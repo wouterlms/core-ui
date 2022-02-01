@@ -18,7 +18,15 @@ import {
   Switch,
 } from '@/components'
 
+import { useTheme } from './composables'
+
 import { Svg } from './utils'
+
+const { extendTheme } = useTheme()
+
+extendTheme({
+  enableDarkMode: true,
+})
 
 const options = [
   'Option A',
@@ -230,3 +238,9 @@ const fileValue = ref([])
     </div>
   </Modal>
 </template>
+
+<style>
+body {
+  @apply bg-secondary
+}
+</style>
