@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import {
   Button,
   Checkbox,
+  FileInputProvider,
   FormLabel,
   Icon,
   Input,
@@ -37,6 +38,8 @@ const inputValue = ref('wouter.laermans@appwise.be')
 const selectValue = ref(null)
 const segmentValue = ref(segments[0])
 const showModal = ref(false)
+
+const fileValue = ref([])
 </script>
 
 <template>
@@ -145,6 +148,52 @@ const showModal = ref(false)
           Show modal
         </Button>
       </div>
+    </div>
+
+    <div class="mt-8">
+      <FileInputProvider
+        v-slot="{ Dropzone, files, isDropzoneHovered, browse }"
+        v-model="fileValue"
+        :mime-types="['image/png', 'image/jpeg']"
+        :limit="3"
+      >
+        <div class="flex">
+          <div
+            v-for="file of files"
+            :key="file.url"
+          >
+            <img
+              :src="file.url"
+              class="h-20 object-cover w-20"
+            >
+
+            <div v-if="file.error">
+              Error!
+            </div>
+          </div>
+        </div>
+
+        <Component
+          :is="Dropzone"
+          :class="[
+            isDropzoneHovered ? 'border-accent-primary': 'border-primary'
+          ]"
+          class="border border-dashed flex flex-col h-32 items-center justify-center rounded w-56"
+        >
+          <div class="text-secondary text-sm">
+            {{ isDropzoneHovered ? 'Drop it' : 'Drag & drop files' }}
+          </div>
+
+          <Button
+            variant="ghost"
+            padding="0.2em"
+            class="hover:underline mt-1 text-sm"
+            @click="browse"
+          >
+            Browse files
+          </Button>
+        </Component>
+      </FileInputProvider>
     </div>
   </div>
 

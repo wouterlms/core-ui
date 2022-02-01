@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  h,
   ref,
   toRef,
   watch,
@@ -35,6 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
 const value = useVModel(toRef(props, 'modelValue'))
 
 const files = ref<File[]>([])
+const isDropzoneHovered = ref(false)
 
 const multiple = computed(() => props.modelValue instanceof Array)
 
@@ -54,6 +56,24 @@ const previews = computed<Preview[]>(() => files.value.map((file) => ({
     || file.size > props.maxFileSize,
 })))
 
+const handleFileInput = (results: File[]) => {
+  if (results?.length) {
+    if (props.replace || !multiple.value) {
+      files.value = []
+    }
+
+    const resultsArray = [ ...results ]
+
+    if (multiple.value) {
+      files.value.push(
+        ...resultsArray.slice(0, props.limit - files.value.length)
+      )
+    } else {
+      files.value = [ results[0] ]
+    }
+  }
+}
+
 const browse = () => {
   const input = document.createElement('input')
 
@@ -64,26 +84,27 @@ const browse = () => {
   input.addEventListener('change', (e: Event) => {
     const { files: results } = e.target as HTMLInputElement
 
-    if (results?.length) {
-      if (props.replace || !multiple.value) {
-        files.value = []
-      }
-
-      const resultsArray = [ ...results ]
-
-      if (multiple.value) {
-        files.value.push(
-          ...resultsArray.slice(0, props.limit - files.value.length)
-        )
-      } else {
-        files.value = [ results[0] ]
-      }
+    if (results) {
+      handleFileInput([ ...results ])
     }
   }, { once: true })
 
   input.click()
 }
 
+const handleDropzoneInput = (e: DragEvent) => {
+  e.preventDefault()
+
+  const { dataTransfer } = e
+
+  if (dataTransfer?.files) {
+    handleFileInput([ ...dataTransfer.files ])
+  }
+
+  isDropzoneHovered.value = false
+}
+
+// TODO
 const removeFile = (file?: Preview) => {
   if (multiple.value) {
     if (!file?.url) {
@@ -109,6 +130,18 @@ const removeFile = (file?: Preview) => {
     value.value = null
   }
 }
+
+const dropzone = computed(() => h('div', {
+  onDragover: (e: DragEvent) => {
+    e.preventDefault()
+
+    isDropzoneHovered.value = true
+  },
+  onDragleave: () => {
+    isDropzoneHovered.value = false
+  },
+  onDrop: handleDropzoneInput,
+}))
 
 watch(files, () => {
   if (props.replace) {
@@ -137,7 +170,9 @@ watch(files, () => {
   <slot
     :file="previews[0]"
     :files="previews"
+    :is-dropzone-hovered="isDropzoneHovered"
     :browse="browse"
     :remove="removeFile"
+    :Dropzone="dropzone"
   />
 </template>
