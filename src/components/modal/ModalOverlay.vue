@@ -1,0 +1,11 @@
+<template>
+  <div
+    class="backdrop-filter
+    bg-black
+    bg-opacity-40
+    dark:backdrop-blur-sm
+    dark:bg-opacity-60
+    fixed
+    inset-0"
+  />
+</template>
