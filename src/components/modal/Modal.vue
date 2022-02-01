@@ -54,7 +54,7 @@ export default {
         :style="{
           borderRadius: useBorderRadius()
         }"
-        class="-translate-x-1/2 -translate-y-1/2 bg-primary fixed left-1/2 top-1/2 z-20"
+        class="-translate-x-1/2 -translate-y-1/2 bg-secondary fixed left-1/2 top-1/2 z-20"
       >
         <header class="flex items-center justify-between">
           <div>
