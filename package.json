@@ -1,10 +1,9 @@
 {
   "name": "@wouterlms/ui",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly && mv dist/src dist/types",
-    "test": "vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix src",
     "publish-lib": "npm run build && cp package.json dist && cd dist && rm vite.config.d.ts && npm publish && cd .. && rm -r dist"
@@ -17,6 +16,9 @@
     "./composables": {
       "import": "./composables.js",
       "types": "./types/composables/index.d.ts"
+    },
+    "./style.css": {
+      "import": "./style.css"
     }
   },
   "main": "index.js",
