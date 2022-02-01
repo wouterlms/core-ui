@@ -1,27 +1,12 @@
-import useBorderRadius from './useBorderRadius'
-import useClosableWithEscape from './useClosableWithEscape'
-import useColor from './useColor'
-import useDarkMode from './useDarkMode'
-import useDescendants from './useDescendants'
-import useEventListener from './useEventListener'
-import useInstance from './useInstance'
-import useIsKeyboardMode from './useIsKeyboardMode'
-import useIsMobileDevice from './useIsMobileDevice'
-import useStylingAttributes from './useStylingAttributes'
-import useTheme from './useTheme'
-import useVModel from './useVModel'
-
-export {
-  useBorderRadius,
-  useClosableWithEscape,
-  useColor,
-  useDarkMode,
-  useDescendants,
-  useEventListener,
-  useInstance,
-  useIsKeyboardMode,
-  useIsMobileDevice,
-  useStylingAttributes,
-  useTheme,
-  useVModel
-}
+export { default as useBorderRadius } from './useBorderRadius'
+export { default as useClosableWithEscape } from './useClosableWithEscape'
+export { default as useColor } from './useColor'
+export { default as useDarkMode } from './useDarkMode'
+export { default as useDescendants } from './useDescendants'
+export { default as useEventListener } from './useEventListener'
+export { default as useInstance } from './useInstance'
+export { default as useIsKeyboardMode } from './useIsKeyboardMode'
+export { default as useIsMobileDevice } from './useIsMobileDevice'
+export { default as useStylingAttributes } from './useStylingAttributes'
+export { default as useTheme } from './useTheme'
+export { default as useVModel } from './useVModel'
