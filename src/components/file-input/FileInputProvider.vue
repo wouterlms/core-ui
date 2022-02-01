@@ -128,6 +128,7 @@ const removeFile = (file?: Preview) => {
     files.value.splice(previewIndex, 1)
   } else {
     value.value = null
+    files.value = []
   }
 }
 
@@ -158,6 +159,10 @@ watch(files, () => {
     value.value = [ ...value.value as Array<unknown>, ...validFiles.slice(0, limit) ]
   } else {
     const file = files.value[0]
+
+    if (!file) {
+      return
+    }
 
     if (props.validator(file) && isSupportedmimeType(file) && file.size <= props.maxFileSize) {
       value.value = file

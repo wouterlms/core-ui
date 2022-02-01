@@ -160,7 +160,7 @@ const fileValue = ref([])
 
     <div class="mt-8">
       <FileInputProvider
-        v-slot="{ Dropzone, files, isDropzoneHovered, browse }"
+        v-slot="{ Dropzone, files, isDropzoneHovered, browse, remove }"
         v-model="fileValue"
         :mime-types="['image/png', 'image/jpeg']"
         :limit="3"
@@ -169,6 +169,7 @@ const fileValue = ref([])
           <div
             v-for="file of files"
             :key="file.url"
+            @click="remove(file)"
           >
             <img
               :src="file.url"
