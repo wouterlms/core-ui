@@ -75,11 +75,11 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
     :value="value"
   >
     <Component
+      v-bind="stylingAttrs"
       :is="slots.default ? 'label' : 'div'"
       class="flex items-center"
     >
       <Component
-        v-bind="stylingAttrs"
         :is="Component"
         :class="[
           {
@@ -124,7 +124,12 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
         ]"
         class="ml-2"
       >
-        <slot />
+        <slot
+          :is-checked="isChecked"
+          :is-focused="isFocused"
+          :is-disabled="providedProps.isDisabled"
+          :error="error"
+        />
       </span>
     </Component>
   </CheckboxProvider>

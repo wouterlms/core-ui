@@ -54,11 +54,11 @@ const getDotColor = () => {
     :value="value"
   >
     <Component
+      v-bind="stylingAttrs"
       :is="slots.default ? 'label' : 'div'"
       class="flex items-center"
     >
       <Component
-        v-bind="stylingAttrs"
         :is="Component"
         :class="[
           {

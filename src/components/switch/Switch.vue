@@ -55,11 +55,11 @@ const thumbStyle = (isChecked: boolean) => ({
     :value="value"
   >
     <Component
+      v-bind="stylingAttrs"
       :is="slots.default ? 'label' : 'div'"
       class="flex items-center"
     >
       <Component
-        v-bind="stylingAttrs"
         :is="Component"
         ref="switchEl"
         :class="[
