@@ -39,7 +39,7 @@ const options = [
 
 const segments = [ 'Users', 'Account settings' ]
 
-const checkboxValue = ref(null)
+const checkboxValue = ref([])
 const radioValue = ref(null)
 const switchValue = ref(false)
 const inputValue = ref('wouter.laermans@appwise.be')
@@ -95,7 +95,6 @@ const fileValue = ref([])
       <Checkbox
         v-model="checkboxValue"
         :is-disabled="false"
-        :error="false"
         accent-color="accent-primary"
         value="value"
       >
@@ -203,6 +202,25 @@ const fileValue = ref([])
           </Button>
         </Component>
       </FileInputProvider>
+    </div>
+
+    <div class="mt-8">
+      <div class="p-4 relative w-60">
+        <Checkbox
+          v-slot="{ isChecked, isFocused }"
+          v-model="checkboxValue"
+          value="value2"
+        >
+          Checkbox
+
+          <div
+            :class="[
+              isChecked || isFocused ? 'border-accent-primary' : 'border-input'
+            ]"
+            class="absolute border border-solid duration-200 h-full left-0 rounded top-0 w-full"
+          />
+        </Checkbox>
+      </div>
     </div>
   </div>
 

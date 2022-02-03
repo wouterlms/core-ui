@@ -175,6 +175,9 @@ watch(files, () => {
   <slot
     :file="previews[0]"
     :files="previews"
+    :limit="limit"
+    :max-file-size="maxFileSize"
+    :mime-types="mimeTypes"
     :is-dropzone-hovered="isDropzoneHovered"
     :browse="browse"
     :remove="removeFile"
