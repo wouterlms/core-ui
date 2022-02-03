@@ -18,14 +18,13 @@ export default defineConfig({
   build: {
     lib: {
       name: 'index',
-      entry: resolve(__dirname, 'src/components/index.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       formats: [ 'es' ],
     },
     rollupOptions: {
       external: Object.keys(pkg.dependencies),
       input: {
-        index: resolve(__dirname, 'src/components/index.ts'),
-        composables: resolve(__dirname, 'src/composables/index.ts'),
+        index: resolve(__dirname, 'src/index.ts'),
       },
       output: {
         globals: {
