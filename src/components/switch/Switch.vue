@@ -8,6 +8,7 @@ import {
 } from '@/composables'
 
 import {
+  nextTick,
   onMounted,
   ref,
   useSlots,
@@ -32,18 +33,25 @@ const slots = useSlots()
 const switchEl = ref<HTMLElement | null>(null)
 const switchWidth = ref(0)
 const padding = '1px'
+let transition: string | null = null
 
-onMounted(() => {
+onMounted(async () => {
   switchWidth.value = switchEl.value?.clientWidth || 0
+
+  // Delay setting the transition to make sure if the initial
+  // state is checked, it does not transition
+  await nextTick()
+
+  transition = '0.3s cubic-bezier(0.22, 0.68, 0, 1.1)'
 })
 
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
 const thumbStyle = (isChecked: boolean) => ({
+  transition,
   transform: isChecked
     ? `translateX(calc(${switchWidth.value}px - 100% - calc(${padding} * 2)))`
     : undefined,
-  transition: '0.3s cubic-bezier(0.22, 0.68, 0, 1.1)',
 })
 </script>
 
