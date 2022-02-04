@@ -48,7 +48,7 @@ onMounted(async () => {
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
 const thumbStyle = (isChecked: boolean) => ({
-  transition,
+  transition: transition || undefined,
   transform: isChecked
     ? `translateX(calc(${switchWidth.value}px - 100% - calc(${padding} * 2)))`
     : undefined,
