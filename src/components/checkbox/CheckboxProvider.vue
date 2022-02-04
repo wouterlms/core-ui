@@ -10,18 +10,16 @@ import {
 
 import { useVModel } from '@/composables'
 
-import { CheckboxValue } from '@/types'
-
 interface Props {
   /**
    * @model
    */
-  modelValue: CheckboxValue
+  modelValue: unknown
 
   /**
    * Checkbox value
    */
-  value: CheckboxValue
+  value: unknown
 
   /**
    * Disable checkbox
@@ -54,7 +52,7 @@ const isChecked = computed({
     }
     return !!checkboxValue.value
   },
-  set(checked: CheckboxValue) {
+  set(checked: unknown) {
     if (props.isReadonly) {
       return
     }

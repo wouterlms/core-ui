@@ -9,10 +9,7 @@ import {
   useTheme,
 } from '@/composables'
 
-import {
-  BorderRadius,
-  CheckboxValue,
-} from '@/types'
+import { BorderRadius } from '@/types'
 
 import { Svg } from '@/utils'
 
@@ -20,8 +17,8 @@ import CheckboxProvider from './CheckboxProvider.vue'
 import Icon from '../icon/Icon.vue'
 
 interface Props {
-  modelValue: CheckboxValue
-  value: CheckboxValue
+  modelValue: unknown
+  value: unknown
   error?: boolean
   accentColor?: string
 
