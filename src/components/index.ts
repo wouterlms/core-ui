@@ -6,6 +6,8 @@ export { default as CalendarProvider } from './calendar/CalendarProvider.vue'
 export { default as Checkbox } from './checkbox/Checkbox.vue'
 export { default as CheckboxProvider } from './checkbox/CheckboxProvider.vue'
 
+export { default as Drawer } from './drawer/Drawer.vue'
+
 export { default as Dropdown } from './dropdown/Dropdown.vue'
 
 export { default as FileInputProvider } from './file-input/FileInputProvider.vue'
