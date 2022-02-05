@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { CheckboxValue } from '@/types'
+import {
+  nextTick,
+  onMounted,
+  ref,
+  useSlots,
+} from 'vue'
 
 import {
   useIsKeyboardMode,
@@ -7,22 +12,17 @@ import {
   useTheme,
 } from '@/composables'
 
-import {
-  nextTick,
-  onMounted,
-  ref,
-  useSlots,
-} from 'vue'
 import CheckboxProvider from '../checkbox/CheckboxProvider.vue'
 
 interface Props {
-  modelValue: CheckboxValue
-  value?: CheckboxValue
+  modelValue: unknown
+  value?: unknown
   accentColor?: string
 }
 
 withDefaults(defineProps<Props>(), {
-  value: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value: true as any,
   accentColor: 'accent-primary',
 })
 
