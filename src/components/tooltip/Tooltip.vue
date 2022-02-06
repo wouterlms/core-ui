@@ -208,6 +208,12 @@ const computedTransition = computed(() => {
 })
 </script>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <Transition :name="computedTransition">
     <div
@@ -231,7 +237,10 @@ const computedTransition = computed(() => {
           class="absolute bg-primary h-[10px] rounded-[0.15em] transform w-[10px]"
         />
 
-        <div class="bg-primary overflow-hidden relative rounded-sm z-[1]">
+        <div
+          v-bind="$attrs"
+          class="bg-primary overflow-hidden relative rounded-sm z-[1]"
+        >
           <slot />
         </div>
       </div>
