@@ -212,7 +212,7 @@ export default () => {
       || (activeColors.value as any).colors[kebabCaseToCamelCase(colorNameWithoutPrefix)]
   }
 
-  const extendTheme = ({ config: userConfig, enableDarkMode }: Settings = {
+  const createTheme = ({ config: userConfig, enableDarkMode }: Settings = {
     enableDarkMode: true,
     config: {
       colors: {},
@@ -236,7 +236,7 @@ export default () => {
   return {
     colors: activeColors,
     icons,
-    extendTheme,
+    createTheme,
     getThemeColor,
   }
 }

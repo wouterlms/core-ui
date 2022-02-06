@@ -8,7 +8,7 @@ import {
 import {
   useEventListener,
   useVModel,
-} from '@/composables'
+} from '@wouterlms/composables'
 
 import { clickOutside as vClickOutside } from '@/directives'
 

@@ -28,6 +28,7 @@
     "vue": "^3.2.0"
   },
   "dependencies": {
+    "@wouterlms/composables": "^0.1.8",
     "focus-trap": "^6.7.2",
     "focus-trap-vue": "^3.2.1",
     "sass": "^1.49.0",

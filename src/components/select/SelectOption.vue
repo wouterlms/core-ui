@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import {
-  useIsMobileDevice,
-  useTheme,
-} from '@/composables'
+import { useIsMobileDevice } from '@wouterlms/composables'
+
+import { useTheme } from '@/composables'
 import { Svg } from '@/utils'
 
 import Icon from '../icon/Icon.vue'

@@ -7,7 +7,7 @@ import {
   watch,
 } from 'vue'
 
-import { useVModel } from '@/composables'
+import { useVModel } from '@wouterlms/composables'
 
 interface Preview {
   url: string

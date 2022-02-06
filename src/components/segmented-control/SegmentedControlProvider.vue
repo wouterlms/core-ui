@@ -10,7 +10,7 @@ import {
   watch,
 } from 'vue'
 
-import { useVModel } from '@/composables'
+import { useVModel } from '@wouterlms/composables'
 
 import { key } from './useSegmentedControl'
 

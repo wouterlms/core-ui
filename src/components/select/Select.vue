@@ -8,9 +8,10 @@ import {
 
 import {
   useIsMobileDevice,
-  useStylingAttributes,
   useVModel,
-} from '@/composables'
+} from '@wouterlms/composables'
+
+import { useStylingAttributes } from '@/composables'
 
 import { Svg } from '@/utils'
 

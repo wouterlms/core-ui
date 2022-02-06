@@ -7,7 +7,7 @@ import {
   useAttrs,
 } from 'vue'
 
-import { useVModel } from '@/composables'
+import { useVModel } from '@wouterlms/composables'
 
 export interface Props {
   /**

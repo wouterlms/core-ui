@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
 
+import { useVModel } from '@wouterlms/composables'
+
 import {
   useBorderRadius,
   useStylingAttributes,
   useTheme,
-  useVModel,
 } from '@/composables'
 
 import { Svg } from '@/utils'

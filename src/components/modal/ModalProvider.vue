@@ -9,7 +9,7 @@ import { FocusTrap } from 'focus-trap-vue'
 import {
   useEventListener,
   useVModel,
-} from '@/composables'
+} from '@wouterlms/composables'
 
 import Overlay from './ModalOverlay.vue'
 

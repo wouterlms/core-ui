@@ -10,9 +10,12 @@ import {
 } from 'vue'
 
 import {
-  useDescendants,
   useEventListener,
   useVModel,
+} from '@wouterlms/composables'
+
+import {
+  useDescendants,
 } from '@/composables'
 
 import { key } from './useSelect'

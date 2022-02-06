@@ -22,9 +22,9 @@ import { useTheme } from './composables'
 
 import { Svg } from './utils'
 
-const { extendTheme } = useTheme()
+const { createTheme } = useTheme()
 
-extendTheme({
+createTheme({
   enableDarkMode: true,
 })
 
@@ -41,7 +41,7 @@ const segments = [ 'Users', 'Account settings' ]
 
 const checkboxValue = ref([])
 const radioValue = ref(null)
-const switchValue = ref(false)
+const switchValue = ref(true)
 const inputValue = ref('wouter.laermans@appwise.be')
 const selectValue = ref(null)
 const segmentValue = ref(segments[0])
@@ -230,8 +230,12 @@ const fileValue = ref([])
     title="Share Project"
   >
     <div class="mt-4 text-secondary">
-      <FormLabel label="Document link">
+      <FormLabel
+        label="Document link"
+        error="Invalid url"
+      >
         <Input
+          :error="true"
           model-value="https://github.com/"
           rounded="sm"
         />

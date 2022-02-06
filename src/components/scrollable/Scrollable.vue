@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { useVModel } from '@/composables'
 import {
   ref,
   toRef,
   watch,
 } from 'vue'
+
+import { useVModel } from '@wouterlms/composables'
 
 interface Props {
   /**

@@ -3,7 +3,7 @@ import {
   isRef,
 } from 'vue'
 
-import useEventListener from './useEventListener'
+import { useEventListener } from '@wouterlms/composables'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default (binding: Ref<boolean> | ((...args: any) => any)) => {

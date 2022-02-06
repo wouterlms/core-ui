@@ -5,7 +5,7 @@ import {
   toRef,
 } from 'vue'
 
-import { useVModel } from '@/composables'
+import { useVModel } from '@wouterlms/composables'
 
 interface Props {
   month?: number

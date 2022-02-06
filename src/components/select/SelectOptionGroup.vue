@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIsMobileDevice } from '@/composables'
+import { useIsMobileDevice } from '@wouterlms/composables'
 
 interface Props {
   label: string

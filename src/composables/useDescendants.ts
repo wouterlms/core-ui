@@ -6,7 +6,8 @@ import {
   ref,
   watch,
 } from 'vue'
-import useEventListener from './useEventListener'
+
+import { useEventListener } from '@wouterlms/composables'
 
 interface Options {
   disabled?: ComputedRef<boolean>,

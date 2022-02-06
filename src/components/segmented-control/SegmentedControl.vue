@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
 
-import {
-  useStylingAttributes,
-  useVModel,
-} from '@/composables'
+import { useVModel } from '@wouterlms/composables'
+
+import { useStylingAttributes } from '@/composables'
 
 import SegmentedControlProvider from './SegmentedControlProvider.vue'
 
