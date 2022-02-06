@@ -49,4 +49,6 @@ export { default as Td } from './table/TableTd.vue'
 export { default as Th } from './table/TableTh.vue'
 export { default as Tr } from './table/TableTr.vue'
 
+export { default as Toasts } from './toast/Toasts.vue'
+
 export { default as Tooltip } from './tooltip/Tooltip.vue'
