@@ -1,11 +1,12 @@
 <script setup lang="ts">
 interface Props {
-  label: string
+  label?: string
   error?: string | boolean | null | undefined
   position?: 'top' | 'bottom'
 }
 
 withDefaults(defineProps<Props>(), {
+  label: undefined,
   error: undefined,
   position: 'top',
 })
@@ -25,8 +26,9 @@ withDefaults(defineProps<Props>(), {
       ]"
       class="text-xs"
     >
-      {{ label }}
-      <template v-if="typeof error === 'string'">| {{ error }}</template>
+      <template v-if="label">{{ label }}</template>
+      <template v-if="label && typeof error === 'string'">&nbsp;|&nbsp;</template>
+      <template v-if="typeof error === 'string'">{{ error }}</template>
     </span>
 
     <slot />

@@ -5,6 +5,7 @@ import {
   ref,
   toRef,
   useAttrs,
+  withDirectives,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'
@@ -44,6 +45,14 @@ export interface Props {
    * Native button types + `textarea`
    */
   type?: 'text' | 'number' | 'password' | 'email' | 'textarea',
+
+  /**
+   * Textarea height
+   */
+  textareaHeight?: string
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  directives?: [ (...args: any) => any, (...args: any) => any ][]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -54,6 +63,8 @@ const props = withDefaults(defineProps<Props>(), {
   autofocus: false,
   type: 'text',
   placeholder: undefined,
+  textareaHeight: '6em',
+  directives: () => [],
 })
 
 /* eslint-disable-next-line */
@@ -100,13 +111,16 @@ const clearInputValue = () => {
 
 const input = computed(() => {
   const {
+    type,
     isLoading,
     isDisabled,
     isReadonly,
     spellcheck,
+    directives,
+    textareaHeight,
   } = props
 
-  return h(component.value, {
+  return withDirectives(h(component.value, {
     ...attrs,
     spellcheck,
     type: inputType.value,
@@ -119,6 +133,9 @@ const input = computed(() => {
         'cursor-default': isReadonly,
       }
     ],
+    style: {
+      height: type === 'textarea' ? textareaHeight : undefined,
+    },
     onInput: (e: InputEvent) => {
       const element = e.currentTarget as HTMLInputElement
       value.value = element.value
@@ -136,7 +153,7 @@ const input = computed(() => {
         e.el?.focus()
       }
     },
-  })
+  }), directives)
 })
 </script>
 

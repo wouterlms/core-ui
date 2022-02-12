@@ -134,6 +134,7 @@ export default {
       :inherit-width="true"
       :show-arrow="false"
       margin="0.5em"
+      class="w-full"
     >
       <slot
         name="input"

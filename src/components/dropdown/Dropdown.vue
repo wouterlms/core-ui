@@ -112,7 +112,7 @@ export default {
 </script>
 
 <template>
-  <div class="inline-block relative">
+  <div class="inline-block relative w-max">
     <slot />
 
     <Tooltip

@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import {
   computed,
+  getCurrentInstance,
   h,
   useAttrs,
   useSlots,
 } from 'vue'
 
-import { RouterLink } from 'vue-router'
+import {
+  RouteLocation,
+  RouterLink,
+} from 'vue-router'
 
 interface Props {
   /**
    * Renders a `<RouterLink>`
    */
-  to?: string | { name: string, params?: Record<string, string> }
+  to?: RouteLocation
 
   /**
    * Renders a `<a>`
@@ -43,15 +47,14 @@ const props = withDefaults(defineProps<Props>(), {
   isLoading: false,
 })
 
+const emit = defineEmits<{(event: 'click'): void }>()
+
 const attrs = useAttrs()
 const slots = useSlots()
+const router = getCurrentInstance()?.proxy?.$router
 
 const component = computed<typeof RouterLink | string>(() => {
-  if (props.to) {
-    return RouterLink
-  }
-
-  if (props.href) {
+  if (props.to || props.href) {
     return 'a'
   }
 
@@ -70,11 +73,18 @@ const button = computed(() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return h(component.value as any, {
     ...attrs,
-    to,
-    href,
+    href: href || to ? router?.resolve(props.to).fullPath : undefined,
     type: !to && !href ? type : undefined,
     disabled: isLoading || isDisabled,
     class: [ 'inline-block', props.isDisabled || props.isLoading ? 'cursor-not-allowed' : 'cursor-pointer' ],
+    onClick: (e: MouseEvent) => {
+      if (props.to) {
+        e.preventDefault()
+        router?.push(props.to)
+      }
+
+      emit('click')
+    },
   }, slots.default)
 })
 </script>
