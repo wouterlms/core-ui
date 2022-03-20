@@ -90,13 +90,14 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
           borderRadius: useBorderRadius()
         }"
         class="border
-        border-solid
-        duration-200
-        flex
-        h-[1.125em]
-        items-center
-        justify-center
-        w-[1.125em]"
+          border-solid
+          duration-200
+          flex
+          flex-shrink-0
+          h-[1.125em]
+          items-center
+          justify-center
+          w-[1.125em]"
       >
         <Transition name="tick-transition">
           <div v-if="isChecked">

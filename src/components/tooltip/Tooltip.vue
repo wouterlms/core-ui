@@ -227,7 +227,7 @@ export default {
     >
       <div
         :class="{
-          transition: '0.3s cubic-bezier(0.22, 0.68, 0, 1.51)',
+          transition: '0.2s cubic-bezier(0.22, 0.68, 0, 1.51)',
         }"
         class="bg-primary content overflow-hidden rounded shadow-light w-full"
       >
@@ -255,7 +255,7 @@ export default {
 .tooltip-transition-right {
   &-enter-active,
   &-leave-active {
-    transition: opacity 0.3s cubic-bezier(0.22, 0.68, 0, 1.51);
+    transition: opacity 0.2s cubic-bezier(0.22, 0.68, 0, 1.51);
   }
 
   &-enter-from,
@@ -270,7 +270,7 @@ export default {
   &-enter-from,
   &-leave-to {
     .content {
-      transform: translateY(10px);
+      transform: translateY(5px);
     }
   }
 }
@@ -279,7 +279,7 @@ export default {
   &-enter-from,
   &-leave-to {
     .content {
-      transform: translateY(-10px);
+      transform: translateY(-5px);
     }
   }
 }
@@ -288,7 +288,7 @@ export default {
   &-enter-from,
   &-leave-to {
     .content {
-      transform: translateX(10px);
+      transform: translateX(5px);
     }
   }
 }
@@ -297,7 +297,7 @@ export default {
   &-enter-from,
   &-leave-to {
     .content {
-      transform: translateX(-10px);
+      transform: translateX(-5px);
     }
   }
 }

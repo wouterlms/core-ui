@@ -33,6 +33,11 @@ interface Props {
   filter?: string | null,
 
   /**
+   * Filter placeholder
+   */
+  filterPlaceholder?: string
+
+  /**
    * Property value which will be displayed
    * Required when `modelValue` is an object
    */
@@ -49,13 +54,20 @@ interface Props {
    * Defaults: to `true`
    */
   showOnFocus?: boolean
+
+  /**
+   * Customize display value
+   */
+  displayValueTransformer?: (value: unknown | null) => string | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   filter: undefined,
+  filterPlaceholder: undefined,
   closeOnSelect: true,
   showOnFocus: true,
   label: undefined,
+  displayValueTransformer: undefined,
 })
 
 const value = useVModel(toRef(props, 'modelValue'))
@@ -83,6 +95,10 @@ const handleFocus = () => {
 }
 
 const getDisplayValue = (multiple: boolean): string | null => {
+  if (props.displayValueTransformer) {
+    return props.displayValueTransformer(value.value)
+  }
+
   if (multiple) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (props.modelValue as any[]).map((selectedOption) => (
@@ -133,7 +149,7 @@ export default {
       v-model:show="isDropdownVisible"
       :inherit-width="true"
       :show-arrow="false"
-      margin="0.5em"
+      margin="0.3em"
       class="w-full"
     >
       <slot
@@ -154,7 +170,7 @@ export default {
           icon-size="0.6em"
           @focus="handleFocus"
           @keydown.space.prevent="isDropdownVisible = true"
-          @click="isDropdownVisible = true"
+          @mousedown="isDropdownVisible = !isDropdownVisible"
         >
           <template #left>
             <slot name="left" />
@@ -180,13 +196,13 @@ export default {
           <InputProvider
             v-slot="{ Component }"
             v-model="filterValue"
-            placeholder="Todo"
+            :placeholder="filterPlaceholder"
             :autofocus="true"
             :tabindex="-1"
           >
             <Component
               :is="Component"
-              class="border-none p-2.5 w-full"
+              class="border-none input p-2.5 text-input w-full"
             />
           </InputProvider>
         </div>
@@ -194,7 +210,7 @@ export default {
         <Scrollable
           v-bind="nonStylingAttrs"
           ref="optionsEl"
-          class="flex flex-col max-h-72"
+          class="flex flex-col max-h-[18em]"
         >
           <slot />
         </Scrollable>
@@ -202,3 +218,11 @@ export default {
     </Dropdown>
   </SelectProvider>
 </template>
+
+<style scoped lang="scss">
+.input {
+  :deep &::placeholder {
+    @apply text-sm text-input-placeholder font-light;
+  }
+}
+</style>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  nextTick,
   ref,
   toRef,
   watch,
@@ -38,6 +39,7 @@ const previouslyFocusedElement = ref<HTMLElement | null>(null)
 const autoPlacementPosition = ref<'top' | 'bottom'>('bottom')
 
 const scrollPosition = ref(0)
+const isClosedWithTabKey = ref(false)
 
 useEventListener('scroll', () => {
   scrollPosition.value = window.scrollY
@@ -52,6 +54,10 @@ const hasFocusTimeout = ref(false)
 useEventListener('keydown', (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
     e.preventDefault()
+  }
+
+  if (e.key === 'Tab' && !e.shiftKey) {
+    isClosedWithTabKey.value = true
   }
 
   if (e.key === 'Escape' || e.key === 'Tab') {
@@ -69,9 +75,12 @@ watch(hasFocusTimeout, (hasFocusTimeoutValue) => {
 
 watch(showDropdown, (show) => {
   if (show) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    previouslyFocusedElement.value = document.activeElement as any
-  } else if (previouslyFocusedElement.value) {
+    isClosedWithTabKey.value = false
+
+    setTimeout(() => {
+      previouslyFocusedElement.value = (document.activeElement ?? null) as HTMLElement | null
+    }, 0)
+  } else if (previouslyFocusedElement.value && !isClosedWithTabKey.value) {
     previouslyFocusedElement.value.focus()
 
     hasFocusTimeout.value = true
@@ -112,7 +121,12 @@ export default {
 </script>
 
 <template>
-  <div class="inline-block relative w-max">
+  <div
+    :style="{
+      width: 'inherit'
+    }"
+    class="inline-block relative"
+  >
     <slot />
 
     <Tooltip

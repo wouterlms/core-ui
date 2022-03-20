@@ -81,7 +81,7 @@ export default {
             width: iconSize,
             height: iconSize,
           }"
-          class="flex-shrink-0 ml-2.5"
+          class="flex-shrink-0 ml-[0.625em]"
         />
       </slot>
 
@@ -97,7 +97,7 @@ export default {
         <Loader
           v-if="providedProps.isLoading"
           :accent-color="colors.textColor.input"
-          class="mr-2 text-xs"
+          class="mr-[0.5em] text-[0.875em]"
         />
 
         <Icon
@@ -108,7 +108,7 @@ export default {
             width: iconSize,
             height: iconSize,
           }"
-          class="flex-shrink-0 mr-2.5"
+          class="flex-shrink-0 mr-[0.625em]"
         />
 
         <Button
@@ -119,7 +119,7 @@ export default {
           variant="ghost"
           rounded="sm"
           padding="0.2em"
-          class="mr-2"
+          class="mr-[0.5em]"
           @click="togglePassword"
         />
       </slot>
@@ -131,7 +131,7 @@ export default {
 :deep input,
 :deep textarea {
   &::placeholder {
-    @apply text-sm text-input-placeholder font-light;
+    @apply text-[0.875em] text-input-placeholder font-light;
   }
 }
 </style>

@@ -117,8 +117,21 @@ const unregisterOption = (option: unknown) => {
     JSON.stringify(o) === JSON.stringify(option)
   ))
 
-  options.value[index].isRendered = false
+  if (index === -1) {
+    // This happens, but I don't know why
+  } else {
+    options.value[index].isRendered = false
+  }
 }
+
+// Prevent form submit on enter
+useEventListener('keydown', (e: KeyboardEvent) => {
+  const { key } = e
+
+  if (key === 'Enter' && props.isDropdownVisible) {
+    e.preventDefault()
+  }
+})
 
 useEventListener('keyup', (e: KeyboardEvent) => {
   const { key } = e

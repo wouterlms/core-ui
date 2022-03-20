@@ -145,7 +145,7 @@ export default {
         {
           'active:opacity-80': !providedProps.isDisabled && !providedProps.isLoading,
           'opacity-50': providedProps.isDisabled,
-          'focus:ring': isKeyboardMode
+          'focus:ring': isKeyboardMode,
         },
       ]"
       :style="{

@@ -39,7 +39,7 @@ export { default as SegmentProvider } from './segmented-control/SegmentProvider.
 export { default as Select } from './select/Select.vue'
 export { default as Option } from './select/SelectOption.vue'
 export { default as OptionGroup } from './select/SelectOptionGroup.vue'
-export { default as SelectOptionProvider } from './select/SelectOptionProvider.vue'
+export { default as OptionProvider } from './select/SelectOptionProvider.vue'
 export { default as SelectProvider } from './select/SelectProvider.vue'
 
 export { default as Switch } from './switch/Switch.vue'

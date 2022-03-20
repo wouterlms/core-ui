@@ -74,6 +74,7 @@ const getDotColor = () => {
         border-solid
         duration-200
         flex
+        flex-shrink-0
         h-[1.125em]
         items-center
         justify-center

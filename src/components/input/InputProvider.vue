@@ -2,6 +2,7 @@
 import {
   computed,
   h,
+  nextTick,
   ref,
   toRef,
   useAttrs,
@@ -150,7 +151,9 @@ const input = computed(() => {
     },
     onVnodeMounted: (e) => {
       if (props.autofocus) {
-        e.el?.focus()
+        setTimeout(() => {
+          e.el?.focus()
+        }, 0)
       }
     },
   }), directives)

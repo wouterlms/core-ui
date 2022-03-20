@@ -1,5 +1,4 @@
 export { default as useBorderRadius } from './useBorderRadius'
-export { default as useClosableWithEscape } from './useClosableWithEscape'
 export { default as useColor } from './useColor'
 export { default as useDarkMode } from './useDarkMode'
 export { default as useDescendants } from './useDescendants'

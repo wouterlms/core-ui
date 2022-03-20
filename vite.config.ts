@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
+import { resolve } from 'path'
 
 import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
 
 import pkg from './package.json'
 
@@ -29,6 +29,7 @@ export default defineConfig({
       output: {
         globals: {
           vue: 'Vue',
+          vueRouter: 'VueRouter',
         },
 
         // entryFileNames: () => '[name].[format].js',

@@ -79,10 +79,9 @@ watch(scrollPositionValue, (scrollPos) => {
 <template>
   <div
     ref="scrollableEl"
-    :scroll-position="scrollPositionValue"
     class="overflow-y-auto"
     @scroll="handleScroll"
   >
-    <slot />
+    <slot :scroll-position="scrollPositionValue" />
   </div>
 </template>

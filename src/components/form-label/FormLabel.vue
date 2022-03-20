@@ -1,19 +1,32 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
+import { useTheme } from '@/composables'
+
 interface Props {
+  is?: string
   label?: string
   error?: string | boolean | null | undefined
   position?: 'top' | 'bottom'
+  color?: string
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
+  is: 'label',
   label: undefined,
   error: undefined,
   position: 'top',
+  color: 'text-secondary',
 })
+
+const { getThemeColor } = useTheme()
+
+const computedColor = computed(() => (props.error ? getThemeColor('error') : getThemeColor(props.color)))
 </script>
 
 <template>
-  <label
+  <Component
+    :is="is"
     :class="[
       position === 'bottom' ? 'flex-col-reverse' : 'flex-col'
     ]"
@@ -21,10 +34,12 @@ withDefaults(defineProps<Props>(), {
   >
     <span
       :class="[
-        !!error ? 'text-error' : 'text-secondary',
-        position === 'bottom' ? 'mt-0.5' : 'mb-0.5'
+        position === 'bottom' ? 'mt-[0.125em]' : 'mb-[0.125em]'
       ]"
-      class="text-xs"
+      :style="{
+        color: computedColor
+      }"
+      class="text-[0.875em]"
     >
       <template v-if="label">{{ label }}</template>
       <template v-if="label && typeof error === 'string'">&nbsp;|&nbsp;</template>
@@ -32,5 +47,5 @@ withDefaults(defineProps<Props>(), {
     </span>
 
     <slot />
-  </label>
+  </Component>
 </template>

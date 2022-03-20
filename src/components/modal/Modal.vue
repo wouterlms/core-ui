@@ -19,6 +19,7 @@ interface Props {
   show: boolean
   title?: string
   showCloseButton?: boolean
+  blur?: boolean
 
   rounded?: BorderRadius
 }
@@ -26,6 +27,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   title: undefined,
   showCloseButton: true,
+  blur: true,
 
   rounded: 'default',
 })
@@ -87,6 +89,9 @@ export default {
       <Component
         :is="Overlay"
         v-if="isVisible"
+        :class="{
+          'backdrop-filter backdrop-blur-sm': blur
+        }"
         class="z-10"
         @click="close"
       />
