@@ -33,11 +33,6 @@ interface Props {
   filter?: string | null,
 
   /**
-   * Filter placeholder
-   */
-  filterPlaceholder?: string
-
-  /**
    * Property value which will be displayed
    * Required when `modelValue` is an object
    */
@@ -63,7 +58,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   filter: undefined,
-  filterPlaceholder: undefined,
   closeOnSelect: true,
   showOnFocus: true,
   label: undefined,
@@ -161,19 +155,35 @@ export default {
       >
         <Input
           v-bind="$attrs"
-          :model-value="getDisplayValue(multiple)"
+          :model-value="isFilterable && isDropdownVisible && !isMobileDevice
+            ? null
+            : getDisplayValue(multiple)"
           :is-readonly="true"
           :icon-right="Svg.CHEVRON_UP_CHEVRON_DOWN"
           :class="{
             '!border-accent-primary': !$attrs.error && isDropdownVisible
           }"
-          icon-size="0.6em"
+          icon-right-size="0.6em"
           @focus="handleFocus"
           @keydown.space.prevent="isDropdownVisible = true"
           @mousedown="isDropdownVisible = !isDropdownVisible"
         >
-          <template #left>
-            <slot name="left" />
+          <template
+            v-if="isFilterable && isDropdownVisible && !isMobileDevice"
+            #input
+          >
+            <InputProvider
+              v-slot="{ Component }"
+              v-model="filterValue"
+              :autofocus="true"
+              :placeholder="$attrs.placeholder"
+              :tabindex="-1"
+            >
+              <Component
+                :is="Component"
+                class="border-none input p-[0.5em] px-2 text-input w-full"
+              />
+            </InputProvider>
           </template>
         </Input>
       </slot>
@@ -192,21 +202,6 @@ export default {
         v-if="!isMobileDevice"
         #dropdown
       >
-        <div v-if="isFilterable">
-          <InputProvider
-            v-slot="{ Component }"
-            v-model="filterValue"
-            :placeholder="filterPlaceholder"
-            :autofocus="true"
-            :tabindex="-1"
-          >
-            <Component
-              :is="Component"
-              class="border-none input p-2.5 text-input w-full"
-            />
-          </InputProvider>
-        </div>
-
         <Scrollable
           v-bind="nonStylingAttrs"
           ref="optionsEl"

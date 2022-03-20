@@ -19,7 +19,8 @@ interface Props {
   error?: boolean
   iconLeft?: Svg
   iconRight?: Svg
-  iconSize?: string
+  iconLeftSize?: string
+  iconRightSize?: string
 
   padding?: string,
   rounded?: BorderRadius
@@ -29,7 +30,8 @@ withDefaults(defineProps<Props>(), {
   error: false,
   iconLeft: undefined,
   iconRight: undefined,
-  iconSize: '0.9375em',
+  iconLeftSize: '0.9375em',
+  iconRightSize: '0.9375em',
   padding: '0.5em',
   rounded: 'default',
 })
@@ -72,57 +74,65 @@ export default {
         borderRadius: useBorderRadius()
       }"
     >
-      <slot name="left">
-        <Icon
-          v-if="iconLeft"
-          :icon="iconLeft"
-          :class="[getIconColor(error)]"
-          :style="{
-            width: iconSize,
-            height: iconSize,
-          }"
-          class="flex-shrink-0 ml-[0.625em]"
-        />
-      </slot>
+      <Icon
+        v-if="iconLeft"
+        :icon="iconLeft"
+        :class="[getIconColor(error)]"
+        :style="{
+          width: iconLeftSize,
+          height: iconLeftSize,
+        }"
+        class="flex-shrink-0 ml-[0.625em]"
+      />
+
+      <slot name="left" />
+
+      <slot
+        v-if="$slots.input"
+        name="input"
+      />
 
       <Component
         :is="Component"
+        :class="{
+          'absolute opacity-0 pointer-events-none': $slots.input
+        }"
         :style="{
           padding,
         }"
         class="w-full"
       />
 
-      <slot name="right">
-        <Loader
-          v-if="providedProps.isLoading"
-          :accent-color="colors.textColor.input"
-          class="mr-[0.5em] text-[0.875em]"
-        />
+      <slot name="right" />
 
-        <Icon
-          v-else-if="iconRight"
-          :icon="iconRight"
-          :class="[getIconColor(error)]"
-          :style="{
-            width: iconSize,
-            height: iconSize,
-          }"
-          class="flex-shrink-0 mr-[0.625em]"
-        />
+      <Loader
+        v-if="providedProps.isLoading"
+        :accent-color="colors.textColor.input"
+        class="mr-[0.5em] text-[0.875em]"
+      />
 
-        <Button
-          v-else-if="providedProps.type === 'password'"
-          :icon-left="isPasswordVisible ? Svg.EYE_HIDE : Svg.EYE_VIEW"
-          :is-disabled="providedProps.isDisabled || providedProps.isReadonly"
-          :color-scheme="color"
-          variant="ghost"
-          rounded="sm"
-          padding="0.2em"
-          class="mr-[0.5em]"
-          @click="togglePassword"
-        />
-      </slot>
+      <Icon
+        v-else-if="iconRight"
+        :icon="iconRight"
+        :class="[getIconColor(error)]"
+        :style="{
+          width: iconRightSize,
+          height: iconRightSize,
+        }"
+        class="flex-shrink-0 mr-[0.625em]"
+      />
+
+      <Button
+        v-else-if="providedProps.type === 'password'"
+        :icon-left="isPasswordVisible ? Svg.EYE_HIDE : Svg.EYE_VIEW"
+        :is-disabled="providedProps.isDisabled || providedProps.isReadonly"
+        :color-scheme="color"
+        variant="ghost"
+        rounded="sm"
+        padding="0.2em"
+        class="mr-[0.5em]"
+        @click="togglePassword"
+      />
     </InputLabel>
   </InputProvider>
 </template>
