@@ -75,7 +75,7 @@ export default {
               variant="ghost"
               padding="0.2em"
               :color-scheme="getThemeColor('text-secondary')"
-              :icon-left="Svg.CLOSE_BOLD"
+              :icon-left="Svg.CORE_CLOSE_BOLD"
               @click="close"
             />
           </div>
@@ -105,6 +105,7 @@ export default {
   &-leave-active {
     transition: opacity 0.3s cubic-bezier(0.17, 0.67, 0.16, 0.99);
   }
+
   &-enter-from,
   &-leave-to {
     opacity: 0;
@@ -116,6 +117,7 @@ export default {
   &-leave-active {
     transition: 0.3s cubic-bezier(0.22, 0.68, 0, 1.51);
   }
+
   &-enter-from,
   &-leave-to {
     opacity: 0;

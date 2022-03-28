@@ -1,13 +1,15 @@
 {
   "name": "@wouterlms/ui",
-  "version": "0.0.3",
+  "version": "0.3.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build && vue-tsc --emitDeclarationOnly && mv dist/src dist/types",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix src",
     "publish-test": "npm run build && cp package.json dist && cd dist && rm vite.config.d.ts",
-    "publish-lib": "npm run build && cp package.json dist && cd dist && rm vite.config.d.ts && npm publish && cd .. && rm -r dist"
+    "publish-lib": "npm run build && cp package.json dist && cd dist && rm vite.config.d.ts && npm publish && cd .. && rm -r dist",
+    "storybook": "start-storybook -p 6006",
+    "build:storybook": "build-storybook"
   },
   "exports": {
     ".": {
@@ -29,16 +31,23 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
+    "@floating-ui/dom": "^0.4.2",
+    "@storybook/addon-controls": "^6.4.19",
     "@wouterlms/composables": "^0.1.8",
     "focus-trap": "^6.7.2",
     "focus-trap-vue": "^3.2.1",
     "sass": "^1.49.0",
     "vue": "^3.2.0",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-multi-entry": "^4.1.0",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@storybook/addon-a11y": "^6.4.19",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/vue3": "^6.4.19",
     "@types/tailwindcss": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.10.0",
@@ -53,6 +62,7 @@
     "eslint-plugin-vue": "^8.4.0",
     "postcss": "^8.4.5",
     "putout": "^23.5.0",
+    "storybook-builder-vite": "^0.1.21",
     "tailwindcss": "^3.0.15",
     "typescript": "^4.5.5",
     "vite": "^2.7.13",

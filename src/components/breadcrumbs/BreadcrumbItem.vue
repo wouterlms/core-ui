@@ -28,7 +28,7 @@ const isNamedRoute = computed(() => !props.route?.startsWith('/'))
 
   <Icon
     v-if="route"
-    :icon="Svg.CHEVRON_RIGHT"
+    :icon="Svg.CORE_CHEVRON_RIGHT"
     class="h-auto mx-3 text-tertiary w-1"
   />
 </template>

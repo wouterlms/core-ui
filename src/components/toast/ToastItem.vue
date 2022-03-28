@@ -60,7 +60,7 @@ const handleActionClick = () => {
         :style="{
           color,
         }"
-        :icon="toast.icon || Svg.INFO"
+        :icon="toast.icon || Svg.CORE_INFO"
         class="w-5"
       />
 
@@ -69,9 +69,9 @@ const handleActionClick = () => {
       </h1>
 
       <Button
-        :icon-left="Svg.CLOSE_BOLD"
+        :icon-left="Svg.CORE_CLOSE_BOLD"
         variant="ghost"
-        icon-size="8px"
+        icon-left-size="8px"
         color-scheme="text-tertiary"
         padding="0.2em"
         class="ml-auto"

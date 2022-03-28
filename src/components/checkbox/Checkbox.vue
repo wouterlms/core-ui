@@ -102,7 +102,7 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
         <Transition name="tick-transition">
           <div v-if="isChecked">
             <Icon
-              :icon="Svg.TICK"
+              :icon="Svg.CORE_TICK"
               :style="{
                 color: getTickColor()
               }"

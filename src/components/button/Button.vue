@@ -171,7 +171,7 @@ export default {
         :class="{
           'opacity-0': providedProps.isLoading
         }"
-        class="flex items-center"
+        class="flex items-center justify-center"
       >
         <Icon
           v-if="iconLeft"
@@ -183,7 +183,7 @@ export default {
           }"
         />
 
-        <span class="pointer-events-none text-[0.875em]">
+        <span class="pointer-events-none text-[0.875em] whitespace-nowrap">
           <slot />
         </span>
 

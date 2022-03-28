@@ -34,7 +34,7 @@ const computedColor = computed(() => (props.error ? getThemeColor('error') : get
   >
     <span
       :class="[
-        position === 'bottom' ? 'mt-[0.125em]' : 'mb-[0.125em]'
+        position === 'bottom' ? 'mt-[0.3em]' : 'mb-[0.3em]'
       ]"
       :style="{
         color: computedColor

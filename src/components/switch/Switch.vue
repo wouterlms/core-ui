@@ -86,7 +86,7 @@ const thumbStyle = (isChecked: boolean) => ({
           box-content
           duration-200
           min-w-[2.5em]
-          rounded-full"
+          rounded-[1rem]"
       >
         <div
           :style="thumbStyle(isChecked)"

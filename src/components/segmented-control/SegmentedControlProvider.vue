@@ -125,7 +125,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="segmentControlEl">
+  <div
+    ref="segmentControlEl"
+    class="relative"
+  >
     <slot :style="style" />
   </div>
 </template>

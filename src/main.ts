@@ -5,7 +5,6 @@ import Router from './router'
 
 import './styles/tailwind.scss'
 
-const app = createApp(App)
-  .use(Router)
+const app = createApp(App).use(Router)
 
 app.mount('#app')

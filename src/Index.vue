@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import {
   Button,
   Checkbox,
+  Drawer,
   FileInputProvider,
   FormLabel,
   Icon,
@@ -17,8 +18,8 @@ import {
   Select,
   Switch,
 } from '@/components'
+import Test from './Test.vue'
 
-import { clickOutside as vClickOutside } from '@/directives'
 import { useTheme } from './composables'
 
 import { Svg } from './utils'
@@ -47,12 +48,9 @@ const inputValue = ref('wouter.laermans@appwise.be')
 const selectValue = ref(null)
 const segmentValue = ref(segments[0])
 const showModal = ref(false)
+const showDrawer = ref(false)
 
 const fileValue = ref([])
-
-const handleClickOutside = () => {
-  console.log('@click')
-}
 </script>
 
 <template>
@@ -60,7 +58,7 @@ const handleClickOutside = () => {
     <div class="gap-8 grid grid-cols-4">
       <div>
         <Icon
-          :icon="Svg.INFO"
+          :icon="Svg.CORE_INFO"
           class="w-8"
         />
       </div>
@@ -68,21 +66,7 @@ const handleClickOutside = () => {
       <div>
         <Loader />
       </div>
-      <!--
-        to
-        href
-        type
-        isDisabled
-        isLoading
-        variant
-        colorScheme
-        iconLeft
-        iconRight
-        iconSize
-        iconSpacing
-        padding
-        rounded
-      -->
+
       <div>
         <Button
           :icon-left="undefined"
@@ -128,7 +112,6 @@ const handleClickOutside = () => {
 
       <Input
         v-model="inputValue"
-        v-click-outside="handleClickOutside"
         :is-disabled="false"
         :is-loading="false"
         :error="false"
@@ -137,7 +120,10 @@ const handleClickOutside = () => {
         rounded="default"
       />
 
-      <Select v-model="selectValue">
+      <Select
+        v-model="selectValue"
+        rounded="sm"
+      >
         <Option
           v-for="option of options"
           :key="option"
@@ -160,6 +146,12 @@ const handleClickOutside = () => {
       <div>
         <Button @click="showModal = true">
           Show modal
+        </Button>
+      </div>
+
+      <div>
+        <Button @click="showDrawer = true">
+          Show drawer
         </Button>
       </div>
     </div>
@@ -212,7 +204,7 @@ const handleClickOutside = () => {
     </div>
 
     <div class="mt-8">
-      <div class="p-4 relative w-60">
+      <label class="inline-block p-4 relative w-60">
         <Checkbox
           v-slot="{ isChecked, isFocused }"
           v-model="checkboxValue"
@@ -224,20 +216,22 @@ const handleClickOutside = () => {
             :class="[
               isChecked || isFocused ? 'border-accent-primary' : 'border-input'
             ]"
-            class="absolute border border-solid duration-200 h-full left-0 rounded top-0 w-full"
+            class="absolute
+              bg-primary
+              border
+              border-solid
+              duration-200
+              h-full
+              left-0
+              rounded
+              top-0
+              w-full
+              z-[-1]"
           />
         </Checkbox>
-      </div>
+      </label>
     </div>
   </div>
-
-  <Button
-    :to="{
-      name: 'test',
-    }"
-  >
-    Router Link
-  </Button>
 
   <Modal
     v-model:show="showModal"
@@ -275,6 +269,32 @@ const handleClickOutside = () => {
       </div>
     </div>
   </Modal>
+
+  <Drawer
+    v-model:show="showDrawer"
+    title="Invoice #123032"
+    inset="0em"
+  >
+    <div class="flex h-full items-end pb-10 w-full">
+      <div class="w-full">
+        <Button
+          :icon-left="Svg.CORE_FOLDER"
+          class="w-full"
+        >
+          Show invoice
+        </Button>
+
+        <div class="flex justify-center mt-2">
+          <Button
+            variant="ghost"
+            class="font-medium underline"
+          >
+            Download invoice
+          </Button>
+        </div>
+      </div>
+    </div>
+  </Drawer>
 </template>
 
 <style>

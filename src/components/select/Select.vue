@@ -59,7 +59,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   filter: undefined,
   closeOnSelect: true,
-  showOnFocus: true,
   label: undefined,
   displayValueTransformer: undefined,
 })
@@ -68,6 +67,7 @@ const value = useVModel(toRef(props, 'modelValue'))
 const filterValue = useVModel(toRef(props, 'filter'), 'filter')
 
 const optionsEl = ref<InstanceType<typeof Scrollable>>()
+const filterInputEl = ref()
 const nativeSelectEl = ref<HTMLElement | null>(null)
 const isDropdownVisible = ref(false)
 
@@ -79,12 +79,8 @@ const { nonStylingAttrs } = useStylingAttributes()
 const handleOptionToggled = () => {
   if (props.closeOnSelect) {
     isDropdownVisible.value = false
-  }
-}
-
-const handleFocus = () => {
-  if (props.showOnFocus) {
-    isDropdownVisible.value = true
+  } else if (isFilterable.value) {
+    filterInputEl.value.$el.nextSibling.focus()
   }
 }
 
@@ -99,6 +95,7 @@ const getDisplayValue = (multiple: boolean): string | null => {
       props.label ? selectedOption[props.label] : selectedOption
     )).join(', ')
   }
+
   if (!props.modelValue) {
     return null
   }
@@ -117,8 +114,9 @@ watch(isDropdownVisible, (show) => {
   }
 
   if (show && isMobileDevice) {
-    const event = new MouseEvent('mousedown')
-    nativeSelectEl.value?.dispatchEvent(event)
+    nativeSelectEl.value?.dispatchEvent(
+      new MouseEvent('mousedown')
+    )
   }
 })
 </script>
@@ -135,6 +133,7 @@ export default {
     v-model="value"
     :is-dropdown-visible="isDropdownVisible"
     :options-el="optionsEl?.$el || null"
+    :has-filter-applied="!!filterValue?.length"
     @option-selected="handleOptionToggled"
     @option-deselected="handleOptionToggled"
   >
@@ -159,20 +158,24 @@ export default {
             ? null
             : getDisplayValue(multiple)"
           :is-readonly="true"
-          :icon-right="Svg.CHEVRON_UP_CHEVRON_DOWN"
+          :icon-right="Svg.CORE_CHEVRON_UP_CHEVRON_DOWN"
           :class="{
             '!border-accent-primary': !$attrs.error && isDropdownVisible
           }"
           icon-right-size="0.6em"
-          @focus="handleFocus"
           @keydown.space.prevent="isDropdownVisible = true"
-          @mousedown="isDropdownVisible = !isDropdownVisible"
+          @click="isDropdownVisible = !isDropdownVisible"
         >
+          <template #left>
+            <slot name="left" />
+          </template>
+
           <template
             v-if="isFilterable && isDropdownVisible && !isMobileDevice"
             #input
           >
             <InputProvider
+              ref="filterInputEl"
               v-slot="{ Component }"
               v-model="filterValue"
               :autofocus="true"
@@ -193,7 +196,7 @@ export default {
         ref="nativeSelectEl"
         v-model="value"
         :multiple="multiple"
-        class="absolute block h-full top-0 w-full z-[-1]"
+        class="absolute block h-full opacity-0 top-0 w-full z-[-1]"
       >
         <slot />
       </select>
@@ -217,7 +220,7 @@ export default {
 <style scoped lang="scss">
 .input {
   :deep &::placeholder {
-    @apply text-sm text-input-placeholder font-light;
+    @apply text-[0.875em] text-input-placeholder font-light;
   }
 }
 </style>

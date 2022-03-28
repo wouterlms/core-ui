@@ -49,7 +49,7 @@ const isMobileDevice = useIsMobileDevice()
       >
         <div v-if="isSelected">
           <Icon
-            :icon="Svg.TICK"
+            :icon="Svg.CORE_TICK"
             :style="{
               color: colors.textColor.tertiary
             }"

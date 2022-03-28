@@ -14,9 +14,7 @@ import {
   useVModel,
 } from '@wouterlms/composables'
 
-import {
-  useDescendants,
-} from '@/composables'
+import { useDescendants } from '@/composables'
 
 import { key } from './useSelect'
 
@@ -27,7 +25,7 @@ interface Props {
   modelValue: unknown
 
   /**
-   *
+   * Whether dropdown is visible
    */
   isDropdownVisible: boolean
 
@@ -36,9 +34,16 @@ interface Props {
    * when not completely visible
    */
   optionsEl: Omit<HTMLHtmlElement, 'version'> | null
+
+  /**
+   * Whether a v-model:filter value is passed and has a value
+   */
+  hasFilterApplied?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  hasFilterApplied: false,
+})
 
 /* eslint-disable-next-line */
 const emit = defineEmits<{
@@ -73,6 +78,7 @@ const { activeDescendantOption } = useDescendants(
   computed(() => props.optionsEl),
   {
     disabled: computed(() => !props.isDropdownVisible),
+    hasFilterApplied: computed(() => props.hasFilterApplied),
   }
 )
 
@@ -136,11 +142,19 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 useEventListener('keyup', (e: KeyboardEvent) => {
   const { key } = e
 
-  if (key === 'Enter' && props.isDropdownVisible && activeDescendantOption.value) {
+  const validOptions = options.value.filter((option) => option.isRendered && !option.isDisabled)
+
+  if (
+    key === 'Enter'
+    && props.isDropdownVisible
+    && ((validOptions.length && props.hasFilterApplied) || !!activeDescendantOption.value)
+  ) {
     e.preventDefault()
     e.stopImmediatePropagation()
 
-    selectOption(activeDescendantOption.value.option)
+    const optionToSelect = activeDescendantOption.value?.option || validOptions[0].option
+
+    selectOption(optionToSelect)
   }
 })
 

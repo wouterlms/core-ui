@@ -11,7 +11,8 @@ import { useEventListener } from '@wouterlms/composables'
 
 interface Options {
   disabled?: ComputedRef<boolean>,
-  defaultIndex?: number
+  defaultIndex?: number,
+  hasFilterApplied: ComputedRef<boolean>
 }
 
 interface Option {
@@ -31,9 +32,14 @@ export default (
   params: Options = {
     disabled: computed(() => false),
     defaultIndex: -1,
+    hasFilterApplied: computed(() => false),
   }
 ) => {
-  const { disabled, defaultIndex } = params
+  const {
+    disabled,
+    defaultIndex,
+    hasFilterApplied,
+  } = params
 
   const renderedOptions = computed(() => options.value.filter((o) => o.isRendered))
   const activeDescendantIndex = ref(defaultIndex as number)
@@ -99,6 +105,14 @@ export default (
 
     if (optionEl && !isOptionVisible(optionEl)) {
       optionsEl.value.scrollTo(0, optionEl.offsetTop - optionsEl.value.offsetTop)
+    }
+  })
+
+  watch(options.value, () => {
+    if (hasFilterApplied.value) {
+      activeDescendantIndex.value = 0
+    } else {
+      activeDescendantIndex.value = -1
     }
   })
 

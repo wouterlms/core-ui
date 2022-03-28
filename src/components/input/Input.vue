@@ -124,7 +124,7 @@ export default {
 
       <Button
         v-else-if="providedProps.type === 'password'"
-        :icon-left="isPasswordVisible ? Svg.EYE_HIDE : Svg.EYE_VIEW"
+        :icon-left="isPasswordVisible ? Svg.CORE_EYE_HIDE : Svg.CORE_EYE_VIEW"
         :is-disabled="providedProps.isDisabled || providedProps.isReadonly"
         :color-scheme="color"
         variant="ghost"

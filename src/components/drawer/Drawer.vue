@@ -16,12 +16,17 @@ import Button from '../button/Button.vue'
 
 interface Props {
   show: boolean
-  title: string
-  width?: string,
+  title?: string
+  width?: string
+  inset?: string
+  containerPadding?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  width: '30em',
+  title: undefined,
+  width: '27em',
+  inset: '0px',
+  containerPadding: '2.5rem',
 })
 
 const showModal = useVModel(toRef(props, 'show'), 'show')
@@ -45,35 +50,47 @@ export default {
     <Transition name="slide-from-right">
       <div
         v-if="isVisible"
-        v-bind="stylingAttrs"
         :style="{
           width,
           borderRadius: useBorderRadius(),
+          padding: inset,
         }"
-        class="bg-secondary fixed h-screen right-0 top-0 z-20"
+        class="!pl-0 fixed h-full right-0 top-0 z-20"
       >
-        <header class="flex items-center justify-between mb-6 p-8 pb-0">
-          <div>
-            <h1
-              v-if="title"
-              class="font-medium text-primary text-xl"
-            >
-              {{ title }}
-            </h1>
-          </div>
+        <div
+          v-bind="stylingAttrs"
+          class="bg-secondary flex flex-col h-full w-full"
+        >
+          <header class="flex items-center justify-between mb-6 p-10 pb-0">
+            <slot name="title">
+              <h1
+                v-if="title"
+                class="font-medium text-lg text-secondary"
+              >
+                {{ title }}
+              </h1>
+            </slot>
 
-          <div>
-            <Button
-              variant="ghost"
-              padding="0.2em"
-              :color-scheme="getThemeColor('text-secondary')"
-              :icon-left="Svg.CLOSE_BOLD"
-              @click="close"
-            />
-          </div>
-        </header>
+            <div>
+              <Button
+                variant="ghost"
+                padding="0.2em"
+                :color-scheme="getThemeColor('text-secondary')"
+                :icon-left="Svg.CORE_CLOSE_BOLD"
+                @click="close"
+              />
+            </div>
+          </header>
 
-        <slot />
+          <div
+            :style="{
+              padding: `0 ${containerPadding}`
+            }"
+            class="h-full overflow-y-auto"
+          >
+            <slot />
+          </div>
+        </div>
       </div>
     </Transition>
 
@@ -92,8 +109,9 @@ export default {
 .overlay-transition {
   &-enter-active,
   &-leave-active {
-    transition: opacity 0.3s cubic-bezier(0.17, 0.67, 0.16, 0.99);
+    transition: opacity 0.4s cubic-bezier(0.17, 0.67, 0.16, 0.99);
   }
+
   &-enter-from,
   &-leave-to {
     opacity: 0;
@@ -103,12 +121,12 @@ export default {
 .slide-from-right {
   &-enter-active,
   &-leave-active {
-    transition: 0.5s cubic-bezier(0.17, 0.67, 0.16, 0.99);
+    transition: 0.4s cubic-bezier(.06,.94,.42,1);
   }
 
   &-enter-from,
   &-leave-to {
-    transform: translateX(100%);
+    transform: translateX(100%) /* scale(1.05) */;
   }
 }
 </style>

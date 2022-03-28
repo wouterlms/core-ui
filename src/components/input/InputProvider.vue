@@ -2,7 +2,6 @@
 import {
   computed,
   h,
-  nextTick,
   ref,
   toRef,
   useAttrs,
