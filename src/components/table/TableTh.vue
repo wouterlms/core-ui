@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
   Ref,
+  defineProps,
   inject,
+  withDefaults,
 } from 'vue'
 
 interface Props {

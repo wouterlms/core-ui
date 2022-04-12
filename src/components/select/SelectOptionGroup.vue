@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { defineProps, withDefaults } from 'vue'
+
 import { useIsMobileDevice } from '@wouterlms/composables'
 
 interface Props {

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
+  defineProps,
   toRef,
   watch,
+  withDefaults,
 } from 'vue'
 
 import { FocusTrap } from 'focus-trap-vue'

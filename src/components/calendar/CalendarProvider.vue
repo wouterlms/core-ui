@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   ref,
   toRef,
+  withDefaults,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'
@@ -43,17 +45,15 @@ const daysOfMonth = computed(() => currentMonthYear.value.getDate())
 /**
  * Number of days of the previous month
  */
-const daysOfPreviousMonth = computed(() => new Date(
-  year.value, month.value === 11 ? 0 : month.value - 1, 0
-).getDate())
+const daysOfPreviousMonth = computed(
+  () => new Date(year.value, month.value === 11 ? 0 : month.value - 1, 0).getDate()
+)
 
 /**
  * Number of week days before the 1st date of the current month
  */
 const indent = computed(() => {
-  const indentDay = new Date(
-    year.value, month.value - 1, 1
-  ).getDay() - 1
+  const indentDay = new Date(year.value, month.value - 1, 1).getDay() - 1
 
   if (indentDay < 0) {
     return 7 + indentDay
@@ -92,9 +92,7 @@ const dateArray = computed(() => {
   }
 
   for (let i = 1; i <= daysOfMonth.value; i += 1) {
-    current.push(new Date(
-      year.value, month.value - 1, i, 23, 59
-    ))
+    current.push(new Date(year.value, month.value - 1, i, 23, 59))
   }
 
   for (let i = 1; i <= adjenct.value; i += 1) {

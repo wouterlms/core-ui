@@ -18,7 +18,7 @@ export const key: InjectionKey<Provide> = Symbol('select')
 export const useSelect = () => {
   const data = inject(key)
 
-  if (!data) {
+  if (data == null) {
     throw new Error('`select` was not provided')
   }
 

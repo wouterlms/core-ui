@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   useSlots,
+  withDefaults,
 } from 'vue'
 
 import {
@@ -125,6 +127,8 @@ const computedPadding = computed(() => {
 
   return '1em 1.2em'
 })
+
+const hasExplicitWidth = computed(() => /w-/.test(stylingAttrs.value.class))
 </script>
 
 <script lang="ts">
@@ -143,7 +147,7 @@ export default {
       v-bind="stylingAttrs"
       :class="[
         {
-          'active:opacity-80': !providedProps.isDisabled && !providedProps.isLoading,
+          'active:brightness-[1.1]': !providedProps.isDisabled && !providedProps.isLoading,
           'opacity-50': providedProps.isDisabled,
           'focus:ring': isKeyboardMode,
         },
@@ -158,30 +162,50 @@ export default {
       class="border border-solid duration-200 relative text-sm"
     >
       <div
-        v-if="providedProps.isLoading"
+        v-if="providedProps.isLoading && !hasExplicitWidth"
         class="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2"
       >
         <Loader
           :accent-color="color"
-          class="text-xs"
+          class="text-[0.7em]"
         />
       </div>
 
       <div
         :class="{
-          'opacity-0': providedProps.isLoading
+          'opacity-0': providedProps.isLoading && !hasExplicitWidth
         }"
-        class="flex items-center justify-center"
+        class="flex items-center justify-center relative"
       >
-        <Icon
-          v-if="iconLeft"
-          :icon="iconLeft"
-          :style="{
-            width: iconSize,
-            height: iconSize,
-            marginRight: !!$slots.default ? iconSpacing : undefined
-          }"
-        />
+        <div class="relative">
+          <Transition :name="!!iconLeft ? 'loader-with-icon-left' : 'loader'">
+            <div
+              v-if="providedProps.isLoading"
+              :style="{
+                width: iconSize,
+                height: iconSize,
+                marginRight: !!$slots.default ? iconSpacing : undefined
+              }"
+              class="relative"
+            >
+              <Loader
+                :accent-color="color"
+                class="!absolute -translate-x-1/2 -translate-y-1/2 left-1/2 text-[0.7em] top-1/2"
+              />
+            </div>
+
+            <div v-else-if="iconLeft">
+              <Icon
+                :icon="iconLeft"
+                :style="{
+                  width: iconSize,
+                  height: iconSize,
+                  marginRight: !!$slots.default ? iconSpacing : undefined
+                }"
+              />
+            </div>
+          </Transition>
+        </div>
 
         <span class="pointer-events-none text-[0.875em] whitespace-nowrap">
           <slot />
@@ -200,3 +224,37 @@ export default {
     </Component>
   </ButtonProvider>
 </template>
+
+<style lang="scss">
+.loader {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.3s cubic-bezier(0.17, 0.67, 0.16, 0.99);
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    width: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+.loader-with-icon-left {
+  &-enter-active,
+  &-leave-active {
+    transition: 0.3s cubic-bezier(0.17, 0.67, 0.16, 0.99);
+  }
+
+  &-leave-active {
+    position: absolute;
+    left: 0;
+  }
+
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+  }
+
+}
+</style>

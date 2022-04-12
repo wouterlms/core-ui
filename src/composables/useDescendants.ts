@@ -10,8 +10,8 @@ import {
 import { useEventListener } from '@wouterlms/composables'
 
 interface Options {
-  disabled?: ComputedRef<boolean>,
-  defaultIndex?: number,
+  disabled?: ComputedRef<boolean>
+  defaultIndex?: number
   hasFilterApplied: ComputedRef<boolean>
 }
 
@@ -44,10 +44,10 @@ export default (
   const renderedOptions = computed(() => options.value.filter((o) => o.isRendered))
   const activeDescendantIndex = ref(defaultIndex as number)
   const activeDescendantOption = computed(
-    () => renderedOptions.value[activeDescendantIndex.value] || null
+    () => renderedOptions.value[activeDescendantIndex.value]
   )
 
-  if (disabled) {
+  if (disabled != null) {
     watch(disabled, (isDisabled) => {
       if (isDisabled) {
         activeDescendantIndex.value = defaultIndex as number
@@ -86,7 +86,7 @@ export default (
   const isOptionVisible = (option: HTMLElement) => {
     const container = optionsEl.value
 
-    if (!container) {
+    if (container == null) {
       return true
     }
 
@@ -97,7 +97,7 @@ export default (
   }
 
   watch((activeDescendantIndex), (index) => {
-    if (!optionsEl.value) {
+    if (optionsEl.value == null) {
       return
     }
 
@@ -123,15 +123,15 @@ export default (
 
     // eslint-disable-next-line default-case
     switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault()
-        findNextAvailableOption(Direction.DOWN)
-        break
+    case 'ArrowDown':
+      e.preventDefault()
+      findNextAvailableOption(Direction.DOWN)
+      break
 
-      case 'ArrowUp':
-        e.preventDefault()
-        findNextAvailableOption(Direction.UP)
-        break
+    case 'ArrowUp':
+      e.preventDefault()
+      findNextAvailableOption(Direction.UP)
+      break
     }
   })
 

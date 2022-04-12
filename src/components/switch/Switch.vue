@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {
+  defineProps,
   nextTick,
   onMounted,
   ref,
   useSlots,
+  withDefaults,
 } from 'vue'
 
 import {
@@ -36,7 +38,7 @@ const padding = '1px'
 let transition: string | null = null
 
 onMounted(async () => {
-  switchWidth.value = switchEl.value?.clientWidth || 0
+  switchWidth.value = switchEl.value?.clientWidth ?? 0
 
   // Delay setting the transition to make sure if the initial
   // state is checked, it does not transition
@@ -48,7 +50,7 @@ onMounted(async () => {
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
 const thumbStyle = (isChecked: boolean) => ({
-  transition: transition || undefined,
+  transition: transition ?? undefined,
   transform: isChecked
     ? `translateX(calc(${switchWidth.value}px - 100% - calc(${padding} * 2)))`
     : undefined,

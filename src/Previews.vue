@@ -6,22 +6,30 @@ const parent = ref()
 </script>
 
 <template>
-  <div class="h-[200vh] p-48">
-    <div
-      ref="parent"
-      class="border border-solid h-48 mt-[100vh]"
-    >
-      parent
-      <Tooltip
-        :margin="0"
-        :offset="0"
-        :inherit-width="true"
-        position="bottom"
+  <div class="p-48">
+    <div class="h-[100vh]" />
+
+    <div class="p-0">
+      <div
+        ref="parent"
+        class="border border-red-500 border-solid p-8"
       >
-        <div class="bg-red-200 p-2">
-          tooltip content
-        </div>
-      </Tooltip>
+        <Tooltip
+          :show="true"
+          :margin="0"
+          :offset="0"
+          :inherit-width="false"
+          :show-arrow="true"
+          :container="parent"
+          position="left"
+        >
+          <div class="p-2">
+            tooltip content
+          </div>
+        </Tooltip>
+      </div>
     </div>
+
+    <div class="h-[100vh]" />
   </div>
 </template>

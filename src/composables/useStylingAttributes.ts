@@ -20,7 +20,7 @@ export default () => {
       style,
       class: className,
     } as {
-      style: HTMLAttributes['style'],
+      style: HTMLAttributes['style']
       class: HTMLAttributes['class']
     }
   })

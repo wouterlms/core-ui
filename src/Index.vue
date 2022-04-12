@@ -18,7 +18,6 @@ import {
   Select,
   Switch,
 } from '@/components'
-import Test from './Test.vue'
 
 import { useTheme } from './composables'
 
@@ -100,6 +99,8 @@ const fileValue = ref([])
       >
         Radio
       </Radio>
+
+      {{ switchValue }}
 
       <Switch
         v-model="switchValue"

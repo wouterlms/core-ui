@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineProps, withDefaults } from 'vue'
 
 interface Props {
   error: boolean
@@ -43,6 +43,7 @@ const backgroundColor = computed(() => {
 </script>
 
 <template>
+  <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
   <label
     :class="[
       color,

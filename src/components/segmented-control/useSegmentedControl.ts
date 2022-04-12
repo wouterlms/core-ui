@@ -16,7 +16,7 @@ export const key: InjectionKey<Provide> = Symbol('segment')
 export const useSegmentedControl = () => {
   const data = inject(key)
 
-  if (!data) {
+  if (data == null) {
     throw new Error('`select` was not provided')
   }
 

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   h,
   ref,
   toRef,
   useAttrs,
   useSlots,
+  withDefaults,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'

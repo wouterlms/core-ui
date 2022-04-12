@@ -2,8 +2,10 @@
 import {
   ComputedRef,
   computed,
+  defineProps,
   onBeforeUnmount,
   reactive,
+  withDefaults,
 } from 'vue'
 
 import { useSelect } from './useSelect'
@@ -41,11 +43,11 @@ const isSelected = computed(() => {
     ))
   }
 
-  return !!selected.value && JSON.stringify(selected.value) === JSON.stringify(props.value)
+  return selected.value !== null && JSON.stringify(selected.value) === JSON.stringify(props.value)
 })
 
 const isActiveDescendant = computed<boolean>(
-  () => activeDescendantOption.value
+  () => activeDescendantOption.value !== undefined
   && JSON.stringify(activeDescendantOption.value.option) === JSON.stringify(props.value)
 )
 

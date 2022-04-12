@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {
+  defineProps,
   ref,
   toRef,
   watch,
+  withDefaults,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'
@@ -42,7 +44,7 @@ const scrollPositionValue = props.scrollPosition === undefined
 const scrollableEl = ref<HTMLElement | null>(null)
 
 const handleScroll = () => {
-  const scrollPos = scrollableEl.value?.scrollTop || 0
+  const scrollPos = scrollableEl.value?.scrollTop ?? 0
   scrollPositionValue.value = scrollPos
 }
 

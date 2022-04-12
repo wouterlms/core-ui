@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   ref,
   toRef,
   watch,
+  withDefaults,
 } from 'vue'
 
 import {
@@ -85,7 +87,7 @@ const handleOptionToggled = () => {
 }
 
 const getDisplayValue = (multiple: boolean): string | null => {
-  if (props.displayValueTransformer) {
+  if (props.displayValueTransformer !== undefined) {
     return props.displayValueTransformer(value.value)
   }
 
@@ -96,7 +98,7 @@ const getDisplayValue = (multiple: boolean): string | null => {
     )).join(', ')
   }
 
-  if (!props.modelValue) {
+  if (props.modelValue === null) {
     return null
   }
 
@@ -142,7 +144,7 @@ export default {
       v-model:show="isDropdownVisible"
       :inherit-width="true"
       :show-arrow="false"
-      margin="0.3em"
+      :margin="5"
       class="w-full"
     >
       <slot

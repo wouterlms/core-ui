@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   h,
   ref,
   toRef,
   useAttrs,
   useSlots,
+  withDefaults,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'
@@ -45,7 +47,7 @@ const slots = useSlots()
 
 const isFocused = ref(false)
 
-const isChecked = computed({
+const isChecked = computed<boolean>({
   get() {
     if (checkboxValue.value instanceof Array) {
       return checkboxValue.value.map((v) => JSON.stringify(v)).includes(JSON.stringify(props.value))

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   onBeforeUnmount,
   onMounted,
   provide,
@@ -8,6 +9,7 @@ import {
   ref,
   toRef,
   watch,
+  withDefaults,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'

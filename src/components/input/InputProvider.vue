@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   h,
   ref,
   toRef,
   useAttrs,
+  withDefaults,
   withDirectives,
 } from 'vue'
 

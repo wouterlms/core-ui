@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {
-  nextTick,
+  defineProps,
   ref,
   toRef,
   watch,
+  withDefaults,
 } from 'vue'
 
 import {
@@ -11,9 +12,7 @@ import {
   useVModel,
 } from '@wouterlms/composables'
 
-import { clickOutside as vClickOutside } from '@/directives'
-
-import Tooltip from '../tooltip/Tooltip.vue'
+import Tooltip from '../tooltip-v2/Tooltip.vue'
 
 interface Props {
   /**
@@ -27,16 +26,12 @@ interface Props {
   autoPlacement?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  autoPlacement: true,
-})
+const props = withDefaults(defineProps<Props>(), {})
 
 const showDropdown = useVModel(toRef(props, 'show'), 'show')
 
 const tooltipEl = ref<InstanceType<typeof Tooltip>>()
 const previouslyFocusedElement = ref<HTMLElement | null>(null)
-
-const autoPlacementPosition = ref<'top' | 'bottom'>('bottom')
 
 const scrollPosition = ref(0)
 const isClosedWithTabKey = ref(false)
@@ -84,34 +79,12 @@ watch(showDropdown, (show) => {
     previouslyFocusedElement.value.focus()
 
     hasFocusTimeout.value = true
-    autoPlacementPosition.value = 'bottom'
 
     setTimeout(() => {
       hasFocusTimeout.value = false
     }, 0)
   }
 })
-
-watch(([ scrollPosition, showDropdown ]), () => {
-  if (!props.autoPlacement || !showDropdown.value || hasFocusTimeout.value) {
-    return
-  }
-
-  const tooltipContent = tooltipEl.value?.$el as HTMLElement
-
-  const { height } = tooltipContent.getBoundingClientRect()
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const { height: parentHeight, top } = tooltipContent.parentElement!.getBoundingClientRect()
-
-  const isOverflowingAtTop = top - height < 0
-  const isOverflowingAtBottom = top + parentHeight + height > window.innerHeight
-
-  if (isOverflowingAtBottom && !isOverflowingAtTop) {
-    autoPlacementPosition.value = 'top'
-  } else {
-    autoPlacementPosition.value = 'bottom'
-  }
-}, { flush: 'post' })
 </script>
 
 <script lang="ts">
@@ -132,10 +105,8 @@ export default {
     <Tooltip
       v-bind="$attrs"
       ref="tooltipEl"
-      v-click-outside="() => showDropdown = false"
       :show="showDropdown && !hasFocusTimeout"
-      :is-interactable="true"
-      :position="autoPlacement ? autoPlacementPosition : undefined"
+      @click-outside="() => showDropdown = false"
     >
       <slot name="dropdown" />
     </Tooltip>

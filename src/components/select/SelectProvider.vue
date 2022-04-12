@@ -3,10 +3,11 @@ import {
   ComputedRef,
   Ref,
   computed,
+  defineProps,
   provide,
   readonly,
   ref,
-  toRef,
+  toRef, withDefaults,
 } from 'vue'
 
 import {
@@ -16,7 +17,7 @@ import {
 
 import { useDescendants } from '@/composables'
 
-import { key } from './useSelect'
+import { key as injectionKey } from './useSelect'
 
 interface Props {
   /**
@@ -142,23 +143,25 @@ useEventListener('keydown', (e: KeyboardEvent) => {
 useEventListener('keyup', (e: KeyboardEvent) => {
   const { key } = e
 
-  const validOptions = options.value.filter((option) => option.isRendered && !option.isDisabled)
+  const validOptions = options.value.filter((
+    option
+  ) => option.isRendered && option.isDisabled.value !== true)
 
   if (
     key === 'Enter'
     && props.isDropdownVisible
-    && ((validOptions.length && props.hasFilterApplied) || !!activeDescendantOption.value)
+    && ((validOptions.length && props.hasFilterApplied) || activeDescendantOption.value !== null)
   ) {
     e.preventDefault()
     e.stopImmediatePropagation()
 
-    const optionToSelect = activeDescendantOption.value?.option || validOptions[0].option
+    const optionToSelect = activeDescendantOption.value?.option ?? validOptions[0].option
 
     selectOption(optionToSelect)
   }
 })
 
-provide(key, {
+provide(injectionKey, {
   selectOption,
   registerOption,
   unregisterOption,

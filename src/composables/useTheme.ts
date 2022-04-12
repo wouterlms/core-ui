@@ -122,9 +122,9 @@ const groupNamePrefixMap: Record<ColorGroups, string> = {
 
 const setCssVariables = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const root = document.querySelector(':root') as any
+  const root = document.querySelector(':root')
 
-  if (!root) {
+  if (root == null) {
     throw new Error(':root selector not found')
   }
 
@@ -179,7 +179,7 @@ export default () => {
 
   const extendConfig = (colorConfig: ColorConfig) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Object.entries(colorConfig!).forEach(([ key, values ]) => {
+    Object.entries(colorConfig).forEach(([ key, values ]) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (config as any)[key] = {
         ...config[key as ColorGroups],
@@ -197,9 +197,9 @@ export default () => {
 
     const [ prefix ] = color.split('-')
 
-    const mappedPrefix = prefixMap[prefix as keyof typeof prefixMap]
+    const mappedPrefix = prefixMap[prefix as keyof typeof prefixMap] ?? null
 
-    if (!mappedPrefix) {
+    if (mappedPrefix === null) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return (activeColors.value as any).colors[kebabCaseToCamelCase(color)]
     }
@@ -218,14 +218,12 @@ export default () => {
       colors: {},
     },
   }) => {
-    const { colors: userColors, icons: userIcons } = userConfig || {}
-
-    if (userColors) {
-      extendConfig(userColors)
+    if (userConfig?.colors != null) {
+      extendConfig(userConfig.colors)
     }
 
-    if (userIcons) {
-      icons = userIcons
+    if (userConfig?.icons != null) {
+      icons = userConfig.icons
     }
 
     if (enableDarkMode !== false) {

@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import { defineProps, useSlots, withDefaults } from 'vue'
+
 import {
   useIsKeyboardMode,
   useStylingAttributes,
   useTheme,
 } from '@/composables'
-import { useSlots } from 'vue'
 
 import RadioProvider from './RadioProvider.vue'
 

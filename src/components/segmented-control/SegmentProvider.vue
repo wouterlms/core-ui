@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { useIsKeyboardMode } from '@/composables'
 import {
   computed,
+  defineProps,
   h,
   onBeforeUnmount,
+  withDefaults,
 } from 'vue'
+
+import { useIsKeyboardMode } from '@/composables'
 
 import { useSegmentedControl } from './useSegmentedControl'
 
@@ -33,7 +36,7 @@ onBeforeUnmount(() => {
 })
 
 const isSelected = computed(
-  () => selectedSegment.value
+  () => selectedSegment.value !== null
   && JSON.stringify(selectedSegment.value) === JSON.stringify(props.segment)
 )
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   watch,
+  withDefaults,
 } from 'vue'
 
 import { useTheme } from '@/composables'
@@ -12,7 +14,9 @@ interface Props {
   preserveOriginalColor?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  preserveOriginalColor: false,
+})
 
 const { icons } = useTheme()
 const component = 'svg'
@@ -23,7 +27,7 @@ const svg = computed(() => ({
 }[props.icon]))
 
 watch(svg, (svgValue) => {
-  if (!svgValue) {
+  if (svgValue === undefined) {
     throw new Error(`\`${props.icon}\` could not be found`)
   }
 }, { immediate: true })
@@ -41,7 +45,7 @@ const removeHexCodes = (path: string) => {
 }
 
 const viewBox = computed(() => {
-  if (!svg.value) {
+  if (svg.value === undefined) {
     return ''
   }
 
@@ -54,7 +58,7 @@ const viewBox = computed(() => {
 })
 
 const paths = computed(() => {
-  if (!svg.value) {
+  if (svg.value === undefined) {
     return ''
   }
 

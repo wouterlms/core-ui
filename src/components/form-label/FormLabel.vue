@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, defineProps, withDefaults } from 'vue'
 
 import { useTheme } from '@/composables'
 
@@ -21,7 +21,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { getThemeColor } = useTheme()
 
-const computedColor = computed(() => (props.error ? getThemeColor('error') : getThemeColor(props.color)))
+const computedColor = computed(() => (
+  typeof props.error === 'string' || props.error === true
+    ? getThemeColor('error')
+    : getThemeColor(props.color)
+))
 </script>
 
 <template>

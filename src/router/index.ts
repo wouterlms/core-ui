@@ -9,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'test',
-      component: () => import('@/Index.vue'),
+      component: async () => await import('@/Index.vue'),
     }
   ],
 })

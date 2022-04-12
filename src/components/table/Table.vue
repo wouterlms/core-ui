@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { provide } from 'vue'
+import { defineProps, provide, withDefaults } from 'vue'
 
 interface Props {
   grid: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-
-})
+const props = withDefaults(defineProps<Props>(), {})
 
 provide('grid', props.grid)
 </script>

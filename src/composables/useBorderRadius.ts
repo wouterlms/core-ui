@@ -13,7 +13,7 @@ const mappedBorderRadius: Record<BorderRadius, string> = {
 export default () => {
   const { props } = useInstance('useBorderRadius')
 
-  if (!props.rounded) {
+  if (typeof props.rounded !== 'string') {
     return '0em'
   }
 

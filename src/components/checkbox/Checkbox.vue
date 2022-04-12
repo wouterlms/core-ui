@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSlots } from 'vue'
+import { defineProps, useSlots, withDefaults } from 'vue'
 
 import {
   useBorderRadius,

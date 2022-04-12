@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {
   computed,
+  defineProps,
   h,
   ref,
   toRef,
-  watch,
+  watch, withDefaults,
 } from 'vue'
 
 import { useVModel } from '@wouterlms/composables'
@@ -51,7 +52,7 @@ const areEqualFiles = (fileA: File, fileB: File) => (
 const previews = computed<Preview[]>(() => files.value.map((file) => ({
   file,
   url: URL.createObjectURL(file),
-  error: !props.validator(file)
+  error: props.validator(file) === false
     || !isSupportedmimeType(file)
     || file.size > props.maxFileSize,
 })))
@@ -107,11 +108,11 @@ const handleDropzoneInput = (e: DragEvent) => {
 // TODO
 const removeFile = (file?: Preview) => {
   if (multiple.value) {
-    if (!file?.url) {
+    if (typeof file?.url !== 'string') {
       throw Error('`file` parameter is required')
     }
 
-    if (!file.error) {
+    if (file.error === true) {
       const valueIndex = (value.value as Array<File | string>).findIndex((v) => (
         v instanceof File
         && areEqualFiles(v, file.file as File)
@@ -151,20 +152,24 @@ watch(files, () => {
 
   if (multiple.value) {
     const validFiles = files.value.filter((file) => (
-      props.validator(file) && isSupportedmimeType(file) && file.size <= props.maxFileSize
+      props.validator(file) === true && isSupportedmimeType(file) && file.size <= props.maxFileSize
     ))
 
     const limit = props.limit - (value.value as Array<unknown>).length
 
     value.value = [ ...value.value as Array<unknown>, ...validFiles.slice(0, limit) ]
   } else {
-    const file = files.value[0]
+    const file = files.value[0] ?? null
 
-    if (!file) {
+    if (file === null) {
       return
     }
 
-    if (props.validator(file) && isSupportedmimeType(file) && file.size <= props.maxFileSize) {
+    if (
+      props.validator(file) === true
+      && isSupportedmimeType(file)
+      && file.size <= props.maxFileSize
+    ) {
       value.value = file
     }
   }
