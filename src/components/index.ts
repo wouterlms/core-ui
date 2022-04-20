@@ -1,3 +1,5 @@
+export { default as Banner } from './banner/Banner.vue'
+
 export { default as Button } from './button/Button.vue'
 export { default as ButtonProvider } from './button/ButtonProvider.vue'
 

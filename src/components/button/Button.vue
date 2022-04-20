@@ -24,13 +24,13 @@ import Loader from '../loader/Loader.vue'
 
 interface Props {
   /** Button styling */
-  variant?: 'solid' | 'outline' | 'ghost'
+  variant?: 'solid' | 'outline' | 'ghost' | 'unstyled'
 
   /**
    * Color scheme - can be predefined scheme or a custom color
    * @values 'success' | 'error' | 'danger' | string
    */
-  colorScheme?: 'success' | 'error' | 'danger' | string
+  colorScheme?: 'success' | 'warning' | 'error' | 'danger' | string
 
   /**
    * Show icon on the left side
@@ -93,7 +93,11 @@ if (!colorSchemeColor.value) {
 const textColor = computed(() => (isDarkColor(colorSchemeColor.value) ? '#fff' : '#000'))
 
 const backgroundColor = computed(() => {
-  if (props.variant === 'outline' || props.variant === 'ghost') {
+  if ([
+    'outline',
+    'ghost',
+    'unstyled'
+  ].includes(props.variant)) {
     return 'transparent'
   }
 
@@ -101,15 +105,19 @@ const backgroundColor = computed(() => {
 })
 
 const color = computed(() => {
-  if (props.variant === 'outline' || props.variant === 'ghost') {
+  if ([ 'ghost', 'outline' ].includes(props.variant)) {
     return colorSchemeColor.value
+  }
+
+  if (props.variant === 'unstyled') {
+    return getThemeColor('text-secondary')
   }
 
   return textColor.value
 })
 
 const borderColor = computed(() => {
-  if (props.variant === 'solid' || props.variant === 'outline') {
+  if ([ 'solid', 'outline' ].includes(props.variant)) {
     return colorSchemeColor.value
   }
 
@@ -119,6 +127,10 @@ const borderColor = computed(() => {
 const computedPadding = computed(() => {
   if (props.padding) {
     return props.padding
+  }
+
+  if (props.variant === 'unstyled') {
+    return '0em'
   }
 
   if (slots.default) {
@@ -147,7 +159,7 @@ export default {
       v-bind="stylingAttrs"
       :class="[
         {
-          'active:brightness-[1.1]': !providedProps.isDisabled && !providedProps.isLoading,
+          'active:brightness-[1.2]': !providedProps.isDisabled && !providedProps.isLoading,
           'opacity-50': providedProps.isDisabled,
           'focus:ring': isKeyboardMode,
         },
@@ -180,7 +192,7 @@ export default {
         <div class="relative">
           <Transition :name="!!iconLeft ? 'loader-with-icon-left' : 'loader'">
             <div
-              v-if="providedProps.isLoading"
+              v-if="providedProps.isLoading && hasExplicitWidth"
               :style="{
                 width: iconSize,
                 height: iconSize,

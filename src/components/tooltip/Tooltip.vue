@@ -1,210 +1,168 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import {
+  computed,
+  defineEmits,
+  defineProps,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  withDefaults,
+} from 'vue'
 
-enum Position {
-  TOP = 'top',
-  BOTTOM = 'bottom',
-  LEFT = 'left',
-  RIGHT = 'right',
-}
+import {
+  Middleware,
+  Placement,
+  arrow,
+  autoUpdate,
+  computePosition,
+  flip,
+  offset,
+  shift,
+  size,
+} from '@floating-ui/dom'
 
-enum Align {
-  TOP = 'top',
-  LEFT = 'left',
-  CENTER = 'center',
-  BOTTOM = 'bottom',
-  RIGHT = 'right',
-}
+import { clickOutside as vClickOutside } from '@/directives'
+import { useTheme } from '@/composables'
 
 interface Props {
   show: boolean
-  position?: 'top' | 'bottom' | 'left' | 'right'
-  align?: 'top' | 'left' | 'center' | 'bottom' | 'right'
-  alignArrow?: 'top' | 'left' | 'center' | 'bottom' | 'right'
-  margin?: string
-  offset?: string
-  arrowOffset?: string
-  transition?: string
-  showArrow?: boolean
+  position?: Placement
+  offset?: number
+  margin?: number
+  zIndex?: number,
   inheritWidth?: boolean
-  isInteractable?: boolean
+  showArrow?: boolean
+  teleport?: boolean
+  backgroundColor?: string
+
+  container?: HTMLElement
+}
+
+enum TooltipState {
+  INITIAL,
+  ENTERING,
+  VISIBLE,
+  LEAVING,
 }
 
 const props = withDefaults(defineProps<Props>(), {
   position: 'bottom',
-  align: 'center',
-  alignArrow: 'center',
-  margin: '0px',
-  offset: '0px',
-  arrowOffset: '0px',
-  transition: undefined,
+  offset: 0,
+  margin: 0,
+  zIndex: 2,
+  inheritWidth: false,
   showArrow: true,
-  isInteractable: false,
+  teleport: false,
+  backgroundColor: 'bg-primary',
+
+  container: undefined,
 })
 
-const transformCssProperties = (properties: Record<string, string | number | undefined>) => {
-  const transformedProperties: Record<string, string | number | undefined> = {}
+const emit = defineEmits<{(event: 'clickOutside', e: MouseEvent): void }>()
 
-  Object.entries(properties).forEach(([ key, value ]) => {
-    if (typeof value === 'number') {
-      transformedProperties[key] = `${value}px`
-    } else {
-      transformedProperties[key] = value
-    }
+const { getThemeColor } = useTheme()
+
+const emptyEl = ref()
+const tooltipEl = ref()
+const parentEl = ref()
+const arrowEl = ref()
+
+const state = ref(TooltipState.INITIAL)
+
+const computedZIndex = computed(() => {
+  if (state.value === TooltipState.ENTERING) {
+    return props.zIndex + 1
+  }
+
+  if (state.value === TooltipState.LEAVING) {
+    return props.zIndex + 2
+  }
+
+  return props.zIndex
+})
+
+const backgroundColorHex = computed(() => getThemeColor(props.backgroundColor))
+
+let cleanup: (() => void) | null = null
+
+const position = reactive({
+  x: 0,
+  y: 0,
+})
+
+const arrowPosition = reactive<{ x: number | null, y: number | null }>({
+  x: 0,
+  y: 0,
+})
+
+const actualPosition = ref<'top' | 'bottom' | 'left' | 'right'>('bottom')
+
+const width = ref<number>()
+
+const isHorizontalPlacement = computed(() => (
+  [ 'top', 'bottom' ].includes(props.position)
+))
+
+const updatePosition = async () => {
+  const middleware: Middleware[] = [
+    offset({
+      mainAxis: isHorizontalPlacement.value ? props.margin : props.offset,
+      crossAxis: isHorizontalPlacement.value ? props.offset : props.margin,
+    })
+  ]
+
+  if (props.container !== undefined) {
+    middleware.push(shift({
+      boundary: props.container,
+      padding: 0, // Maybe later if necessary
+    }))
+  }
+
+  middleware.push(
+    flip(),
+    arrow({
+      element: arrowEl.value,
+    }),
+    size({
+      apply({ reference }) {
+        width.value = reference.width
+      },
+    })
+  )
+
+  const {
+    x,
+    y,
+    middlewareData: { arrow: _arrowPosition },
+    placement,
+  } = await computePosition(parentEl.value, tooltipEl.value, {
+    middleware,
+    placement: props.position,
   })
 
-  return transformedProperties
+  actualPosition.value = {
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+  }[placement.split('-')[0]] as typeof actualPosition.value
+
+  position.x = x
+  position.y = y
+
+  arrowPosition.x = _arrowPosition?.x ?? null
+  arrowPosition.y = _arrowPosition?.y ?? null
 }
 
-// TODO: format code
+onMounted(() => {
+  parentEl.value = emptyEl.value.parentElement
 
-const style = computed(() => {
-  let position: Record<string, number | string | undefined> = {
-    top: undefined,
-    left: undefined,
-    bottom: undefined,
-    right: undefined,
-  }
-
-  let transform: Record<string, string | number | undefined> = {
-    x: 0,
-    y: 0,
-  }
-
-  const isVertical = props.position === Position.TOP || props.position === Position.BOTTOM
-
-  if (isVertical) {
-    if (props.align === Align.LEFT) {
-      position.left = `-${props.offset}`
-    } else if (props.align === Align.RIGHT) {
-      position.right = `-${props.offset}`
-    } else {
-      position.left = `calc(50% + ${props.offset})`
-      transform.x = '-50%'
-    }
-  // Horizontal
-  } else if (props.align === Align.TOP) {
-    position.top = `-${props.offset}`
-  } else if (props.align === Align.BOTTOM) {
-    position.bottom = `-${props.offset}`
-  } else {
-    position.top = `calc(50% + ${props.offset})`
-    transform.y = '-50%'
-  }
-
-  // eslint-disable-next-line default-case
-  switch (props.position) {
-    case Position.TOP:
-      position.top = `-${props.margin}`
-      transform.y = '-100%'
-      break
-
-    case Position.BOTTOM:
-      position.bottom = `-${props.margin}`
-      transform.y = '100%'
-      break
-
-    case Position.LEFT:
-      position.left = `-${props.margin}`
-      transform.x = '-100%'
-      break
-
-    case Position.RIGHT:
-      position.right = `-${props.margin}`
-      transform.x = '100%'
-      break
-  }
-
-  position = transformCssProperties(position)
-  transform = transformCssProperties(transform)
-
-  return {
-    ...position,
-    transform: `translate3d(${transform.x}, ${transform.y}, 0)`,
-  }
+  cleanup = autoUpdate(parentEl.value, tooltipEl.value, updatePosition)
 })
 
-const arrowStyle = computed(() => {
-  let position: Record<string, number | string | undefined> = {
-    top: undefined,
-    left: undefined,
-    bottom: undefined,
-    right: undefined,
-  }
-
-  let transform: Record<string, string | number | undefined> = {
-    x: 0,
-    y: 0,
-  }
-
-  const isVertical = props.position === Position.TOP || props.position === Position.BOTTOM
-
-  if (isVertical) {
-    if (props.alignArrow === Align.LEFT) {
-      position.left = props.arrowOffset
-    } else if (props.alignArrow === Align.RIGHT) {
-      position.right = props.arrowOffset
-    } else {
-      position.left = `calc(50% + ${props.arrowOffset})`
-      transform.x = '-50%'
-    }
-  // Horizontal
-  } else if (props.alignArrow === Align.TOP) {
-    position.top = `-${props.arrowOffset}`
-  } else if (props.alignArrow === Align.BOTTOM) {
-    position.bottom = `-${props.arrowOffset}`
-  } else {
-    position.top = `calc(50% + ${props.arrowOffset})`
-    transform.y = '-50%'
-  }
-
-  // eslint-disable-next-line default-case
-  switch (props.position) {
-    case Position.TOP:
-      position.bottom = '1px'
-      transform.y = '50%'
-      break
-
-    case Position.BOTTOM:
-      position.top = '1px'
-      transform.y = '-50%'
-      break
-
-    case Position.LEFT:
-      position.right = '1px'
-      transform.x = '50%'
-      break
-
-    case Position.RIGHT:
-      position.left = '1px'
-      transform.x = '-50%'
-      break
-  }
-
-  position = transformCssProperties(position)
-  transform = transformCssProperties(transform)
-
-  return {
-    ...position,
-    transform: `translate3d(${transform.x}, ${transform.y}, 0) rotate(45deg)`,
-  }
-})
-
-const computedTransition = computed(() => {
-  if (props.transition) {
-    return props.transition
-  }
-
-  let tooltipTransition = 'bottom'
-
-  if (props.position === Position.TOP) {
-    tooltipTransition = 'top'
-  } else if (props.position === Position.LEFT) {
-    tooltipTransition = 'left'
-  } else if (props.position === Position.RIGHT) {
-    tooltipTransition = 'right'
-  }
-  return `tooltip-transition-${tooltipTransition}`
+onBeforeUnmount(() => {
+  cleanup?.()
 })
 </script>
 
@@ -215,109 +173,72 @@ export default {
 </script>
 
 <template>
-  <Transition :name="computedTransition">
-    <div
-      v-if="show"
-      :style="style"
-      :class="{
-        'w-full': inheritWidth,
-        'pointer-events-none': !isInteractable
-      }"
-      class="absolute z-[1]"
+  <div ref="emptyEl" />
+
+  <Teleport
+    to="body"
+    :disabled="!teleport"
+  >
+    <Transition
+      name="tooltip-transition"
+      @before-enter="state = TooltipState.ENTERING"
+      @after-enter="state = TooltipState.VISIBLE"
+      @before-leave="state = TooltipState.LEAVING"
     >
       <div
-        :class="{
-          transition: '0.2s cubic-bezier(0.22, 0.68, 0, 1.51)',
+        v-show="show"
+        v-bind="$attrs"
+        ref="tooltipEl"
+        v-click-outside="(e: MouseEvent) => emit('clickOutside', e)"
+        :style="{
+          backgroundColor: backgroundColorHex,
+          zIndex: computedZIndex,
+          top: `${position.y}px`,
+          left: `${position.x}px`,
+          width: inheritWidth ? `${width}px` : undefined,
         }"
-        class="bg-primary content overflow-hidden rounded shadow-light w-full"
+        class="absolute rounded shadow-light"
       >
         <div
-          v-if="showArrow"
-          :style="arrowStyle"
-          class="absolute bg-primary h-[10px] rounded-[0.15em] transform w-[10px]"
+          v-show="showArrow"
+          ref="arrowEl"
+          :style="{
+            backgroundColor: backgroundColorHex,
+            left: arrowPosition.x !== null ? `${arrowPosition.x}px` : '',
+            top: arrowPosition.y !== null ? `${arrowPosition.y}px` : '',
+            right: '',
+            bottom: '',
+            [actualPosition]: '-4px',
+          }"
+          class="absolute h-3 rotate-45 rounded-sm shadow-light w-3"
         />
 
         <div
-          v-bind="$attrs"
-          class="bg-primary overflow-hidden relative rounded-sm z-[1]"
+          :style="{
+            backgroundColor: backgroundColorHex,
+          }"
+          class="h-full left-0 relative rounded top-0 w-full z-[1]"
         >
           <slot />
         </div>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </Teleport>
 </template>
 
 <style scoped lang="scss">
-.tooltip-transition-top,
-.tooltip-transition-bottom,
-.tooltip-transition-left,
-.tooltip-transition-right {
+.tooltip-transition {
   &-enter-active,
   &-leave-active {
-    transition: opacity 0.2s cubic-bezier(0.22, 0.68, 0, 1.51);
+    transition:
+      0.15s transform,
+      0.15s opacity;
   }
 
   &-enter-from,
   &-leave-to {
-    .content {
-      opacity: 0;
-    }
-  }
-}
-
-.tooltip-transition-top {
-  &-enter-from,
-  &-leave-to {
-    .content {
-      transform: translateY(5px);
-    }
-  }
-}
-
-.tooltip-transition-bottom {
-  &-enter-from,
-  &-leave-to {
-    .content {
-      transform: translateY(-5px);
-    }
-  }
-}
-
-.tooltip-transition-left {
-  &-enter-from,
-  &-leave-to {
-    .content {
-      transform: translateX(5px);
-    }
-  }
-}
-
-.tooltip-transition-right {
-  &-enter-from,
-  &-leave-to {
-    .content {
-      transform: translateX(-5px);
-    }
-  }
-}
-
-.sleek {
-  &-enter-active,
-  &-leave-active {
-    transition: 0.2s opacity cubic-bezier(0.22, 0.68, 0, 1.3);
-
-    .content {
-      transition: 0.2s cubic-bezier(0.22, 0.68, 0, 1.3);
-    }
-  }
-
-  &-enter-from,
-  &-leave-to {
-    .content {
-      transform: scale(0.9);
-      opacity: 0;
-    }
+    transform: scale(0.98);
+    opacity: 0;
   }
 }
 </style>

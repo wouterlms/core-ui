@@ -15,6 +15,7 @@ interface Colors extends Record<ColorGroups, Record<string, Color>> {
   colors: {
     accentPrimary: Color
     success: Color
+    warning: Color
     error: Color
     danger: Color
 
@@ -68,6 +69,7 @@ const config: Colors = reactive({
   colors: {
     accentPrimary: '#4343e0',
     success: '#43b581',
+    warning: '#e6a23c',
     error: '#f56c6c',
     danger: '#f56c6c',
 
@@ -122,7 +124,7 @@ const groupNamePrefixMap: Record<ColorGroups, string> = {
 
 const setCssVariables = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const root = document.querySelector(':root')
+  const root = document.querySelector(':root') as HTMLElement
 
   if (root == null) {
     throw new Error(':root selector not found')

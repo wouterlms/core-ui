@@ -71,7 +71,7 @@ const getDotColor = () => {
           borderColor: getBorderColor(isChecked, isFocused),
         }"
         class="bg-primary
-        border
+        border-[1.5px]
         border-solid
         duration-200
         flex
@@ -114,7 +114,7 @@ const getDotColor = () => {
 .dot-transition {
   &-enter-active,
   &-leave-active {
-    transition: 0.3s cubic-bezier(0.22, 0.68, 0, 1.51);
+    transition: 0.3s cubic-bezier(0.22, 0.68, 0, 1);
   }
 
   &-enter-from,

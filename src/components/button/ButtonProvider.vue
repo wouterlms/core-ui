@@ -52,7 +52,11 @@ const attrs = useAttrs()
 const slots = useSlots()
 
 const component = computed<typeof RouterLink | string>(() => {
-  if (typeof props.to === 'string' || props.href) {
+  if (props.to !== undefined) {
+    return RouterLink
+  }
+
+  if (props.href !== undefined) {
     return 'a'
   }
 

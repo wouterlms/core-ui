@@ -89,7 +89,7 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
           borderColor :getBorderColor(isChecked, isFocused),
           borderRadius: useBorderRadius()
         }"
-        class="border
+        class="border-[1.5px]
           border-solid
           duration-200
           flex
@@ -137,7 +137,7 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
 .tick-transition {
   &-enter-active,
   &-leave-active {
-    transition: 0.3s cubic-bezier(0.22, 0.68, 0, 1.51);
+    transition: 0.3s cubic-bezier(0.22, 0.68, 0, 1);
   }
 
   &-enter-from,

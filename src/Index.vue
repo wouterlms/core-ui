@@ -72,7 +72,6 @@ const fileValue = ref([])
           :icon-right="undefined"
           :is-disabled="false"
           :is-loading="false"
-          to="/"
           variant="solid"
           color-scheme="accent-primary"
           rounded="default"
@@ -215,7 +214,8 @@ const fileValue = ref([])
 
           <div
             :class="[
-              isChecked || isFocused ? 'border-accent-primary' : 'border-input'
+              isChecked || isFocused ? 'border-accent-primary' : 'border-input',
+              isFocused ? 'ring' : ''
             ]"
             class="absolute
               bg-primary

@@ -1,33 +1,32 @@
 <script setup lang="ts">
-import { computed, defineProps, withDefaults } from 'vue'
+import { defineProps, withDefaults } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 
 import { Svg } from '@/utils'
 
 import Icon from '../icon/Icon.vue'
 
 interface Props {
-  route?: string
+  to?: RouteLocationRaw
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  route: undefined,
+withDefaults(defineProps<Props>(), {
+  to: undefined,
 })
-
-const isNamedRoute = computed(() => !props.route?.startsWith('/'))
 </script>
 
 <template>
   <Component
-    :is="!!route ? 'RouterLink' : 'div'"
-    :to="isNamedRoute ? { name: route } : route"
-    :class="[!!route ? 'hover:underline text-secondary' : 'text-tertiary']"
+    :is="!!to ? 'RouterLink' : 'div'"
+    :to="to"
+    :class="[!!to ? 'hover:underline text-secondary' : 'text-tertiary']"
     class="max-w-[12rem] text-sm truncate"
   >
     <slot />
   </Component>
 
   <Icon
-    v-if="route"
+    v-if="to"
     :icon="Svg.CORE_CHEVRON_RIGHT"
     class="h-auto mx-3 text-tertiary w-1"
   />

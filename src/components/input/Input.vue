@@ -143,7 +143,8 @@ export default {
 :deep input,
 :deep textarea {
   &::placeholder {
-    @apply text-[0.875em] text-input-placeholder font-light;
+    @apply text-input-placeholder text-[0.875em];
+    // @apply text-[0.875em] text-input-placeholder font-light;
   }
 }
 </style>

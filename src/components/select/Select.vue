@@ -47,12 +47,6 @@ interface Props {
   closeOnSelect?: boolean
 
   /**
-   * Whether to immediately show the dropdown when the input is focused
-   * Defaults: to `true`
-   */
-  showOnFocus?: boolean
-
-  /**
    * Customize display value
    */
   displayValueTransformer?: (value: unknown | null) => string | null
@@ -72,6 +66,7 @@ const optionsEl = ref<InstanceType<typeof Scrollable>>()
 const filterInputEl = ref()
 const nativeSelectEl = ref<HTMLElement | null>(null)
 const isDropdownVisible = ref(false)
+const isFilterInputFocused = ref(false)
 
 const isFilterable = computed(() => props.filter !== undefined)
 
@@ -82,8 +77,12 @@ const handleOptionToggled = () => {
   if (props.closeOnSelect) {
     isDropdownVisible.value = false
   } else if (isFilterable.value) {
-    filterInputEl.value.$el.nextSibling.focus()
+    // filterInputEl.value.$el.nextSibling.focus()
   }
+}
+
+const handleClick = () => {
+  isDropdownVisible.value = !isDropdownVisible.value
 }
 
 const getDisplayValue = (multiple: boolean): string | null => {
@@ -166,7 +165,7 @@ export default {
           }"
           icon-right-size="0.6em"
           @keydown.space.prevent="isDropdownVisible = true"
-          @click="isDropdownVisible = !isDropdownVisible"
+          @click="handleClick"
         >
           <template #left>
             <slot name="left" />
@@ -176,19 +175,27 @@ export default {
             v-if="isFilterable && isDropdownVisible && !isMobileDevice"
             #input
           >
+            <!-- eslint-disable vuejs-accessibility/no-autofocus -->
             <InputProvider
               ref="filterInputEl"
               v-slot="{ Component }"
               v-model="filterValue"
               :autofocus="true"
-              :placeholder="$attrs.placeholder"
+              :placeholder="getDisplayValue(multiple) || $attrs.placeholder"
               :tabindex="-1"
             >
               <Component
                 :is="Component"
-                class="border-none input p-[0.5em] px-2 text-input w-full"
+                :class="{
+                  'filter-input-placeholder':
+                    getDisplayValue(multiple) !== null && !isFilterInputFocused
+                }"
+                class="border-none filter-input p-[0.5em] px-2 text-input w-full"
+                @focus="isFilterInputFocused = true"
+                @blur="isFilterInputFocused = false"
               />
             </InputProvider>
+            <!-- eslint-enable vuejs-accessibility/no-autofocus -->
           </template>
         </Input>
       </slot>
@@ -220,9 +227,15 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.input {
+.filter-input {
   :deep &::placeholder {
-    @apply text-[0.875em] text-input-placeholder font-light;
+    @apply text-[1em] duration-200;
+  }
+}
+
+.filter-input-placeholder {
+  :deep &::placeholder {
+    @apply text-input;
   }
 }
 </style>

@@ -125,7 +125,7 @@ const unregisterOption = (option: unknown) => {
   ))
 
   if (index === -1) {
-    // This happens, but I don't know why
+    // This happens sometimes, but I don't know why
   } else {
     options.value[index].isRendered = false
   }
@@ -138,6 +138,16 @@ useEventListener('keydown', (e: KeyboardEvent) => {
   if (key === 'Enter' && props.isDropdownVisible) {
     e.preventDefault()
   }
+
+  // if (key === 'Tab' && props.isDropdownVisible) {
+  //   setTimeout(() => {
+  //     document.body.dispatchEvent(new KeyboardEvent('keydown', {
+  //       bubbles: true,
+  //       cancelable: false,
+  //       key: 'Tab',
+  //     }))
+  //   }, 500)
+  // }
 })
 
 useEventListener('keyup', (e: KeyboardEvent) => {
