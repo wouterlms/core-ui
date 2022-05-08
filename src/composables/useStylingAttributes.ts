@@ -4,6 +4,11 @@ import {
   useAttrs,
 } from 'vue'
 
+interface StylingAttrs {
+  style: HTMLAttributes['style']
+  class: HTMLAttributes['class']
+}
+
 export default () => {
   const attrs = useAttrs()
 
@@ -13,16 +18,14 @@ export default () => {
     style: undefined,
   }))
 
-  const stylingAttrs = computed(() => {
+  const stylingAttrs = computed<StylingAttrs>(() => {
     const { style, class: className } = attrs
 
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     return {
       style,
       class: className,
-    } as {
-      style: HTMLAttributes['style']
-      class: HTMLAttributes['class']
-    }
+    } as StylingAttrs
   })
 
   return {

@@ -101,9 +101,9 @@ export default (
       return
     }
 
-    const optionEl = optionsEl.value.querySelectorAll('button')[index] as HTMLElement
+    const optionEl = (optionsEl.value.querySelectorAll('button')[index] ?? null) as HTMLElement | null
 
-    if (optionEl && !isOptionVisible(optionEl)) {
+    if (optionEl !== null && !isOptionVisible(optionEl)) {
       optionsEl.value.scrollTo(0, optionEl.offsetTop - optionsEl.value.offsetTop)
     }
   })
@@ -117,21 +117,16 @@ export default (
   })
 
   useEventListener('keydown', (e: KeyboardEvent) => {
-    if (disabled?.value) {
+    if (disabled?.value === true) {
       return
     }
 
-    // eslint-disable-next-line default-case
-    switch (e.key) {
-    case 'ArrowDown':
+    if (e.key === 'ArrowDown') {
       e.preventDefault()
       findNextAvailableOption(Direction.DOWN)
-      break
-
-    case 'ArrowUp':
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       findNextAvailableOption(Direction.UP)
-      break
     }
   })
 

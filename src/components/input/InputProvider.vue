@@ -46,7 +46,7 @@ export interface Props {
   /**
    * Native button types + `textarea`
    */
-  type?: 'text' | 'number' | 'password' | 'email' | 'textarea',
+  type?: 'text' | 'number' | 'password' | 'email' | 'date' | 'time' | 'textarea',
 
   /**
    * Textarea height

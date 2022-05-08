@@ -111,7 +111,10 @@ const getDisplayValue = (multiple: boolean): string | null => {
 
 watch(isDropdownVisible, (show) => {
   if (!show) {
-    filterValue.value = null
+    // Timeout is used so that the list doesn't update when closing
+    setTimeout(() => {
+      filterValue.value = null
+    }, 200)
   }
 
   if (show && isMobileDevice) {
