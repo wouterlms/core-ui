@@ -12,7 +12,7 @@ import {
   useVModel,
 } from '@wouterlms/composables'
 
-import { Tooltip } from '@/components'
+import { Popover } from '@/components'
 
 interface Props {
   /**
@@ -32,11 +32,12 @@ const props = withDefaults(defineProps<Props>(), {})
 
 const showDropdown = useVModel(toRef(props, 'show'), 'show')
 
-const tooltipEl = ref<InstanceType<typeof Tooltip>>()
+const popoverEl = ref<InstanceType<typeof Popover>>()
 const wrapperEl = ref<HTMLElement | null>(null)
 const previouslyFocusedElement = ref<HTMLElement | null>(null)
 
 const scrollPosition = ref(0)
+const wasClosedByMouse = ref(false)
 
 useEventListener('scroll', () => {
   scrollPosition.value = window.scrollY
@@ -72,9 +73,12 @@ watch(showDropdown, (show) => {
       previouslyFocusedElement.value = (document.activeElement ?? null) as HTMLElement | null
     }, 0)
   } else if (previouslyFocusedElement.value) {
-    previouslyFocusedElement.value.focus()
+    if (!wasClosedByMouse.value) {
+      previouslyFocusedElement.value.focus()
+    }
 
     hasFocusTimeout.value = true
+    wasClosedByMouse.value = false
 
     setTimeout(() => {
       hasFocusTimeout.value = false
@@ -98,6 +102,7 @@ const isChildElement = (element: HTMLElement) => {
 
 const handleClickOutside = ({ target }: MouseEvent) => {
   if (!isChildElement(target as HTMLElement)) {
+    wasClosedByMouse.value = true
     showDropdown.value = false
   }
 }
@@ -119,13 +124,13 @@ export default {
   >
     <slot />
 
-    <Tooltip
+    <Popover
       v-bind="$attrs"
-      ref="tooltipEl"
+      ref="popoverEl"
       :show="showDropdown && !hasFocusTimeout"
       @click-outside="handleClickOutside"
     >
       <slot name="dropdown" />
-    </Tooltip>
+    </Popover>
   </div>
 </template>

@@ -28,6 +28,8 @@ export { default as Modal } from './modal/Modal.vue'
 export { default as ModalOverlay } from './modal/ModalOverlay.vue'
 export { default as ModalProvider } from './modal/ModalProvider.vue'
 
+export { default as Popover } from './popover/Popover.vue'
+
 export { default as Radio } from './radio/Radio.vue'
 export { default as RadioProvider } from './radio/RadioProvider.vue'
 
@@ -52,5 +54,3 @@ export { default as Th } from './table/TableTh.vue'
 export { default as Tr } from './table/TableTr.vue'
 
 export { default as Toasts } from './toast/Toasts.vue'
-
-export { default as Tooltip } from './tooltip/Tooltip.vue'

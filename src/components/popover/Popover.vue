@@ -197,7 +197,7 @@ export default {
           left: `${position.x}px`,
           width: inheritWidth ? `${width}px` : undefined,
         }"
-        class="absolute rounded shadow-light"
+        class="absolute overflow-hidden rounded shadow-light"
       >
         <div
           v-show="showArrow"
