@@ -40,6 +40,8 @@
     // "no-param-reassign": "off",
     // "import/no-extraneous-dependencies": "off",
 
+    // "putout/array-elements-newline": "error",
+
     "sort-imports": ["error", {
       "ignoreDeclarationSort": true
     }],
@@ -58,7 +60,7 @@
     */
     "max-len": ["error", {
       "code": 100,
-      "comments": 75,
+      "comments": 100,
       "ignoreTrailingComments": true,
       "ignoreStrings": true,
       "ignoreTemplateLiterals": true,

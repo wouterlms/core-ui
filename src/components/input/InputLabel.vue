@@ -1,13 +1,19 @@
 <script setup lang="ts">
+import { useTheme } from '@/composables'
 import { computed, defineProps, withDefaults } from 'vue'
 
 interface Props {
   error: boolean
   isDisabled: boolean
   isFocused: boolean
+  borderColor?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  borderColor: 'border-input',
+})
+
+const { getThemeColor } = useTheme()
 
 const color = computed(() => {
   if (props.isDisabled) {
@@ -23,14 +29,14 @@ const color = computed(() => {
 
 const borderColor = computed(() => {
   if (props.error) {
-    return 'border-error'
+    return getThemeColor('border-error')
   }
 
   if (props.isFocused) {
-    return 'border-accent-primary'
+    return getThemeColor('border-accent-primary')
   }
 
-  return 'border-input'
+  return getThemeColor(props.borderColor)
 })
 
 const backgroundColor = computed(() => {
@@ -47,13 +53,15 @@ const backgroundColor = computed(() => {
   <label
     :class="[
       color,
-      borderColor,
       backgroundColor,
       {
         'opacity-50': props.isDisabled,
         'border-error': !!error
       }
     ]"
+    :style="{
+      borderColor
+    }"
     class="border border-solid duration-200 flex items-center"
   >
     <slot :color="color" />

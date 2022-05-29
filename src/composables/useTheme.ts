@@ -1,71 +1,21 @@
-import {
-  computed,
-  reactive,
-  watch,
-} from 'vue'
-import useDarkMode from './useDarkMode'
+import { computed, reactive, watch } from 'vue'
 
+import {
+  camelCaseToKebabCase,
+  groupNamePrefixMap,
+  isTwColor,
+  kebabCaseToCamelCase,
+  prefixMap,
+} from '@/utils/themeHelpers'
+
+import { ColorConfig, ColorGroups, Colors } from '@/types'
+
+import useDarkMode from './useDarkMode'
 import '../styles/tailwind.scss'
 
-type ColorGroups = 'colors' | 'textColor' | 'backgroundColor' | 'borderColor'
+const { isDark } = useDarkMode()
 
-type Color = string | [string, string]
-
-interface Colors extends Record<ColorGroups, Record<string, Color>> {
-  colors: {
-    accentPrimary: Color
-    success: Color
-    warning: Color
-    error: Color
-    danger: Color
-
-    grayPrimary: Color
-    graySecondary: Color
-    grayTertiary: Color
-    grayQuaternary: Color
-  }
-  textColor: {
-    primary: Color
-    secondary: Color
-    tertiary: Color
-
-    input: Color
-    inputDisabled: Color
-    inputPlaceholder: Color
-  }
-  backgroundColor: {
-    primary: Color
-    secondary: Color
-    tertiary: Color
-
-    input: Color
-    inputDisabled: Color
-
-    switch: Color
-  }
-  borderColor: {
-    primary: Color
-    secondary: Color
-    tertiary: Color
-
-    input: Color
-  }
-}
-
-type ColorConfig = Partial<{ [K in keyof Colors]: K extends 'colors'
-  ? Partial<Colors[K]> & Record<string, string | [string, string]>
-  : Partial<Colors[K]>
-}>
-
-interface Settings {
-  enableDarkMode?: boolean
-  config?: {
-    colors?: ColorConfig
-    icons?: Record<string, string>
-  }
-}
-
-const config: Colors = reactive({
+const colors: Colors = reactive({
   colors: {
     accentPrimary: '#4343e0',
     success: '#43b581',
@@ -107,20 +57,6 @@ const config: Colors = reactive({
 })
 
 let icons: Record<string, string> = {}
-const { isDark, detectTheme } = useDarkMode()
-
-const camelCaseToKebabCase = (
-  str: string
-) => str.split('').map((letter, idx) => (letter.toUpperCase() === letter
-  ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}`
-  : letter)).join('')
-
-const groupNamePrefixMap: Record<ColorGroups, string> = {
-  colors: '',
-  textColor: 'text-',
-  backgroundColor: 'bg-',
-  borderColor: 'border-',
-}
 
 const setCssVariables = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -132,10 +68,10 @@ const setCssVariables = () => {
 
   const index = isDark.value ? 1 : 0
 
-  Object.entries(config).forEach(([ colorGroup, colors ]) => {
+  Object.entries(colors).forEach(([ colorGroup, currentColors ]) => {
     const prefix = groupNamePrefixMap[colorGroup as ColorGroups]
 
-    Object.entries((colors)).forEach(([ colorKey, colorValue ]) => {
+    Object.entries((currentColors)).forEach(([ colorKey, colorValue ]) => {
       const color = Array.isArray(colorValue) ? colorValue[index] : colorValue
 
       root.style.setProperty(`--${prefix}${camelCaseToKebabCase(colorKey)}`, color)
@@ -143,54 +79,26 @@ const setCssVariables = () => {
   })
 }
 
-watch([ isDark, config ], () => {
+watch([ isDark, colors ], () => {
   setCssVariables()
 }, { immediate: true })
 
 export default () => {
-  const prefixMap: Record<'text' | 'bg' | 'border', string> = {
-    text: 'textColor',
-    bg: 'backgroundColor',
-    border: 'borderColor',
-  }
-
-  const kebabCaseToCamelCase = (str: string) => {
-    const arr = str.split('-')
-    const capital = arr.map((item, index) => (
-      index ? item.charAt(0).toUpperCase() + item.slice(1).toLowerCase() : item.toLowerCase()))
-    const capitalString = capital.join('')
-
-    return capitalString
-  }
-
   const activeColors = computed(() => {
-    const activeColors: Record<string, Record<string, string>> = {}
+    const activeColorMap: Record<string, Record<string, string>> = {}
     const index = isDark.value ? 1 : 0
 
-    Object.entries(config).forEach(([ colorGroup, colors ]) => {
-      activeColors[colorGroup] = {}
+    Object.entries(colors).forEach(([ colorGroup, currentColors ]) => {
+      activeColorMap[colorGroup] = {}
 
-      Object.entries((colors)).forEach(([ colorKey, colorValue ]) => {
+      Object.entries((currentColors)).forEach(([ colorKey, colorValue ]) => {
         const color = Array.isArray(colorValue) ? colorValue[index] : colorValue
-        activeColors[colorGroup][colorKey] = color
+        activeColorMap[colorGroup][colorKey] = color
       })
     })
 
-    return activeColors as { [K in keyof Colors]: Record<keyof Colors[K], string> }
+    return activeColorMap as { [K in keyof Colors]: Record<keyof Colors[K], string> }
   })
-
-  const extendConfig = (colorConfig: ColorConfig) => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    Object.entries(colorConfig).forEach(([ key, values ]) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (config as any)[key] = {
-        ...config[key as ColorGroups],
-        ...values,
-      }
-    })
-  }
-
-  const isTwColor = (color: string) => !color.startsWith('#') && !color.startsWith('rgb')
 
   const getThemeColor = (color: string): string => {
     if (!isTwColor(color)) {
@@ -208,35 +116,33 @@ export default () => {
 
     const colorNameWithoutPrefix = color.split('-').slice(1).join('-')
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any,  @typescript-eslint/strict-boolean-expressions
     return (activeColors.value as any)[mappedPrefix][kebabCaseToCamelCase(colorNameWithoutPrefix)]
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       || (activeColors.value as any).colors[kebabCaseToCamelCase(colorNameWithoutPrefix)]
   }
 
-  const createTheme = ({ config: userConfig, enableDarkMode }: Settings = {
-    enableDarkMode: true,
-    config: {
-      colors: {},
-    },
-  }) => {
-    if (userConfig?.colors != null) {
-      extendConfig(userConfig.colors)
-    }
+  const extendConfig = (colorConfig: ColorConfig) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    Object.entries(colorConfig).forEach(([ key, values ]) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (colors as any)[key] = {
+        ...colors[key as ColorGroups],
+        ...values,
+      }
+    })
+  }
 
-    if (userConfig?.icons != null) {
-      icons = userConfig.icons
-    }
-
-    if (enableDarkMode !== false) {
-      detectTheme()
-    }
+  const setIcons = (newIcons: Record<string, string>) => {
+    icons = newIcons
   }
 
   return {
     colors: activeColors,
-    icons,
-    createTheme,
     getThemeColor,
+    _icons: icons,
+    _extendConfig: extendConfig,
+    _setIcons: setIcons,
   }
 }

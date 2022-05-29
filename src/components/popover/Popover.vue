@@ -197,7 +197,7 @@ export default {
           left: `${position.x}px`,
           width: inheritWidth ? `${width}px` : undefined,
         }"
-        class="absolute overflow-hidden rounded shadow-light"
+        class="absolute rounded shadow-primary"
       >
         <div
           v-show="showArrow"
@@ -210,14 +210,14 @@ export default {
             bottom: '',
             [actualPosition]: '-4px',
           }"
-          class="absolute h-3 rotate-45 rounded-sm shadow-light w-3"
+          class="absolute h-3 rotate-45 rounded-sm shadow-primary w-3"
         />
 
         <div
           :style="{
             backgroundColor: backgroundColorHex,
           }"
-          class="h-full left-0 relative rounded top-0 w-full z-[1]"
+          class="h-full left-0 overflow-hidden relative rounded top-0 w-full z-[1]"
         >
           <slot />
         </div>

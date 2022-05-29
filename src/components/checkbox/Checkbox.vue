@@ -21,6 +21,8 @@ interface Props {
   value: unknown
   error?: boolean
   accentColor?: string
+  backgroundColor?: string
+  borderColor?: string
 
   rounded?: BorderRadius
 }
@@ -29,6 +31,8 @@ const props = withDefaults(defineProps<Props>(), {
   error: false,
   rounded: 'sm',
   accentColor: 'accent-primary',
+  backgroundColor: 'bg-primary',
+  borderColor: 'border-input',
 })
 
 const isKeyboardMode = useIsKeyboardMode()
@@ -46,7 +50,7 @@ const getBackgroundColor = (isChecked: boolean) => {
     return getThemeColor(props.accentColor)
   }
 
-  return getThemeColor('bg-primary')
+  return getThemeColor(props.backgroundColor)
 }
 
 const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
@@ -58,7 +62,7 @@ const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
     return getThemeColor(props.accentColor)
   }
 
-  return getThemeColor('border-input')
+  return getThemeColor(props.borderColor)
 }
 
 const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true))) ? '#fff' : '#000')

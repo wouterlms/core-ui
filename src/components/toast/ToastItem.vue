@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { defineEmits, defineProps, withDefaults } from 'vue'
 import { useTimeout } from '@wouterlms/composables'
 
 import { useTheme } from '@/composables'
@@ -19,7 +20,7 @@ const emit = defineEmits<{(event: 'close'): void }>()
 
 const { getThemeColor } = useTheme()
 
-if (props.toast.timeout) {
+if (props.toast.timeout !== undefined) {
   useTimeout(() => {
     emit('close')
   }, props.toast.timeout)
@@ -27,12 +28,12 @@ if (props.toast.timeout) {
 
 const color = getThemeColor(props.toast.type || '#4447e0')
 
-const handleActionClick = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  props.toast.action!.cb()
+// const handleActionClick = () => {
+//   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//   props.toast.action!.cb()
 
-  emit('close')
-}
+//   emit('close')
+// }
 </script>
 
 <template>
@@ -71,7 +72,7 @@ const handleActionClick = () => {
       <Button
         :icon-left="Svg.CORE_CLOSE_BOLD"
         variant="ghost"
-        icon-left-size="8px"
+        icon-size="8px"
         color-scheme="text-tertiary"
         padding="0.2em"
         class="ml-auto"

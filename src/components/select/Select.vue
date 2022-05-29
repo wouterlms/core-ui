@@ -217,6 +217,8 @@ export default {
         v-if="!isMobileDevice"
         #dropdown
       >
+        <slot name="top" />
+
         <Scrollable
           v-bind="nonStylingAttrs"
           ref="optionsEl"
@@ -224,6 +226,8 @@ export default {
         >
           <slot />
         </Scrollable>
+
+        <slot name="bottom" />
       </template>
     </Dropdown>
   </SelectProvider>

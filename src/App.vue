@@ -1,15 +1,30 @@
 <script setup lang="ts">
-import Test from './Test.vue'
-import Index from './Index.vue'
+import { onMounted, ref } from 'vue'
+import { Toasts } from '@/components'
 
-import { useTheme } from './composables'
+const toasts = ref<InstanceType<typeof Toasts>>()
 
-const { createTheme } = useTheme()
+onMounted(() => {
+  toasts.value?.createToast({
+    title: 'Hello',
+    message: 'World',
+    type: 'success',
+    timeout: 5000,
+  })
 
-createTheme()
+  setTimeout(() => {
+    toasts.value?.createToast({
+      title: 'Hello',
+      message: 'World',
+      type: 'error',
+      timeout: 5000,
+    })
+  }, 1000)
+})
 </script>
 
 <template>
-  <Index />
-  <Test />
+  <div>
+    <Toasts ref="toasts" />
+  </div>
 </template>

@@ -4,7 +4,7 @@ module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   safelist: [
     {
-      pattern: /(border|bg|text)-(accent-primary|success|error|danger)/,
+      pattern: /(border|bg|text)-(accent-primary|success|warning|error|danger)/,
     }
   ],
   theme: {

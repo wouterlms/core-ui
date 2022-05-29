@@ -18,12 +18,12 @@ const props = withDefaults(defineProps<Props>(), {
   preserveOriginalColor: false,
 })
 
-const { icons } = useTheme()
+const { _icons } = useTheme()
 const component = 'svg'
 
 const svg = computed(() => ({
   ...svgs,
-  ...icons,
+  ..._icons,
 }[props.icon]))
 
 watch(svg, (svgValue) => {

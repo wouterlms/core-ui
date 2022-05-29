@@ -52,6 +52,7 @@ const isChecked = computed<boolean>({
     if (checkboxValue.value instanceof Array) {
       return checkboxValue.value.map((v) => JSON.stringify(v)).includes(JSON.stringify(props.value))
     }
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     return !!checkboxValue.value
   },
   set(checked: unknown) {

@@ -23,6 +23,7 @@ interface Props {
   iconRight?: Svg
   iconLeftSize?: string
   iconRightSize?: string
+  borderColor?: string
 
   padding?: string,
   rounded?: BorderRadius
@@ -34,6 +35,8 @@ withDefaults(defineProps<Props>(), {
   iconRight: undefined,
   iconLeftSize: '0.9375em',
   iconRightSize: '0.9375em',
+  borderColor: 'border-input',
+
   padding: '0.5em',
   rounded: 'default',
 })
@@ -72,6 +75,7 @@ export default {
       :error="!!error"
       :is-disabled="providedProps.isDisabled"
       :is-focused="isFocused"
+      :border-color="borderColor"
       :style="{
         borderRadius: useBorderRadius()
       }"

@@ -19,14 +19,11 @@ import {
   Switch,
 } from '@/components'
 
-import { useTheme } from './composables'
-
-import { Svg } from './utils'
-
-const { createTheme } = useTheme()
+import { Svg, createTheme } from './utils'
 
 createTheme({
-  enableDarkMode: true,
+  extend: {},
+  darkMode: true,
 })
 
 const options = [
@@ -117,6 +114,7 @@ const fileValue = ref([])
         :error="false"
         :icon-left="undefined"
         :icon-right="undefined"
+        border-color="#000"
         rounded="default"
       />
 

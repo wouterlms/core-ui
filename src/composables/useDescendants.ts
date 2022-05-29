@@ -78,7 +78,7 @@ export default (
       }
     }
 
-    if (activeDescendantOption.value.isDisabled) {
+    if (activeDescendantOption.value.isDisabled.value) {
       findNextAvailableOption(direction)
     }
   }
