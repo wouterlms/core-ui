@@ -20,6 +20,7 @@ interface Props {
   title?: string
   showCloseButton?: boolean
   blur?: boolean
+  padding?: string
 
   rounded?: BorderRadius
 }
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), {
   title: undefined,
   showCloseButton: true,
   blur: true,
+  padding: '0em',
 
   rounded: 'default',
 })
@@ -59,11 +61,16 @@ export default {
         }"
         class="-translate-x-1/2 -translate-y-1/2 bg-secondary fixed left-1/2 top-1/2 z-20"
       >
-        <header class="flex items-center justify-between">
+        <header
+          :style="{
+            padding
+          }"
+          class="flex items-center justify-between"
+        >
           <div>
             <h1
               v-if="title"
-              class="font-medium text-lg text-secondary"
+              class="font-medium text-lg text-primary"
             >
               {{ title }}
             </h1>
@@ -74,6 +81,7 @@ export default {
               v-if="showCloseButton"
               variant="ghost"
               padding="0.2em"
+              icon-size="0.7em"
               :color-scheme="getThemeColor('text-secondary')"
               :icon-left="Svg.CORE_CLOSE_BOLD"
               @click="close"
