@@ -11,7 +11,7 @@ import { useIsKeyboardMode } from '@/composables'
 
 import { useSegmentedControl } from './useSegmentedControl'
 
-interface Props {
+export interface Props {
   /**
    * Segment value
    */

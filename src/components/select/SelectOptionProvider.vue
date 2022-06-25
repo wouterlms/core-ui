@@ -10,7 +10,7 @@ import {
 
 import { useSelect } from './useSelect'
 
-interface Props {
+export interface Props {
   /**
    * Option value
    */

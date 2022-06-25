@@ -16,7 +16,7 @@ interface Preview {
   error?: boolean
 }
 
-interface Props {
+export interface Props {
   // eslint-disable-next-line @typescript-eslint/ban-types
   modelValue: Object | string | string[] | File | File[] | null
   limit?: number

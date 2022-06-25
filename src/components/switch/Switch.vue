@@ -11,12 +11,13 @@ import {
 import {
   useIsKeyboardMode,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
+
+import { colors } from '@/utils'
 
 import CheckboxProvider from '../checkbox/CheckboxProvider.vue'
 
-interface Props {
+export interface Props {
   modelValue: unknown
   value?: unknown
   accentColor?: string
@@ -25,10 +26,9 @@ interface Props {
 withDefaults(defineProps<Props>(), {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: true as any,
-  accentColor: 'accent-primary',
+  accentColor: colors.accent.primary,
 })
 
-const { getThemeColor } = useTheme()
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
 
@@ -80,7 +80,9 @@ const thumbStyle = (isChecked: boolean) => ({
         ]"
         :style="{
           padding,
-          backgroundColor: isChecked ? getThemeColor(accentColor) : getThemeColor('bg-switch'),
+          backgroundColor: isChecked
+            ? colors.accent.primary
+            : colors.background.switch,
         }"
         class="border
           border-solid

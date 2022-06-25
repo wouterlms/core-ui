@@ -14,7 +14,7 @@ import {
 
 import { Popover } from '@/components'
 
-interface Props {
+export interface Props {
   /**
    * @model
    */

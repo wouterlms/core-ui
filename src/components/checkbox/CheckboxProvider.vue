@@ -12,7 +12,7 @@ import {
 
 import { useVModel } from '@wouterlms/composables'
 
-interface Props {
+export interface Props {
   /**
    * @model
    */

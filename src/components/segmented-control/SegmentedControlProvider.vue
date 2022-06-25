@@ -21,7 +21,7 @@ interface SegmentDimensions {
   width: number
 }
 
-interface Props {
+export interface Props {
   /**
    * @model
    */

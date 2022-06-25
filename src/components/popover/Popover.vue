@@ -23,9 +23,10 @@ import {
 } from '@floating-ui/dom'
 
 import { clickOutside as vClickOutside } from '@/directives'
-import { useTheme } from '@/composables'
 
-interface Props {
+import { colors } from '@/utils'
+
+export interface Props {
   show: boolean
   position?: Placement
   offset?: number
@@ -54,14 +55,12 @@ const props = withDefaults(defineProps<Props>(), {
   inheritWidth: false,
   showArrow: true,
   teleport: false,
-  backgroundColor: 'bg-primary',
+  backgroundColor: colors.background.primary,
 
   container: undefined,
 })
 
 const emit = defineEmits<{(event: 'clickOutside', e: MouseEvent): void }>()
-
-const { getThemeColor } = useTheme()
 
 const emptyEl = ref()
 const tooltipEl = ref()
@@ -81,8 +80,6 @@ const computedZIndex = computed(() => {
 
   return props.zIndex
 })
-
-const backgroundColorHex = computed(() => getThemeColor(props.backgroundColor))
 
 let cleanup: (() => void) | null = null
 
@@ -191,7 +188,7 @@ export default {
         ref="tooltipEl"
         v-click-outside="(e: MouseEvent) => emit('clickOutside', e)"
         :style="{
-          backgroundColor: backgroundColorHex,
+          backgroundColor,
           zIndex: computedZIndex,
           top: `${position.y}px`,
           left: `${position.x}px`,
@@ -203,7 +200,7 @@ export default {
           v-show="showArrow"
           ref="arrowEl"
           :style="{
-            backgroundColor: backgroundColorHex,
+            backgroundColor,
             left: arrowPosition.x !== null ? `${arrowPosition.x}px` : '',
             top: arrowPosition.y !== null ? `${arrowPosition.y}px` : '',
             right: '',
@@ -215,7 +212,7 @@ export default {
 
         <div
           :style="{
-            backgroundColor: backgroundColorHex,
+            backgroundColor,
           }"
           class="h-full left-0 overflow-hidden relative rounded top-0 w-full z-[1]"
         >

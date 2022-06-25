@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useTheme } from '@/composables'
 import { computed, defineProps, withDefaults } from 'vue'
 
-interface Props {
+import { colors } from '@/utils'
+
+export interface Props {
   error: boolean
   isDisabled: boolean
   isFocused: boolean
@@ -10,10 +11,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  borderColor: 'border-input',
+  borderColor: colors.border.input,
 })
-
-const { getThemeColor } = useTheme()
 
 const color = computed(() => {
   if (props.isDisabled) {
@@ -29,14 +28,14 @@ const color = computed(() => {
 
 const borderColor = computed(() => {
   if (props.error) {
-    return getThemeColor('border-error')
+    return colors.accent.error
   }
 
   if (props.isFocused) {
-    return getThemeColor('border-accent-primary')
+    return colors.accent.primary
   }
 
-  return getThemeColor(props.borderColor)
+  return props.borderColor
 })
 
 const backgroundColor = computed(() => {

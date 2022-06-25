@@ -14,7 +14,7 @@ import { Svg } from '@/utils'
 import ModalProvider from '../modal/ModalProvider.vue'
 import Button from '../button/Button.vue'
 
-interface Props {
+export interface Props {
   show: boolean
   title?: string
   width?: string

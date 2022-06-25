@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, defineProps, withDefaults } from 'vue'
 
-import { useTheme } from '@/composables'
+import { colors } from '@/utils'
 
-interface Props {
+export interface Props {
   is?: string
   label?: string
   error?: string | boolean | null | undefined
@@ -16,15 +16,13 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   error: undefined,
   position: 'top',
-  color: 'text-secondary',
+  color: colors.text.secondary,
 })
-
-const { getThemeColor } = useTheme()
 
 const computedColor = computed(() => (
   typeof props.error === 'string' || props.error === true
-    ? getThemeColor('error')
-    : getThemeColor(props.color)
+    ? colors.accent.error
+    : props.color
 ))
 </script>
 

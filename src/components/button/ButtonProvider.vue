@@ -13,7 +13,7 @@ import {
   RouterLink,
 } from 'vue-router'
 
-interface Props {
+export interface Props {
   /**
    * Renders a `<RouterLink>`
    */

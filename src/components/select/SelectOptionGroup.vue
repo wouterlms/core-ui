@@ -3,7 +3,7 @@ import { defineProps, withDefaults } from 'vue'
 
 import { useIsMobileDevice } from '@wouterlms/composables'
 
-interface Props {
+export interface Props {
   label: string
 }
 

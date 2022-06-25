@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue'
+import {
+  defineProps,
+  withDefaults,
+} from 'vue'
 
 import {
   useBorderRadius,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
 
 import { BorderRadius } from '@/types'
-import { Svg } from '@/utils'
+import { Svg, colors } from '@/utils'
 
 import Button from '../button/Button.vue'
 import Icon from '../icon/Icon.vue'
@@ -16,7 +18,7 @@ import InputLabel from './InputLabel.vue'
 import InputProvider from './InputProvider.vue'
 import Loader from '../loader/Loader.vue'
 
-interface Props {
+export interface Props {
   modelValue: string | number | null
   error?: boolean
   iconLeft?: Svg
@@ -35,19 +37,18 @@ withDefaults(defineProps<Props>(), {
   iconRight: undefined,
   iconLeftSize: '0.9375em',
   iconRightSize: '0.9375em',
-  borderColor: 'border-input',
+  borderColor: colors.border.input,
 
   padding: '0.5em',
   rounded: 'default',
 })
 
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
-const { colors } = useTheme()
 
 const getIconColor = (error: boolean) => (
   error
-    ? 'text-error'
-    : 'text-tertiary'
+    ? colors.accent.error
+    : colors.text.tertiary
 )
 </script>
 
@@ -83,10 +84,10 @@ export default {
       <Icon
         v-if="iconLeft"
         :icon="iconLeft"
-        :class="[getIconColor(error)]"
         :style="{
           width: iconLeftSize,
           height: iconLeftSize,
+          color: getIconColor(error),
         }"
         class="flex-shrink-0 ml-[0.625em]"
       />
@@ -113,7 +114,7 @@ export default {
 
       <Loader
         v-if="providedProps.isLoading"
-        :accent-color="colors.textColor.input"
+        :accent-color="colors.text.input"
         class="mr-[0.5em] text-[0.875em]"
       />
 

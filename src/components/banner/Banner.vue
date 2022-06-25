@@ -13,7 +13,7 @@ import { Svg } from '@/utils'
 import Button from '../button/Button.vue'
 import Icon from '../icon/Icon.vue'
 
-interface Props {
+export interface Props {
   colorScheme?: 'success' | 'warning' | 'danger' | string
   title: string
   isClosable?: boolean

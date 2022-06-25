@@ -15,7 +15,7 @@ import { BorderRadius } from '@/types'
 import ModalProvider from './ModalProvider.vue'
 import Button from '../button/Button.vue'
 
-interface Props {
+export interface Props {
   show: boolean
   title?: string
   showCloseButton?: boolean

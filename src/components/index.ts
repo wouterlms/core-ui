@@ -3,8 +3,6 @@ export { default as Banner } from './banner/Banner.vue'
 export { default as Button } from './button/Button.vue'
 export { default as ButtonProvider } from './button/ButtonProvider.vue'
 
-export { default as CalendarProvider } from './calendar/CalendarProvider.vue'
-
 export { default as Checkbox } from './checkbox/Checkbox.vue'
 export { default as CheckboxProvider } from './checkbox/CheckboxProvider.vue'
 

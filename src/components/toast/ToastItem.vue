@@ -10,7 +10,7 @@ import { Svg } from '@/utils'
 import Icon from '../icon/Icon.vue'
 import Button from '../button/Button.vue'
 
-interface Props {
+export interface Props {
   toast: Toast
 }
 

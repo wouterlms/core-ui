@@ -80,7 +80,6 @@ const fileValue = ref([])
       <Checkbox
         v-model="checkboxValue"
         :is-disabled="false"
-        accent-color="accent-primary"
         value="value"
       >
         Checkbox
@@ -90,7 +89,6 @@ const fileValue = ref([])
         v-model="radioValue"
         :is-disabled="false"
         :error="false"
-        accent-color="accent-primary"
         value="value"
       >
         Radio
@@ -102,7 +100,6 @@ const fileValue = ref([])
         v-model="switchValue"
         :is-disabled="false"
         :error="false"
-        accent-color="accent-primary"
       >
         Switch
       </Switch>
@@ -114,7 +111,6 @@ const fileValue = ref([])
         :error="false"
         :icon-left="undefined"
         :icon-right="undefined"
-        border-color="#000"
         rounded="default"
       />
 

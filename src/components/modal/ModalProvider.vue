@@ -15,7 +15,7 @@ import {
 
 import Overlay from './ModalOverlay.vue'
 
-interface Props {
+export interface Props {
   /**
    * @modal
    * Show modal

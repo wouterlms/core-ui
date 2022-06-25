@@ -11,26 +11,24 @@ import {
   useColor,
   useIsKeyboardMode,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
 
-import { BorderRadius } from '@/types'
+import { Svg, colors } from '@/utils'
 
-import { Svg } from '@/utils'
+import { BorderRadius } from '@/types'
 
 import ButtonProvider from './ButtonProvider.vue'
 import Icon from '../icon/Icon.vue'
 import Loader from '../loader/Loader.vue'
 
-interface Props {
+export interface Props {
+  /**
+   * Button color
+   */
+  accentColor?: string
+
   /** Button styling */
   variant?: 'solid' | 'outline' | 'ghost' | 'unstyled'
-
-  /**
-   * Color scheme - can be predefined scheme or a custom color
-   * @values 'success' | 'error' | 'danger' | string
-   */
-  colorScheme?: 'success' | 'warning' | 'error' | 'danger' | string
 
   /**
    * Show icon on the left side
@@ -66,8 +64,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  accentColor: colors.accent.primary,
   variant: 'solid',
-  colorScheme: 'accent-primary',
   iconLeft: undefined,
   iconRight: undefined,
   iconSize: '0.875em',
@@ -79,18 +77,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 const { isDarkColor } = useColor()
-const { getThemeColor } = useTheme()
 
 const slots = useSlots()
 const isKeyboardMode = useIsKeyboardMode()
 
-const colorSchemeColor = computed(() => getThemeColor(props.colorScheme))
-
-if (!colorSchemeColor.value) {
-  throw new Error('Invalid `color-scheme` color')
-}
-
-const textColor = computed(() => (isDarkColor(colorSchemeColor.value) ? '#fff' : '#000'))
+const textColor = computed(() => (isDarkColor(props.accentColor) ? '#fff' : '#000'))
 
 const backgroundColor = computed(() => {
   if ([
@@ -101,16 +92,16 @@ const backgroundColor = computed(() => {
     return 'transparent'
   }
 
-  return colorSchemeColor.value
+  return props.accentColor
 })
 
 const color = computed(() => {
   if ([ 'ghost', 'outline' ].includes(props.variant)) {
-    return colorSchemeColor.value
+    return props.accentColor
   }
 
   if (props.variant === 'unstyled') {
-    return getThemeColor('text-secondary')
+    return colors.text.secondary
   }
 
   return textColor.value
@@ -118,7 +109,7 @@ const color = computed(() => {
 
 const borderColor = computed(() => {
   if ([ 'solid', 'outline' ].includes(props.variant)) {
-    return colorSchemeColor.value
+    return props.accentColor
   }
 
   return 'transparent'

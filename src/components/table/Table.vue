@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, provide, withDefaults } from 'vue'
 
-interface Props {
+export interface Props {
   grid: string
 }
 

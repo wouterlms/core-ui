@@ -3,7 +3,7 @@ import { defineProps, withDefaults } from 'vue'
 
 import SegmentProvider from './SegmentProvider.vue'
 
-interface Props {
+export interface Props {
   segment: unknown
 }
 

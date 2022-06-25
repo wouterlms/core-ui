@@ -1,21 +1,22 @@
-export type ColorGroups = 'colors' | 'textColor' | 'backgroundColor' | 'borderColor'
+export type ColorGroups = 'accent' | 'gray' | 'text' | 'background' | 'border'
 
 export type Color = string | [string, string]
 
-export interface Colors extends Record<ColorGroups, Record<string, Color>> {
-  colors: {
-    accentPrimary: Color
+export interface Colors extends Record<ColorGroups, Record<keyof ColorGroups, Color>> {
+  accent: {
+    primary: Color
     success: Color
     warning: Color
     error: Color
     danger: Color
-
-    grayPrimary: Color
-    graySecondary: Color
-    grayTertiary: Color
-    grayQuaternary: Color
   }
-  textColor: {
+  gray: {
+    primary: Color
+    secondary: Color
+    tertiary: Color
+    quaternary: Color
+  }
+  text: {
     primary: Color
     secondary: Color
     tertiary: Color
@@ -24,7 +25,7 @@ export interface Colors extends Record<ColorGroups, Record<string, Color>> {
     inputDisabled: Color
     inputPlaceholder: Color
   }
-  backgroundColor: {
+  background: {
     primary: Color
     secondary: Color
     tertiary: Color
@@ -34,7 +35,7 @@ export interface Colors extends Record<ColorGroups, Record<string, Color>> {
 
     switch: Color
   }
-  borderColor: {
+  border: {
     primary: Color
     secondary: Color
     tertiary: Color

@@ -23,7 +23,7 @@ import InputProvider from '../input/InputProvider.vue'
 import SelectProvider from './SelectProvider.vue'
 import Scrollable from '../scrollable/Scrollable.vue'
 
-interface Props {
+export interface Props {
   /**
    * @model
    */

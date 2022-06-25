@@ -9,7 +9,7 @@ import {
 
 import { useVModel } from '@wouterlms/composables'
 
-interface Props {
+export interface Props {
   /**
    * Current scrollposition, setting a value will trigger `scrollTo`
    * @model

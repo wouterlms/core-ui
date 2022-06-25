@@ -6,17 +6,16 @@ import {
   useColor,
   useIsKeyboardMode,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
 
-import { BorderRadius } from '@/types'
+import { Svg, colors } from '@/utils'
 
-import { Svg } from '@/utils'
+import { BorderRadius } from '@/types'
 
 import CheckboxProvider from './CheckboxProvider.vue'
 import Icon from '../icon/Icon.vue'
 
-interface Props {
+export interface Props {
   modelValue: unknown
   value: unknown
   error?: boolean
@@ -30,42 +29,41 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   error: false,
   rounded: 'sm',
-  accentColor: 'accent-primary',
-  backgroundColor: 'bg-primary',
-  borderColor: 'border-input',
+  accentColor: colors.accent.primary,
+  backgroundColor: colors.background.primary,
+  borderColor: colors.border.input,
 })
 
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 const { isDarkColor } = useColor()
-const { getThemeColor } = useTheme()
 
 const getBackgroundColor = (isChecked: boolean) => {
   if (isChecked) {
     if (props.error) {
-      return getThemeColor('error')
+      return colors.accent.error
     }
 
-    return getThemeColor(props.accentColor)
+    return props.accentColor
   }
 
-  return getThemeColor(props.backgroundColor)
+  return props.backgroundColor
 }
 
 const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
   if (props.error) {
-    return getThemeColor('error')
+    return colors.accent.error
   }
 
   if (isChecked || isFocused) {
-    return getThemeColor(props.accentColor)
+    return props.accentColor
   }
 
-  return getThemeColor(props.borderColor)
+  return props.borderColor
 }
 
-const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true))) ? '#fff' : '#000')
+const getTickColor = () => (isDarkColor((getBackgroundColor(true))) ? '#fff' : '#000')
 </script>
 
 <template>
@@ -90,7 +88,7 @@ const getTickColor = () => (isDarkColor(getThemeColor(getBackgroundColor(true)))
         ]"
         :style="{
           backgroundColor: getBackgroundColor(isChecked),
-          borderColor :getBorderColor(isChecked, isFocused),
+          borderColor: getBorderColor(isChecked, isFocused),
           borderRadius: useBorderRadius()
         }"
         class="border-[1.5px]

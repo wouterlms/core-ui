@@ -6,7 +6,7 @@ import { Svg } from '@/utils'
 
 import Icon from '../icon/Icon.vue'
 
-interface Props {
+export interface Props {
   to?: RouteLocationRaw
 }
 

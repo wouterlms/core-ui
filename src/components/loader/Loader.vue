@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue'
 
-import { useTheme } from '@/composables'
+import { colors } from '@/utils'
 
-interface Props {
+export interface Props {
   /**
    * Tailwind `color` value or a hex, rgb value
    */
@@ -11,10 +11,8 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  accentColor: 'accent-primary',
+  accentColor: colors.accent.primary,
 })
-
-const { getThemeColor } = useTheme()
 </script>
 
 <template>
@@ -26,7 +24,7 @@ const { getThemeColor } = useTheme()
         :style="{
           transform: `rotate(${12 - i * 30}deg) translate(146%)`,
           animationDelay: `${-i * 0.1 - 1.2}s`,
-          backgroundColor: getThemeColor(accentColor)
+          backgroundColor: accentColor
         }"
         class="-left-[10%] -top-[3.9%] absolute animate h-[0.1em] rounded w-[24%]"
       />

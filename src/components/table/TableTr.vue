@@ -6,7 +6,7 @@ import {
   withDefaults,
 } from 'vue'
 
-interface Props {
+export interface Props {
   is?: string
 }
 

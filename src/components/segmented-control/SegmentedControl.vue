@@ -7,7 +7,7 @@ import { useStylingAttributes } from '@/composables'
 
 import SegmentedControlProvider from './SegmentedControlProvider.vue'
 
-interface Props {
+export interface Props {
   modelValue: unknown
 }
 

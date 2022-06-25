@@ -9,7 +9,7 @@ import {
 import { useTheme } from '@/composables'
 import { svgs } from '@/utils'
 
-interface Props {
+export interface Props {
   icon: string
   preserveOriginalColor?: boolean
 }

@@ -19,7 +19,7 @@ import { useDescendants } from '@/composables'
 
 import { key as injectionKey } from './useSelect'
 
-interface Props {
+export interface Props {
   /**
    * @model
    */

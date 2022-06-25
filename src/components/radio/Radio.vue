@@ -4,12 +4,13 @@ import { defineProps, useSlots, withDefaults } from 'vue'
 import {
   useIsKeyboardMode,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
+
+import { colors } from '@/utils'
 
 import RadioProvider from './RadioProvider.vue'
 
-interface Props {
+export interface Props {
   modelValue: unknown
   value: unknown
   error?: boolean
@@ -18,32 +19,31 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   error: false,
-  accentColor: 'accent-primary',
+  accentColor: colors.accent.primary,
 })
 
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
-const { getThemeColor } = useTheme()
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
 const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
   if (props.error) {
-    return getThemeColor('error')
+    return colors.accent.error
   }
 
   if (isChecked || isFocused) {
-    return getThemeColor(props.accentColor)
+    return props.accentColor
   }
 
-  return getThemeColor('border-input')
+  return colors.border.input
 }
 
 const getDotColor = () => {
   if (props.error) {
-    return getThemeColor('error')
+    return colors.accent.error
   }
 
-  return getThemeColor(props.accentColor)
+  return props.accentColor
 }
 </script>
 

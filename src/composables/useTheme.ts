@@ -29,7 +29,7 @@ const colors: Colors = reactive({
     grayQuaternary: [ '#9c9c9c', '#2b2c2f' ],
   },
   textColor: {
-    primary: [ '#595f66', '#ffffff' ],
+    primary: [ '#272c33', '#ffffff' ],
     secondary: [ '#5b6573', '#d6d6d6' ],
     tertiary: [ '#718096', '#969696' ],
 
