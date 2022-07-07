@@ -23,7 +23,7 @@ import InputProvider from '../input/InputProvider.vue'
 import SelectProvider from './SelectProvider.vue'
 import Scrollable from '../scrollable/Scrollable.vue'
 
-interface Props {
+export interface Props {
   /**
    * @model
    */
@@ -59,6 +59,13 @@ const props = withDefaults(defineProps<Props>(), {
   displayValueTransformer: undefined,
 })
 
+/* eslint-disable-next-line */
+const emit = defineEmits<{
+  (event: 'select', option: unknown): void
+  (event: 'update:filter', filter: string | null): void
+  (event: 'update:modelValue', option: unknown | null): void
+}>()
+
 const value = useVModel(toRef(props, 'modelValue'))
 const filterValue = useVModel(toRef(props, 'filter'), 'filter')
 
@@ -73,7 +80,17 @@ const isFilterable = computed(() => props.filter !== undefined)
 const isMobileDevice = useIsMobileDevice()
 const { nonStylingAttrs } = useStylingAttributes()
 
-const handleOptionToggled = () => {
+const handleOptionSelected = (option: unknown) => {
+  if (props.closeOnSelect) {
+    isDropdownVisible.value = false
+  } else if (isFilterable.value) {
+    // filterInputEl.value.$el.nextSibling.focus()
+  }
+
+  emit('select', option)
+}
+
+const handleOptionDeselected = () => {
   if (props.closeOnSelect) {
     isDropdownVisible.value = false
   } else if (isFilterable.value) {
@@ -138,8 +155,8 @@ export default {
     :is-dropdown-visible="isDropdownVisible"
     :options-el="optionsEl?.$el || null"
     :has-filter-applied="!!filterValue?.length"
-    @option-selected="handleOptionToggled"
-    @option-deselected="handleOptionToggled"
+    @option-selected="handleOptionSelected"
+    @option-deselected="handleOptionDeselected"
   >
     <Dropdown
       v-bind="$attrs"

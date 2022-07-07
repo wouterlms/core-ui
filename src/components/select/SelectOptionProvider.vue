@@ -10,7 +10,7 @@ import {
 
 import { useSelect } from './useSelect'
 
-interface Props {
+export interface Props {
   /**
    * Option value
    */
@@ -64,6 +64,9 @@ onBeforeUnmount(() => {
 <template>
   <button
     type="button"
+    role="option"
+    :value="(value as any)"
+    :aria-selected="isSelected"
     :tabindex="-1"
     :disabled="isDisabled"
     @keydown.enter.prevent

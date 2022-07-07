@@ -25,12 +25,13 @@ import {
 import { clickOutside as vClickOutside } from '@/directives'
 import { useTheme } from '@/composables'
 
-interface Props {
+export interface Props {
   show: boolean
   position?: Placement
   offset?: number
   margin?: number
-  zIndex?: number,
+  containerPadding?: number
+  zIndex?: number
   inheritWidth?: boolean
   showArrow?: boolean
   teleport?: boolean
@@ -50,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
   position: 'bottom',
   offset: 0,
   margin: 0,
+  containerPadding: 0,
   zIndex: 2,
   inheritWidth: false,
   showArrow: true,
@@ -115,7 +117,8 @@ const updatePosition = async () => {
   if (props.container !== undefined) {
     middleware.push(shift({
       boundary: props.container,
-      padding: 0, // Maybe later if necessary
+      crossAxis: true,
+      padding: props.containerPadding,
     }))
   }
 

@@ -9,7 +9,7 @@ import { Svg } from '@/utils'
 import Icon from '../icon/Icon.vue'
 import SelectOptionProvider from './SelectOptionProvider.vue'
 
-interface Props {
+export interface Props {
   value: unknown
 }
 

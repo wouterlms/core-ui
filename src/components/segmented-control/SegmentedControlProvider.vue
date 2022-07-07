@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  StyleValue,
   computed,
   defineProps,
   onBeforeUnmount,
@@ -48,7 +49,7 @@ const isSegmentSelected = (segment: unknown) => (
   JSON.stringify(value.value) === JSON.stringify(segment)
 )
 
-const style = computed<Record<string, unknown>>(() => {
+const style = computed<StyleValue>(() => {
   if (!segmentDimensions.value.length) {
     return {}
   }
@@ -65,7 +66,7 @@ const style = computed<Record<string, unknown>>(() => {
     transform: `translate3d(${left}px, 0, 0)`,
     width: `${width}px`,
     transition: `${transitionDuration.value}ms cubic-bezier(0.8, 0.5, 0.3, 1)`,
-  }
+  } as StyleValue
 })
 
 const selectSegment = (segment: unknown) => {
