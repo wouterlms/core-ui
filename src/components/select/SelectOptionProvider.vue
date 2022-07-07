@@ -64,6 +64,9 @@ onBeforeUnmount(() => {
 <template>
   <button
     type="button"
+    role="option"
+    :value="(value as any)"
+    :aria-selected="isSelected"
     :tabindex="-1"
     :disabled="isDisabled"
     @keydown.enter.prevent

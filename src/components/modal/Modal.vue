@@ -6,14 +6,15 @@ import { useVModel } from '@wouterlms/composables'
 import {
   useBorderRadius,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
 
 import { Svg } from '@/utils'
 
 import { BorderRadius } from '@/types'
+
 import ModalProvider from './ModalProvider.vue'
-import Button from '../button/Button.vue'
+import Focusable from '../focusable/Focusable.vue'
+import Icon from '../icon/Icon.vue'
 
 export interface Props {
   show: boolean
@@ -28,7 +29,7 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   title: undefined,
   showCloseButton: true,
-  blur: true,
+  blur: false,
   padding: '0em',
 
   rounded: 'default',
@@ -37,7 +38,6 @@ const props = withDefaults(defineProps<Props>(), {
 const showModal = useVModel(toRef(props, 'show'), 'show')
 
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
-const { getThemeColor } = useTheme()
 </script>
 
 <script lang="ts">
@@ -61,33 +61,16 @@ export default {
         }"
         class="-translate-x-1/2 -translate-y-1/2 bg-secondary fixed left-1/2 top-1/2 z-20"
       >
-        <header
-          :style="{
-            padding
-          }"
-          class="flex items-center justify-between"
+        <Focusable
+          v-if="showCloseButton"
+          class="absolute bg-gray-secondary p-1.5 right-3 rounded-full top-3"
+          @click="close"
         >
-          <div>
-            <h1
-              v-if="title"
-              class="font-medium text-lg text-primary"
-            >
-              {{ title }}
-            </h1>
-          </div>
-
-          <div>
-            <Button
-              v-if="showCloseButton"
-              variant="ghost"
-              padding="0.2em"
-              icon-size="0.7em"
-              :color-scheme="getThemeColor('text-secondary')"
-              :icon-left="Svg.CORE_CLOSE_BOLD"
-              @click="close"
-            />
-          </div>
-        </header>
+          <Icon
+            :icon="Svg.CORE_CLOSE_BOLD"
+            class="h-2 text-secondary w-2"
+          />
+        </Focusable>
 
         <slot />
       </div>
