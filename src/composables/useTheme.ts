@@ -80,7 +80,7 @@ const setCssVariables = () => {
 }
 
 watch([ isDark, colors ], () => {
-  setCssVariables()
+  // setCssVariables()
 }, { immediate: true })
 
 export default () => {

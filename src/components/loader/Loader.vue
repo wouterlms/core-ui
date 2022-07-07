@@ -11,7 +11,7 @@ export interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  accentColor: colors.accent.primary,
+  accentColor: colors.value.accent.primary,
 })
 </script>
 

@@ -1,34 +1,29 @@
 <script setup lang="ts">
 import {
-  computed,
   defineEmits,
   defineProps,
   h,
   withDefaults,
 } from 'vue'
 
-import { useTheme } from '@/composables'
 import { Svg } from '@/utils'
+import { colors } from '@/utils-v2'
 
 import Button from '../button/Button.vue'
 import Icon from '../icon/Icon.vue'
 
 export interface Props {
-  colorScheme?: 'success' | 'warning' | 'danger' | string
+  accentColor?: string
   title: string
   isClosable?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  colorScheme: 'success',
+withDefaults(defineProps<Props>(), {
+  accentColor: colors.value.accent.success,
   isClosable: true,
 })
 
 const emit = defineEmits<{(event: 'dismiss'): void }>()
-
-const { getThemeColor } = useTheme()
-
-const colorSchemeHex = computed(() => getThemeColor(props.colorScheme))
 
 const actionButton = h(Button, {
   variant: 'outline',
@@ -40,8 +35,8 @@ const actionButton = h(Button, {
 <template>
   <aside
     :style="{
-      backgroundColor: `${colorSchemeHex}20`,
-      borderColor: colorSchemeHex,
+      backgroundColor: `${accentColor}20`,
+      borderColor: accentColor,
     }"
     class="bg-opacity-50 border border-solid p-4 pr-8 relative rounded"
   >
@@ -59,7 +54,7 @@ const actionButton = h(Button, {
       <Icon
         :icon="Svg.CORE_INFO_FILLED"
         :style="{
-          color: colorSchemeHex
+          color: accentColor
         }"
         class="flex-shrink-0 h-5 translate-y-[1px] w-5"
       />

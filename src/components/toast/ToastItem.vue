@@ -2,8 +2,6 @@
 import { defineEmits, defineProps, withDefaults } from 'vue'
 import { useTimeout } from '@wouterlms/composables'
 
-import { useTheme } from '@/composables'
-
 import { Toast } from '@/types'
 import { Svg } from '@/utils'
 
@@ -18,15 +16,13 @@ const props = withDefaults(defineProps<Props>(), {})
 
 const emit = defineEmits<{(event: 'close'): void }>()
 
-const { getThemeColor } = useTheme()
-
 if (props.toast.timeout !== undefined) {
   useTimeout(() => {
     emit('close')
   }, props.toast.timeout)
 }
 
-const color = getThemeColor(props.toast.type || '#4447e0')
+const color = props.toast.type ?? '#4447e0'
 
 // const handleActionClick = () => {
 //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

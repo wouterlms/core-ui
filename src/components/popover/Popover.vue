@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   inheritWidth: false,
   showArrow: true,
   teleport: false,
-  backgroundColor: colors.background.primary,
+  backgroundColor: colors.value.background.primary,
 
   container: undefined,
 })

@@ -36,7 +36,7 @@
 
   "rules": {
     // "no-undef": "off",
-    // "no-shadow": "off",
+    "no-shadow": "off",
     // "no-param-reassign": "off",
     // "import/no-extraneous-dependencies": "off",
 

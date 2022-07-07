@@ -13,7 +13,8 @@ import {
   useStylingAttributes,
 } from '@/composables'
 
-import { Svg, colors } from '@/utils'
+import { Svg } from '@/utils'
+import { colors } from '@/utils-v2'
 
 import { BorderRadius } from '@/types'
 
@@ -64,7 +65,7 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  accentColor: colors.accent.primary,
+  accentColor: colors.value.accent.primary,
   variant: 'solid',
   iconLeft: undefined,
   iconRight: undefined,
@@ -101,7 +102,7 @@ const color = computed(() => {
   }
 
   if (props.variant === 'unstyled') {
-    return colors.text.secondary
+    return colors.value.text.secondary
   }
 
   return textColor.value

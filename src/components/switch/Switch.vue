@@ -26,7 +26,7 @@ export interface Props {
 withDefaults(defineProps<Props>(), {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: true as any,
-  accentColor: colors.accent.primary,
+  accentColor: colors.value.accent.primary,
 })
 
 const isKeyboardMode = useIsKeyboardMode()

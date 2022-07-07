@@ -6,10 +6,10 @@ import { useVModel } from '@wouterlms/composables'
 import {
   useBorderRadius,
   useStylingAttributes,
-  useTheme,
 } from '@/composables'
 
 import { Svg } from '@/utils'
+import { colors } from '@/utils-v2'
 
 import ModalProvider from '../modal/ModalProvider.vue'
 import Button from '../button/Button.vue'
@@ -32,7 +32,6 @@ const props = withDefaults(defineProps<Props>(), {
 const showModal = useVModel(toRef(props, 'show'), 'show')
 
 const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
-const { getThemeColor } = useTheme()
 </script>
 
 <script lang="ts">
@@ -75,7 +74,7 @@ export default {
               <Button
                 variant="ghost"
                 padding="0.2em"
-                :color-scheme="getThemeColor('text-secondary')"
+                :accent-scheme="colors.text.secondary"
                 :icon-left="Svg.CORE_CLOSE_BOLD"
                 @click="close"
               />

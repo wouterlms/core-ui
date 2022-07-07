@@ -3,8 +3,8 @@ import { defineProps, withDefaults } from 'vue'
 
 import { useIsMobileDevice } from '@wouterlms/composables'
 
-import { useTheme } from '@/composables'
 import { Svg } from '@/utils'
+import { colors } from '@/utils-v2'
 
 import Icon from '../icon/Icon.vue'
 import SelectOptionProvider from './SelectOptionProvider.vue'
@@ -15,7 +15,6 @@ export interface Props {
 
 withDefaults(defineProps<Props>(), {})
 
-const { colors } = useTheme()
 const isMobileDevice = useIsMobileDevice()
 </script>
 
@@ -53,7 +52,7 @@ const isMobileDevice = useIsMobileDevice()
           <Icon
             :icon="Svg.CORE_TICK"
             :style="{
-              color: colors.textColor.tertiary
+              color: colors.text.tertiary
             }"
             class="w-3"
           />

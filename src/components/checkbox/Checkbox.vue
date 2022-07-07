@@ -29,9 +29,9 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   error: false,
   rounded: 'sm',
-  accentColor: colors.accent.primary,
-  backgroundColor: colors.background.primary,
-  borderColor: colors.border.input,
+  accentColor: colors.value.accent.primary,
+  backgroundColor: colors.value.background.primary,
+  borderColor: colors.value.border.input,
 })
 
 const isKeyboardMode = useIsKeyboardMode()
@@ -42,7 +42,7 @@ const { isDarkColor } = useColor()
 const getBackgroundColor = (isChecked: boolean) => {
   if (isChecked) {
     if (props.error) {
-      return colors.accent.error
+      return colors.value.accent.error
     }
 
     return props.accentColor
@@ -53,7 +53,7 @@ const getBackgroundColor = (isChecked: boolean) => {
 
 const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
   if (props.error) {
-    return colors.accent.error
+    return colors.value.accent.error
   }
 
   if (isChecked || isFocused) {

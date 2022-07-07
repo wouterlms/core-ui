@@ -17,15 +17,19 @@ module.exports = {
         light: '0 2px 12px 0 rgba(7, 6, 6, 0.05)',
       },
       colors: {
-        'accent-primary': 'var(--accent-primary)',
-        success: 'var(--success)',
-        error: 'var(--error)',
-        danger: 'var(--danger)',
+        accent: {
+          primary: 'var(--accent-primary)',
+          success: 'var(--success)',
+          error: 'var(--error)',
+          danger: 'var(--danger)',
+        },
 
-        'gray-primary': 'var(--gray-primary)',
-        'gray-secondary': 'var(--gray-secondary)',
-        'gray-tertiary': 'var(--gray-tertiary)',
-        'gray-quaternary': 'var(--gray-quaternary)',
+        gray: {
+          primary: 'var(--gray-primary)',
+          secondary: 'var(--gray-secondary)',
+          tertiary: 'var(--gray-tertiary)',
+          quaternary: 'var(--gray-quaternary)',
+        }
       },
       textColor: {
         primary: 'var(--text-primary)',

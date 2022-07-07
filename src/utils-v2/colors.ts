@@ -1,6 +1,6 @@
 import { Colors } from '@/types'
 
-const defaultColors: Colors = {
+const colors: Colors = {
   accent: {
     primary: '#232323',
     success: '#43b581',
@@ -46,4 +46,4 @@ const defaultColors: Colors = {
   },
 }
 
-export default defaultColors
+export default colors

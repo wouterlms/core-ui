@@ -16,12 +16,12 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   error: undefined,
   position: 'top',
-  color: colors.text.secondary,
+  color: colors.value.text.secondary,
 })
 
 const computedColor = computed(() => (
   typeof props.error === 'string' || props.error === true
-    ? colors.accent.error
+    ? colors.value.accent.error
     : props.color
 ))
 </script>

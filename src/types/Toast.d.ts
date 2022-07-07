@@ -6,7 +6,7 @@ export interface Toast {
   message?: string | RenderFunction
   timeout?: number
   icon?: string
-  type?: 'info' | 'success' | 'error'
+  type?: string
   action?: {
     label: string
     cb: () => void

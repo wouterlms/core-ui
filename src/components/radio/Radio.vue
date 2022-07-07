@@ -19,7 +19,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   error: false,
-  accentColor: colors.accent.primary,
+  accentColor: colors.value.accent.primary,
 })
 
 const isKeyboardMode = useIsKeyboardMode()
@@ -28,19 +28,19 @@ const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
 const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
   if (props.error) {
-    return colors.accent.error
+    return colors.value.accent.error
   }
 
   if (isChecked || isFocused) {
     return props.accentColor
   }
 
-  return colors.border.input
+  return colors.value.border.input
 }
 
 const getDotColor = () => {
   if (props.error) {
-    return colors.accent.error
+    return colors.value.accent.error
   }
 
   return props.accentColor

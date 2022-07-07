@@ -11,7 +11,7 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  borderColor: colors.border.input,
+  borderColor: colors.value.border.input,
 })
 
 const color = computed(() => {
@@ -28,11 +28,11 @@ const color = computed(() => {
 
 const borderColor = computed(() => {
   if (props.error) {
-    return colors.accent.error
+    return colors.value.accent.error
   }
 
   if (props.isFocused) {
-    return colors.accent.primary
+    return colors.value.accent.primary
   }
 
   return props.borderColor

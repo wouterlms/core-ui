@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue'
+import { computed } from 'vue'
 
 import { useDarkMode } from '@/composables'
 import { ColorConfig, Colors } from '@/types'
@@ -8,11 +8,13 @@ import defaultColors from './colors'
 type CreateTheme = (
   settings: {
     colors: ColorConfig
-    icons: Record<string, string>,
+    icons: Record<string, string>
     enableDarkMode: boolean
   }) => void
 
-const { isDark } = useDarkMode()
+const { isDark, detectTheme } = useDarkMode()
+
+detectTheme()
 
 const activeColors = computed(
   () => {
@@ -36,7 +38,7 @@ const createTheme: CreateTheme = ({ colors, icons, enableDarkMode }) => {
 
 }
 
-export const colors = reactive(activeColors.value)
+export const colors = activeColors
 
 // Kleuren extenden
 // Iconen instellen

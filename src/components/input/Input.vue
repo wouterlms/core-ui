@@ -37,7 +37,7 @@ withDefaults(defineProps<Props>(), {
   iconRight: undefined,
   iconLeftSize: '0.9375em',
   iconRightSize: '0.9375em',
-  borderColor: colors.border.input,
+  borderColor: colors.value.border.input,
 
   padding: '0.5em',
   rounded: 'default',
@@ -47,8 +47,8 @@ const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
 const getIconColor = (error: boolean) => (
   error
-    ? colors.accent.error
-    : colors.text.tertiary
+    ? colors.value.accent.error
+    : colors.value.text.tertiary
 )
 </script>
 
