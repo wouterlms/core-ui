@@ -1,40 +1,32 @@
 <script setup lang="ts">
-import { defineProps, toRef, withDefaults } from 'vue'
+import {
+  defineProps,
+  withDefaults,
+} from 'vue'
 
-import { useVModel } from '@wouterlms/composables'
+import useSegmentedControl, { Props as BaseProps } from './useSegmentedControl'
 
-import { useStylingAttributes } from '@/composables'
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Props extends BaseProps {}
 
-import SegmentedControlProvider from './SegmentedControlProvider.vue'
+withDefaults(defineProps<Props>(), {})
 
-export interface Props {
-  modelValue: unknown
-}
-
-const props = withDefaults(defineProps<Props>(), {})
-
-const value = useVModel(toRef(props, 'modelValue'))
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
+const { Component, state } = useSegmentedControl()
 </script>
 
 <template>
-  <SegmentedControlProvider
-    v-slot="{ style }"
-    v-model="value"
-    v-bind="nonStylingAttrs"
-  >
+  <Component :is="Component">
     <div
-      v-bind="stylingAttrs"
       class="bg-gray-primary dark:bg-primary inline-flex p-1 rounded"
     >
       <div class="relative">
         <div
-          :style="style"
+          :style="state.style"
           class="bg-primary dark:bg-tertiary h-full rounded-sm shadow"
         />
 
         <slot />
       </div>
     </div>
-  </SegmentedControlProvider>
+  </Component>
 </template>

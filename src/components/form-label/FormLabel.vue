@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, defineProps, withDefaults } from 'vue'
 
-import { colors } from '@/utils'
+import { colors } from '@/theme'
 
 export interface Props {
   is?: string
   label?: string
   error?: string | boolean | null | undefined
   position?: 'top' | 'bottom'
-  color?: string
+  accentColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -16,13 +16,13 @@ const props = withDefaults(defineProps<Props>(), {
   label: undefined,
   error: undefined,
   position: 'top',
-  color: colors.value.text.secondary,
+  accentColor: undefined,
 })
 
 const computedColor = computed(() => (
   typeof props.error === 'string' || props.error === true
     ? colors.value.accent.error
-    : props.color
+    : props.accentColor ?? colors.value.text.secondary
 ))
 </script>
 

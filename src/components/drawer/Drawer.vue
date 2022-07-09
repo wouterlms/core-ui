@@ -8,8 +8,7 @@ import {
   useStylingAttributes,
 } from '@/composables'
 
-import { Svg } from '@/utils'
-import { colors } from '@/utils-v2'
+import { Svg, colors } from '@/theme'
 
 import ModalProvider from '../modal/ModalProvider.vue'
 import Button from '../button/Button.vue'

@@ -24,7 +24,7 @@ import {
 
 import { clickOutside as vClickOutside } from '@/directives'
 
-import { colors } from '@/utils'
+import { colors } from '@/theme'
 
 export interface Props {
   show: boolean
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   inheritWidth: false,
   showArrow: true,
   teleport: false,
-  backgroundColor: colors.value.background.primary,
+  backgroundColor: undefined,
 
   container: undefined,
 })
@@ -70,6 +70,10 @@ const parentEl = ref()
 const arrowEl = ref()
 
 const state = ref(TooltipState.INITIAL)
+
+const computedBackgroundColor = computed(() => (
+  props.backgroundColor ?? colors.value.background.primary
+))
 
 const computedZIndex = computed(() => {
   if (state.value === TooltipState.ENTERING) {
@@ -191,7 +195,7 @@ export default {
         ref="tooltipEl"
         v-click-outside="(e: MouseEvent) => emit('clickOutside', e)"
         :style="{
-          backgroundColor,
+          backgroundColor: computedBackgroundColor,
           zIndex: computedZIndex,
           top: `${position.y}px`,
           left: `${position.x}px`,
@@ -203,7 +207,7 @@ export default {
           v-show="showArrow"
           ref="arrowEl"
           :style="{
-            backgroundColor,
+            backgroundColor: computedBackgroundColor,
             left: arrowPosition.x !== null ? `${arrowPosition.x}px` : '',
             top: arrowPosition.y !== null ? `${arrowPosition.y}px` : '',
             right: '',
@@ -215,7 +219,7 @@ export default {
 
         <div
           :style="{
-            backgroundColor,
+            backgroundColor: computedBackgroundColor,
           }"
           class="h-full left-0 overflow-hidden relative rounded top-0 w-full z-[1]"
         >

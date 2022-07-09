@@ -1,43 +1,37 @@
 <script setup lang="ts">
-import { defineProps, toRef, withDefaults } from 'vue'
-
-import { useVModel } from '@wouterlms/composables'
-
 import {
-  useBorderRadius,
-  useStylingAttributes,
-} from '@/composables'
+  defineProps,
+  withDefaults,
+} from 'vue'
 
-import { Svg } from '@/utils'
+import { useBorderRadius } from '@/composables'
+
+import { Svg } from '@/theme'
 
 import { BorderRadius } from '@/types'
 
-import ModalProvider from './ModalProvider.vue'
 import Focusable from '../focusable/Focusable.vue'
 import Icon from '../icon/Icon.vue'
+import ModalOverlay from './ModalOverlay.vue'
+import useModal, { Props as BaseProps } from './useModal'
 
-export interface Props {
-  show: boolean
-  title?: string
+export interface Props extends BaseProps {
   showCloseButton?: boolean
   blur?: boolean
-  padding?: string
-
   rounded?: BorderRadius
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  title: undefined,
+withDefaults(defineProps<Props>(), {
   showCloseButton: true,
   blur: false,
-  padding: '0em',
-
   rounded: 'default',
 })
 
-const showModal = useVModel(toRef(props, 'show'), 'show')
-
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
+const {
+  Component,
+  state,
+  close,
+} = useModal()
 </script>
 
 <script lang="ts">
@@ -47,19 +41,25 @@ export default {
 </script>
 
 <template>
-  <ModalProvider
-    v-slot="{ Overlay, isVisible, close }"
-    v-model:show="showModal"
-    v-bind="nonStylingAttrs"
-  >
+  <Component :is="Component">
     <Transition name="modal-transition">
+      <!-- <FocusTrap v-if="state.isVisible"> -->
       <div
-        v-if="isVisible"
-        v-bind="stylingAttrs"
+        v-if="state.isVisible"
+        v-bind="$attrs"
         :style="{
           borderRadius: useBorderRadius()
         }"
-        class="-translate-x-1/2 -translate-y-1/2 bg-secondary fixed left-1/2 top-1/2 z-20"
+        class="-translate-x-1/2
+        -translate-y-1/2
+        bg-secondary
+        fixed
+        flex
+        flex-col
+        justify-between
+        left-1/2
+        top-1/2
+        z-20"
       >
         <Focusable
           v-if="showCloseButton"
@@ -74,12 +74,13 @@ export default {
 
         <slot />
       </div>
+      <!-- </FocusTrap> -->
     </Transition>
 
     <Transition name="overlay-transition">
       <Component
-        :is="Overlay"
-        v-if="isVisible"
+        :is="ModalOverlay"
+        v-if="state.isVisible"
         :class="{
           'backdrop-filter backdrop-blur-sm': blur
         }"
@@ -87,7 +88,7 @@ export default {
         @click="close"
       />
     </Transition>
-  </ModalProvider>
+  </Component>
 </template>
 
 <style scoped lang="scss">

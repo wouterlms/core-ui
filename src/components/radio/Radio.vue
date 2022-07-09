@@ -1,76 +1,78 @@
 <script setup lang="ts">
-import { defineProps, useSlots, withDefaults } from 'vue'
+import {
+  computed,
+  defineProps,
+  useSlots,
+  withDefaults,
+} from 'vue'
 
 import {
   useIsKeyboardMode,
-  useStylingAttributes,
 } from '@/composables'
 
-import { colors } from '@/utils'
+import { colors } from '@/theme'
 
-import RadioProvider from './RadioProvider.vue'
+import useRadio, { Props as BaseProps } from './useRadio'
 
-export interface Props {
-  modelValue: unknown
-  value: unknown
+export interface Props extends BaseProps {
   error?: boolean
   accentColor?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   error: false,
-  accentColor: colors.value.accent.primary,
+  accentColor: undefined,
 })
+
+const { Component, state } = useRadio()
+
+const computedAccentColor = computed(() => (
+  props.accentColor ?? colors.value.accent.primary
+))
 
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
 
-const getBorderColor = (isChecked: boolean, isFocused: boolean) => {
+const borderColor = computed(() => {
+  const { isChecked, isFocused } = state.value
+
   if (props.error) {
     return colors.value.accent.error
   }
 
   if (isChecked || isFocused) {
-    return props.accentColor
+    return computedAccentColor.value
   }
 
   return colors.value.border.input
-}
+})
 
-const getDotColor = () => {
+const dotColor = computed(() => {
   if (props.error) {
     return colors.value.accent.error
   }
 
-  return props.accentColor
-}
+  return computedAccentColor.value
+})
 </script>
 
 <template>
-  <RadioProvider
-    v-slot="{ Component, props: providedProps, isChecked, isFocused }"
-    v-bind="nonStylingAttrs"
-    :model-value="modelValue"
-    :value="value"
+  <Component
+    :is="slots.default ? 'label' : 'div'"
+    class="flex items-center"
   >
     <Component
-      v-bind="stylingAttrs"
-      :is="slots.default ? 'label' : 'div'"
-      class="flex items-center"
-    >
-      <Component
-        :is="Component"
-        :class="[
-          {
-            'focus:ring': isKeyboardMode,
-            'opacity-50': providedProps.isDisabled,
-          }
-        ]"
-        :style="{
-          borderColor: getBorderColor(isChecked, isFocused),
-        }"
-        class="bg-primary
+      :is="Component"
+      :class="[
+        {
+          'focus:ring': isKeyboardMode,
+          'opacity-50': state.isDisabled,
+        }
+      ]"
+      :style="{
+        borderColor,
+      }"
+      class="bg-primary
         border-[1.5px]
         border-solid
         duration-200
@@ -81,33 +83,32 @@ const getDotColor = () => {
         justify-center
         rounded-full
         w-[1.125em]"
-      >
-        <Transition name="dot-transition">
-          <div v-if="isChecked">
-            <div
-              :style="{
-                backgroundColor: getDotColor()
-              }"
-              class="h-[0.5em] rounded-full w-[0.5em]"
-            />
-          </div>
-        </Transition>
-      </Component>
-
-      <span
-        v-if="slots.default"
-        :class="[
-          error ? 'text-error' : 'text-secondary',
-          {
-            'opacity-50': providedProps.isDisabled,
-          }
-        ]"
-        class="ml-2"
-      >
-        <slot />
-      </span>
+    >
+      <Transition name="dot-transition">
+        <div v-if="state.isChecked">
+          <div
+            :style="{
+              backgroundColor: dotColor
+            }"
+            class="h-[0.5em] rounded-full w-[0.5em]"
+          />
+        </div>
+      </Transition>
     </Component>
-  </RadioProvider>
+
+    <span
+      v-if="slots.default"
+      :class="[
+        error ? 'text-error' : 'text-secondary',
+        {
+          'opacity-50': state.isDisabled,
+        }
+      ]"
+      class="ml-2"
+    >
+      <slot />
+    </span>
+  </Component>
 </template>
 
 <style scoped lang="scss">

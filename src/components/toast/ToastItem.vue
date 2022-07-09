@@ -3,7 +3,7 @@ import { defineEmits, defineProps, withDefaults } from 'vue'
 import { useTimeout } from '@wouterlms/composables'
 
 import { Toast } from '@/types'
-import { Svg } from '@/utils'
+import { Svg } from '@/theme'
 
 import Icon from '../icon/Icon.vue'
 import Button from '../button/Button.vue'

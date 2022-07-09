@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue'
+import { computed, defineProps, withDefaults } from 'vue'
 
-import { colors } from '@/utils'
+import { colors } from '@/theme'
 
 export interface Props {
   /**
@@ -10,9 +10,13 @@ export interface Props {
   accentColor?: string
 }
 
-withDefaults(defineProps<Props>(), {
-  accentColor: colors.value.accent.primary,
+const props = withDefaults(defineProps<Props>(), {
+  accentColor: undefined,
 })
+
+const computedAccentColor = computed(() => (
+  props.accentColor ?? colors.value.accent.primary
+))
 </script>
 
 <template>
@@ -24,7 +28,7 @@ withDefaults(defineProps<Props>(), {
         :style="{
           transform: `rotate(${12 - i * 30}deg) translate(146%)`,
           animationDelay: `${-i * 0.1 - 1.2}s`,
-          backgroundColor: accentColor
+          backgroundColor: computedAccentColor
         }"
         class="-left-[10%] -top-[3.9%] absolute animate h-[0.1em] rounded w-[24%]"
       />

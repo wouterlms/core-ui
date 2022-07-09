@@ -1,25 +1,26 @@
 <script setup lang="ts">
 import {
+  computed,
   defineProps,
   withDefaults,
 } from 'vue'
 
 import {
   useBorderRadius,
-  useStylingAttributes,
+  useComponentAttrs,
 } from '@/composables'
 
 import { BorderRadius } from '@/types'
-import { Svg, colors } from '@/utils'
+import { Svg, colors } from '@/theme'
 
 import Button from '../button/Button.vue'
 import Icon from '../icon/Icon.vue'
 import InputLabel from './InputLabel.vue'
-import InputProvider from './InputProvider.vue'
 import Loader from '../loader/Loader.vue'
 
-export interface Props {
-  modelValue: string | number | null
+import useInput, { Props as BaseProps } from './useInput'
+
+export interface Props extends BaseProps {
   error?: boolean
   iconLeft?: Svg
   iconRight?: Svg
@@ -31,7 +32,7 @@ export interface Props {
   rounded?: BorderRadius
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   error: false,
   iconLeft: undefined,
   iconRight: undefined,
@@ -43,13 +44,34 @@ withDefaults(defineProps<Props>(), {
   rounded: 'default',
 })
 
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
+/* eslint-disable-next-line */
+const emit = defineEmits<{
+  (event: 'update:modelValue', value: string | number | null): void
+  (event: 'focus'): void
+  (event: 'blur'): void
+}>()
 
-const getIconColor = (error: boolean) => (
-  error
-    ? colors.value.accent.error
-    : colors.value.text.tertiary
+const {
+  Component,
+  state,
+  togglePassword,
+} = useInput(emit)
+
+const { getListenerAttrs } = useComponentAttrs()
+
+const listenerAttrs = getListenerAttrs()
+
+const computedBorderColor = computed(
+  () => props.borderColor ?? colors.value.border.input,
 )
+
+const iconColor = computed(() => {
+  if (props.error) {
+    return colors.value.accent.error
+  }
+
+  return colors.value.text.tertiary
+})
 </script>
 
 <script lang="ts">
@@ -59,89 +81,77 @@ export default {
 </script>
 
 <template>
-  <InputProvider
-    v-slot="{
-      Component,
-      props: providedProps,
-      isFocused,
-      isPasswordVisible,
-      togglePassword
+  <InputLabel
+    v-slot="{ color }"
+    :error="!!error"
+    :is-disabled="state.isDisabled"
+    :is-focused="state.isFocused"
+    :border-color="computedBorderColor"
+    :style="{
+      borderRadius: useBorderRadius()
     }"
-    v-bind="nonStylingAttrs"
-    :model-value="modelValue"
   >
-    <InputLabel
-      v-slot="{ color }"
-      v-bind="stylingAttrs"
-      :error="!!error"
-      :is-disabled="providedProps.isDisabled"
-      :is-focused="isFocused"
-      :border-color="borderColor"
+    <Icon
+      v-if="iconLeft"
+      :icon="iconLeft"
       :style="{
-        borderRadius: useBorderRadius()
+        width: iconLeftSize,
+        height: iconLeftSize,
+        color: iconColor,
       }"
-    >
-      <Icon
-        v-if="iconLeft"
-        :icon="iconLeft"
-        :style="{
-          width: iconLeftSize,
-          height: iconLeftSize,
-          color: getIconColor(error),
-        }"
-        class="flex-shrink-0 ml-[0.625em]"
-      />
+      class="flex-shrink-0 ml-[0.625em]"
+    />
 
-      <slot name="left" />
+    <slot name="left" />
 
-      <slot
-        v-if="$slots.input"
-        name="input"
-      />
+    <slot
+      v-if="$slots.input"
+      name="input"
+    />
 
-      <Component
-        :is="Component"
-        :class="{
-          'absolute opacity-0 pointer-events-none': $slots.input
-        }"
-        :style="{
-          padding,
-        }"
-        class="w-full"
-      />
+    <Component
+      v-bind="listenerAttrs"
+      :is="Component"
+      :class="{
+        'absolute opacity-0 pointer-events-none': $slots.input
+      }"
+      :style="{
+        padding,
+      }"
+      class="w-full"
+    />
 
-      <slot name="right" />
+    <slot name="right" />
 
-      <Loader
-        v-if="providedProps.isLoading"
-        :accent-color="colors.text.input"
-        class="mr-[0.5em] text-[0.875em]"
-      />
+    <Loader
+      v-if="state.isLoading"
+      :accent-color="colors.text.input"
+      class="mr-[0.5em] text-[0.875em]"
+    />
 
-      <Icon
-        v-else-if="iconRight"
-        :icon="iconRight"
-        :class="[getIconColor(error)]"
-        :style="{
-          width: iconRightSize,
-          height: iconRightSize,
-        }"
-        class="flex-shrink-0 mr-[0.625em]"
-      />
+    <Icon
+      v-else-if="iconRight"
+      :icon="iconRight"
+      :style="{
+        width: iconRightSize,
+        height: iconRightSize,
+        color: iconColor,
+      }"
+      class="flex-shrink-0 mr-[0.625em]"
+    />
 
-      <Button
-        v-else-if="providedProps.type === 'password'"
-        :icon-left="isPasswordVisible ? Svg.CORE_EYE_HIDE : Svg.CORE_EYE_VIEW"
-        :is-disabled="providedProps.isDisabled || providedProps.isReadonly"
-        :color-scheme="color"
-        variant="ghost"
-        rounded="sm"
-        padding="0.2em"
-        class="mr-[0.5em]"
-        @click="togglePassword"
-      />
-    </InputLabel>
-  </InputProvider>
+    <Button
+      v-else-if="state.type === 'password'"
+      :icon-left="state.isPasswordVisible ? Svg.CORE_EYE_HIDE : Svg.CORE_EYE_VIEW"
+      :is-disabled="state.isDisabled || state.isReadonly"
+      :color-scheme="color"
+      variant="ghost"
+      rounded="sm"
+      padding="0.2em"
+      class="mr-[0.5em]"
+      @click="togglePassword"
+    />
+  </InputLabel>
 </template>
 
 <style scoped lang="scss">

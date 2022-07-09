@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { computed, defineProps, withDefaults } from 'vue'
+import {
+  computed,
+  defineProps,
+  withDefaults,
+} from 'vue'
 
-import { colors } from '@/utils'
+import { colors } from '@/theme'
 
 export interface Props {
   error: boolean
@@ -11,19 +15,19 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  borderColor: colors.value.border.input,
+  borderColor: undefined,
 })
 
 const color = computed(() => {
   if (props.isDisabled) {
-    return 'text-input-disabled'
+    return colors.value.text.inputDisabled
   }
 
   if (props.error) {
-    return 'text-error'
+    return colors.value.accent.error
   }
 
-  return 'text-input'
+  return colors.value.text.input
 })
 
 const borderColor = computed(() => {
@@ -35,15 +39,15 @@ const borderColor = computed(() => {
     return colors.value.accent.primary
   }
 
-  return props.borderColor
+  return props.borderColor ?? colors.value.border.input
 })
 
 const backgroundColor = computed(() => {
   if (props.isDisabled) {
-    return 'bg-input-disabled'
+    return colors.value.background.inputDisabled
   }
 
-  return 'bg-input'
+  return colors.value.background.input
 })
 </script>
 
@@ -51,15 +55,15 @@ const backgroundColor = computed(() => {
   <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
   <label
     :class="[
-      color,
-      backgroundColor,
       {
         'opacity-50': props.isDisabled,
         'border-error': !!error
       }
     ]"
     :style="{
-      borderColor
+      borderColor,
+      color,
+      backgroundColor,
     }"
     class="border border-solid duration-200 flex items-center"
   >

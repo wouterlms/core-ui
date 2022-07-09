@@ -1,53 +1,67 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import {
+  Segment,
+  SegmentedControl,
   Modal,
-  ModalAction,
-  ModalContent,
-  ModalTitle,
-} from '@/components'
+  Button,
+  Checkbox,
+} from './components'
 
-import { createTheme } from './utils-v2'
+import { createTheme } from './theme'
 
-// probleem is dat props niet updaten
+const segments = [
+  'Segment A',
+  'Segment B',
+]
+const segment = ref(segments[0])
 
 createTheme({
-  colors: {
-    accent: {
-      primary: '#ff00ff',
-    },
-  },
+  colors: {},
   icons: {},
   enableDarkMode: true,
 })
+
+const showModal = ref(false)
+
+const cbv = ref([])
 </script>
 
 <template>
-  <div>
-    <Modal
-      :show="true"
-      class="p-16"
+  <div class="p-8">
+    <SegmentedControl v-model="segment">
+      <Segment
+        v-for="s of segments"
+        :key="s"
+        :segment="s"
+      >
+        {{ s }}
+      </Segment>
+    </SegmentedControl>
+
+    <button
+      type="button"
+      @click="showModal = true"
     >
-      <ModalTitle class="text-center">
-        iPad-analyse
-      </ModalTitle>
+      show modal
+    </button>
 
-      <ModalContent>
-        <div class="text-center text-secondary">
-          Om Apple te helpen bij het verbeteren van zijn rpoducten en diensten,
-          versturen pre-release versies van iOS autlmatisch diagnose- en gebruikersinfo.
-          Je kunt dit wijzigen in 'Privacy' in Instellingen.
-        </div>
+    <Modal v-model:show="showModal">
+      <div class="p-8">
+        modal content
 
-        <template #actions>
-          <ModalAction :is-secondary-action="true">
-            Info over apparaatanalyse en privacy
-          </ModalAction>
-
-          <ModalAction>
-            Ga door
-          </ModalAction>
-        </template>
-      </ModalContent>
+        <Button type="button">
+          btn
+        </Button>
+      </div>
     </Modal>
+
+    <Checkbox
+      v-model="cbv"
+      value="test"
+    />
+
+    {{ cbv }}
   </div>
 </template>

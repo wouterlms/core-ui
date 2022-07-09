@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue'
+import {
+  defineProps,
+  withDefaults,
+} from 'vue'
 
-import SegmentProvider from './SegmentProvider.vue'
+import useSegment, { Props as BaseProps } from './useSegment'
 
-export interface Props {
-  segment: unknown
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Props extends BaseProps {}
 
 withDefaults(defineProps<Props>(), {})
+
+const { Component, state } = useSegment()
 </script>
 
 <template>
-  <SegmentProvider
-    v-slot="{ Component, isSelected }"
-    :segment="segment"
-  >
-    <Component
-      :is="Component"
-      :class="[
-        isSelected ? 'text-primary' : 'text-tertiary'
-      ]"
-      class="duration-200
+  <Component
+    :is="Component"
+    :class="[
+      state.isSelected ? 'text-primary' : 'text-tertiary'
+    ]"
+    class="duration-200
         px-[1.4em]
         py-[0.25rem]
         relative
@@ -28,8 +28,7 @@ withDefaults(defineProps<Props>(), {})
         text-sm
         whitespace-nowrap
         z-[1]"
-    >
-      <slot />
-    </Component>
-  </SegmentProvider>
+  >
+    <slot />
+  </Component>
 </template>

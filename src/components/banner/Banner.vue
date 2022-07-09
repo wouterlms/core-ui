@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
+  computed,
   defineEmits,
   defineProps,
   h,
   withDefaults,
 } from 'vue'
 
-import { Svg } from '@/utils'
-import { colors } from '@/utils-v2'
+import { Svg, colors } from '@/theme'
 
 import Button from '../button/Button.vue'
 import Icon from '../icon/Icon.vue'
@@ -18,12 +18,16 @@ export interface Props {
   isClosable?: boolean
 }
 
-withDefaults(defineProps<Props>(), {
-  accentColor: colors.value.accent.success,
+const props = withDefaults(defineProps<Props>(), {
+  accentColor: undefined,
   isClosable: true,
 })
 
 const emit = defineEmits<{(event: 'dismiss'): void }>()
+
+const computedAccentColor = computed(
+  () => props.accentColor ?? colors.value.accent.primary
+)
 
 const actionButton = h(Button, {
   variant: 'outline',
@@ -35,8 +39,8 @@ const actionButton = h(Button, {
 <template>
   <aside
     :style="{
-      backgroundColor: `${accentColor}20`,
-      borderColor: accentColor,
+      backgroundColor: `${computedAccentColor}20`,
+      borderColor: computedAccentColor,
     }"
     class="bg-opacity-50 border border-solid p-4 pr-8 relative rounded"
   >
@@ -54,7 +58,7 @@ const actionButton = h(Button, {
       <Icon
         :icon="Svg.CORE_INFO_FILLED"
         :style="{
-          color: accentColor
+          color: computedAccentColor
         }"
         class="flex-shrink-0 h-5 translate-y-[1px] w-5"
       />

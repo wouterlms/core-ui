@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
+import { Svg } from '@/theme'
+
 import {
   Button,
   Checkbox,
   Drawer,
-  FileInputProvider,
   FormLabel,
   Icon,
   Input,
@@ -18,13 +19,6 @@ import {
   Select,
   Switch,
 } from '@/components'
-
-import { Svg, createTheme } from './utils'
-
-createTheme({
-  extend: {},
-  darkMode: true,
-})
 
 const options = [
   'Option A',
@@ -148,53 +142,6 @@ const fileValue = ref([])
           Show drawer
         </Button>
       </div>
-    </div>
-
-    <div class="mt-8">
-      <FileInputProvider
-        v-slot="{ Dropzone, files, isDropzoneHovered, browse, remove }"
-        v-model="fileValue"
-        :mime-types="['image/png', 'image/jpeg']"
-        :limit="3"
-      >
-        <div class="flex">
-          <div
-            v-for="file of files"
-            :key="file.url"
-            @click="remove(file)"
-          >
-            <img
-              :src="file.url"
-              class="h-20 object-cover w-20"
-            >
-
-            <div v-if="file.error">
-              Error!
-            </div>
-          </div>
-        </div>
-
-        <Component
-          :is="Dropzone"
-          :class="[
-            isDropzoneHovered ? 'border-accent-primary': 'border-primary'
-          ]"
-          class="border border-dashed flex flex-col h-32 items-center justify-center rounded w-56"
-        >
-          <div class="text-secondary text-sm">
-            {{ isDropzoneHovered ? 'Drop it' : 'Drag & drop files' }}
-          </div>
-
-          <Button
-            variant="ghost"
-            padding="0.2em"
-            class="hover:underline mt-1 text-sm"
-            @click="browse"
-          >
-            Browse files
-          </Button>
-        </Component>
-      </FileInputProvider>
     </div>
 
     <div class="mt-8">

@@ -15,13 +15,14 @@ import {
 
 import { useStylingAttributes } from '@/composables'
 
-import { Svg } from '@/utils'
+import { Svg } from '@/theme'
 
 import Dropdown from '../dropdown/Dropdown.vue'
 import Input from '../input/Input.vue'
-import InputProvider from '../input/InputProvider.vue'
 import SelectProvider from './SelectProvider.vue'
 import Scrollable from '../scrollable/Scrollable.vue'
+
+import useInput from '../input/useInput'
 
 export interface Props {
   /**
@@ -64,7 +65,11 @@ const emit = defineEmits<{
   (event: 'select', option: unknown): void
   (event: 'update:filter', filter: string | null): void
   (event: 'update:modelValue', option: unknown | null): void
+  (event: 'focus'): void
+  (event: 'blur'): void
 }>()
+
+const { Component: InputComponent } = useInput(emit)
 
 const value = useVModel(toRef(props, 'modelValue'))
 const filterValue = useVModel(toRef(props, 'filter'), 'filter')
@@ -80,7 +85,7 @@ const isFilterable = computed(() => props.filter !== undefined)
 const isMobileDevice = useIsMobileDevice()
 const { nonStylingAttrs } = useStylingAttributes()
 
-const handleOptionSelected = (option: unknown) => {
+const handleOptionSelected = (option: unknown): void => {
   if (props.closeOnSelect) {
     isDropdownVisible.value = false
   } else if (isFilterable.value) {
@@ -90,7 +95,7 @@ const handleOptionSelected = (option: unknown) => {
   emit('select', option)
 }
 
-const handleOptionDeselected = () => {
+const handleOptionDeselected = (): void => {
   if (props.closeOnSelect) {
     isDropdownVisible.value = false
   } else if (isFilterable.value) {
@@ -98,7 +103,7 @@ const handleOptionDeselected = () => {
   }
 }
 
-const handleClick = () => {
+const handleClick = (): void => {
   isDropdownVisible.value = !isDropdownVisible.value
 }
 
@@ -136,7 +141,7 @@ watch(isDropdownVisible, (show) => {
 
   if (show && isMobileDevice) {
     nativeSelectEl.value?.dispatchEvent(
-      new MouseEvent('mousedown')
+      new MouseEvent('mousedown'),
     )
   }
 })
@@ -196,25 +201,21 @@ export default {
             #input
           >
             <!-- eslint-disable vuejs-accessibility/no-autofocus -->
-            <InputProvider
+
+            <Component
+              :is="InputComponent"
               ref="filterInputEl"
-              v-slot="{ Component }"
-              v-model="filterValue"
               :autofocus="true"
-              :placeholder="getDisplayValue(multiple) || $attrs.placeholder"
               :tabindex="-1"
-            >
-              <Component
-                :is="Component"
-                :class="{
-                  'filter-input-placeholder':
-                    getDisplayValue(multiple) !== null && !isFilterInputFocused
-                }"
-                class="border-none filter-input p-[0.5em] px-2 text-input w-full"
-                @focus="isFilterInputFocused = true"
-                @blur="isFilterInputFocused = false"
-              />
-            </InputProvider>
+              :placeholder="getDisplayValue(multiple) || $attrs.placeholder"
+              :class="{
+                'filter-input-placeholder':
+                  getDisplayValue(multiple) !== null && !isFilterInputFocused
+              }"
+              class="border-none filter-input p-[0.5em] px-2 text-input w-full"
+              @focus="isFilterInputFocused = true"
+              @blur="isFilterInputFocused = false"
+            />
             <!-- eslint-enable vuejs-accessibility/no-autofocus -->
           </template>
         </Input>

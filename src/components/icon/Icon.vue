@@ -6,8 +6,7 @@ import {
   withDefaults,
 } from 'vue'
 
-import { useTheme } from '@/composables'
-import { svgs } from '@/utils'
+import { svgs } from '@/theme'
 
 export interface Props {
   icon: string
@@ -18,12 +17,11 @@ const props = withDefaults(defineProps<Props>(), {
   preserveOriginalColor: false,
 })
 
-const { _icons } = useTheme()
 const component = 'svg'
 
 const svg = computed(() => ({
   ...svgs,
-  ..._icons,
+  // ..._icons, // TODO
 }[props.icon]))
 
 watch(svg, (svgValue) => {

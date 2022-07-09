@@ -1,16 +1,16 @@
 export { default as Banner } from './banner/Banner.vue'
 
 export { default as Button } from './button/Button.vue'
-export { default as ButtonProvider } from './button/ButtonProvider.vue'
+export { default as useButton } from './button/useButton'
+export type { Props as ButtonProps } from './button/useButton'
 
 export { default as Checkbox } from './checkbox/Checkbox.vue'
-export { default as CheckboxProvider } from './checkbox/CheckboxProvider.vue'
+export { default as useCheckbox } from './checkbox/useCheckbox'
+export type { Props as CheckboxProps } from './checkbox/useCheckbox'
 
 export { default as Drawer } from './drawer/Drawer.vue'
 
 export { default as Dropdown } from './dropdown/Dropdown.vue'
-
-export { default as FileInputProvider } from './file-input/FileInputProvider.vue'
 
 export { default as FormLabel } from './form-label/FormLabel.vue'
 
@@ -18,7 +18,8 @@ export { default as Icon } from './icon/Icon.vue'
 
 export { default as Input } from './input/Input.vue'
 export { default as InputLabel } from './input/InputLabel.vue'
-export { default as InputProvider } from './input/InputProvider.vue'
+export { default as useInput } from './input/useInput'
+export type { Props as InputProps } from './input/useInput'
 
 export { default as Loader } from './loader/Loader.vue'
 
@@ -32,14 +33,17 @@ export { default as ModalTitle } from './modal/ModalTitle.vue'
 export { default as Popover } from './popover/Popover.vue'
 
 export { default as Radio } from './radio/Radio.vue'
-export { default as RadioProvider } from './radio/RadioProvider.vue'
+export { default as useRadio } from './radio/useRadio'
+export type { Props as RadioProps } from './radio/useRadio'
 
 export { default as Scrollable } from './scrollable/Scrollable.vue'
 
 export { default as Segment } from './segmented-control/Segment.vue'
 export { default as SegmentedControl } from './segmented-control/SegmentedControl.vue'
-export { default as SegmentedControlProvider } from './segmented-control/SegmentedControlProvider.vue'
-export { default as SegmentProvider } from './segmented-control/SegmentProvider.vue'
+export { default as useSegement } from './segmented-control/useSegment'
+export { default as useSegmentedControl } from './segmented-control/useSegmentedControl'
+export type { Props as SegmentProps } from './segmented-control/useSegment'
+export type { Props as SegmentedControlProps } from './segmented-control/useSegmentedControl'
 
 export { default as Select } from './select/Select.vue'
 export { default as Option } from './select/SelectOption.vue'

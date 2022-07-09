@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  computed,
   defineProps,
   nextTick,
   onMounted,
@@ -10,24 +11,27 @@ import {
 
 import {
   useIsKeyboardMode,
-  useStylingAttributes,
 } from '@/composables'
 
-import { colors } from '@/utils'
+import { colors } from '@/theme'
 
-import CheckboxProvider from '../checkbox/CheckboxProvider.vue'
+import useCheckbox, { Props as BaseProps } from '../checkbox/useCheckbox'
 
-export interface Props {
-  modelValue: unknown
-  value?: unknown
+export interface Props extends BaseProps {
   accentColor?: string
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: true as any,
-  accentColor: colors.value.accent.primary,
+  accentColor: undefined,
 })
+
+const { Component, state } = useCheckbox()
+
+const computedAccentColor = computed(() => (
+  props.accentColor ?? colors.value.accent.primary
+))
 
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
@@ -47,66 +51,56 @@ onMounted(async () => {
   transition = '0.3s cubic-bezier(0.22, 0.68, 0, 1.1)'
 })
 
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
-
-const thumbStyle = (isChecked: boolean) => ({
+const thumbStyle = computed(() => ({
   transition: transition ?? undefined,
-  transform: isChecked
+  transform: state.value.isChecked
     ? `translateX(calc(${switchWidth.value}px - 100% - calc(${padding} * 2)))`
     : undefined,
-})
+}))
 </script>
 
 <template>
-  <CheckboxProvider
-    v-slot="{ Component, props: providedProps, isChecked }"
-    v-bind="nonStylingAttrs"
-    :model-value="modelValue"
-    :value="value"
+  <Component
+    :is="slots.default ? 'label' : 'div'"
+    class="flex items-center text-sm"
   >
     <Component
-      v-bind="stylingAttrs"
-      :is="slots.default ? 'label' : 'div'"
-      class="flex items-center"
-    >
-      <Component
-        :is="Component"
-        ref="switchEl"
-        :class="[
-          {
-            'focus:ring': isKeyboardMode,
-            'opacity-50': providedProps.isDisabled,
-          }
-        ]"
-        :style="{
-          padding,
-          backgroundColor: isChecked
-            ? colors.accent.primary
-            : colors.background.switch,
-        }"
-        class="border
+      :is="Component"
+      ref="switchEl"
+      :class="[
+        {
+          'focus:ring': isKeyboardMode,
+          'opacity-50': state.isDisabled,
+        }
+      ]"
+      :style="{
+        padding,
+        backgroundColor: state.isChecked
+          ? computedAccentColor
+          : colors.background.switch,
+      }"
+      class="border
           border-solid
           border-transparent
           box-content
           duration-200
           min-w-[2.5em]
           rounded-[1rem]"
-      >
-        <div
-          :style="thumbStyle(isChecked)"
-          class="bg-white h-[1.5em] rounded-full shadow w-[1.5em]"
-        />
-      </Component>
-
-      <span
-        v-if="slots.default"
-        :class="{
-          'opacity-50': providedProps.isDisabled
-        }"
-        class="ml-2 text-secondary"
-      >
-        <slot />
-      </span>
+    >
+      <div
+        :style="thumbStyle"
+        class="bg-white h-[1.5em] rounded-full shadow w-[1.5em]"
+      />
     </Component>
-  </CheckboxProvider>
+
+    <span
+      v-if="slots.default"
+      :class="{
+        'opacity-50': state.isDisabled
+      }"
+      class="ml-2 text-secondary"
+    >
+      <slot />
+    </span>
+  </Component>
 </template>

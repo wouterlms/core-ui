@@ -5,6 +5,7 @@ export type Color = string | [string, string]
 export interface Colors extends Record<ColorGroups, Record<keyof ColorGroups, Color>> {
   accent: {
     primary: Color
+    secondary: Color
     success: Color
     warning: Color
     error: Color

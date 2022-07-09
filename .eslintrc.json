@@ -35,101 +35,37 @@
   },
 
   "rules": {
-    // "no-undef": "off",
+    "putout/multiple-properties-destructuring": ["error", {
+      "minProperties": 3
+    }],
+    "no-undef": "off",
     "no-shadow": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
     // "no-param-reassign": "off",
     // "import/no-extraneous-dependencies": "off",
 
-    // "putout/array-elements-newline": "error",
-
-    "sort-imports": ["error", {
-      "ignoreDeclarationSort": true
-    }],
-
-    /**
-    * https://eslint.org/docs/rules/semi
-    *
-    * Disable ;
-    */
+    "no-return-await": "off",
     "semi": ["error", "never"],
 
-    /**
-    * https://eslint.org/docs/rules/max-len
-    *
-    * Max line length
-    */
-    "max-len": ["error", {
-      "code": 100,
-      "comments": 100,
-      "ignoreTrailingComments": true,
-      "ignoreStrings": true,
-      "ignoreTemplateLiterals": true,
-      "ignoreUrls": true,
-      "ignoreRegExpLiterals": true
-    }],
+    "vuejs-accessibility/form-control-has-label": "off",
+    "vuejs-accessibility/label-has-for": "off",
 
-    /**
-    * https://eslint.org/docs/rules/array-bracket-newline
-    */
-    "array-bracket-newline": ["error", {
-      "multiline": true,
-      "minItems": 3
-    }],
+    "@typescript-eslint/explicit-function-return-type": "error",
 
-    /**
-    * https://eslint.org/docs/rules/array-bracket-spacing
-    */
-    "array-bracket-spacing": ["error", "always"],
+    "object-property-newline": [ "error", { "allowAllPropertiesOnSameLine": false } ],
 
-    /**
-    * https://eslint.org/docs/rules/array-element-newline
-    *
-    * Wrap arrays
-    */
-    "array-element-newline": ["error", {
-      "minItems": 3
-    }],
+    "array-element-newline": [
+      "error", {
+        "minItems": 2
+      }
+    ],
 
-    /**
-    * https://eslint.org/docs/rules/object-property-newline
-    *
-    * Wrap objects
-    */
-    "object-property-newline": ["error", {
-      "allowAllPropertiesOnSameLine": false
-    }],
-
-    /**
-    * https://eslint.org/docs/rules/camelcase
-    *
-    * Allow camelcase properties (API)
-    */
-    "camelcase": "off",
-
-    /**
-    * https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/prefer-default-export.md
-    */
-    "import/prefer-default-export": "warn",
-
-    /**
-    * https://eslint.org/docs/rules/comma-dangle
-    *
-    * Always add a trailing comma
-    */
-    "comma-dangle": ["error", {
-      "arrays": "never",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "never",
-      "functions": "never"
-    }],
-
-    /**
-    * https://eslint.org/docs/rules/object-curly-spacing
-    *
-    * Enforce consistent spacing inside braces
-    */
-    "object-curly-spacing": ["error", "always"],
+    "array-bracket-newline": [
+      "error", {
+        "multiline": true,
+        "minItems": 3
+      }
+    ],
 
     /**
     * https://eslint.vuejs.org/rules/v-for-delimiter-style.html

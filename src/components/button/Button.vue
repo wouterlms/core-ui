@@ -6,23 +6,21 @@ import {
   withDefaults,
 } from 'vue'
 
+import { Svg, colors } from '@/theme'
+import { BorderRadius } from '@/types'
+
 import {
   useBorderRadius,
   useColor,
   useIsKeyboardMode,
-  useStylingAttributes,
 } from '@/composables'
 
-import { Svg } from '@/utils'
-import { colors } from '@/utils-v2'
+import useButton, { Props as BaseProps } from './useButton'
 
-import { BorderRadius } from '@/types'
-
-import ButtonProvider from './ButtonProvider.vue'
 import Icon from '../icon/Icon.vue'
 import Loader from '../loader/Loader.vue'
 
-export interface Props {
+export interface Props extends BaseProps {
   /**
    * Button color
    */
@@ -65,7 +63,7 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  accentColor: colors.value.accent.primary,
+  accentColor: undefined,
   variant: 'solid',
   iconLeft: undefined,
   iconRight: undefined,
@@ -76,29 +74,43 @@ const props = withDefaults(defineProps<Props>(), {
   rounded: 'default',
 })
 
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
-const { isDarkColor } = useColor()
-
 const slots = useSlots()
+
+const {
+  Component,
+  state,
+} = useButton()
+
+const { isDarkColor } = useColor()
 const isKeyboardMode = useIsKeyboardMode()
 
-const textColor = computed(() => (isDarkColor(props.accentColor) ? '#fff' : '#000'))
+const computedAccentColor = computed(
+  () => props.accentColor ?? colors.value.accent.primary,
+)
+
+const textColor = computed(() => (
+  isDarkColor(computedAccentColor.value)
+    ? '#fff'
+    : '#000'))
 
 const backgroundColor = computed(() => {
   if ([
     'outline',
     'ghost',
-    'unstyled'
+    'unstyled',
   ].includes(props.variant)) {
     return 'transparent'
   }
 
-  return props.accentColor
+  return computedAccentColor.value
 })
 
 const color = computed(() => {
-  if ([ 'ghost', 'outline' ].includes(props.variant)) {
-    return props.accentColor
+  if ([
+    'ghost',
+    'outline',
+  ].includes(props.variant)) {
+    return computedAccentColor.value
   }
 
   if (props.variant === 'unstyled') {
@@ -109,8 +121,11 @@ const color = computed(() => {
 })
 
 const borderColor = computed(() => {
-  if ([ 'solid', 'outline' ].includes(props.variant)) {
-    return props.accentColor
+  if ([
+    'solid',
+    'outline',
+  ].includes(props.variant)) {
+    return computedAccentColor.value
   }
 
   return 'transparent'
@@ -132,101 +147,89 @@ const computedPadding = computed(() => {
   return '1em 1.2em'
 })
 
-const hasExplicitWidth = computed(() => /w-/.test(stylingAttrs.value.class))
-</script>
-
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
+const hasExplicitWidth = computed(() => /w-/.test(attrs.class as string))
 </script>
 
 <template>
-  <ButtonProvider
-    v-slot="{ Component, props: providedProps }"
-    v-bind="nonStylingAttrs"
+  <Component
+    :is="Component"
+    :class="[
+      {
+        'active:brightness-[1.2]': !state.isDisabled && !state.isLoading,
+        'opacity-50': state.isDisabled,
+        'focus:ring': isKeyboardMode,
+      },
+    ]"
+    :style="{
+      backgroundColor,
+      borderColor,
+      color,
+      padding: computedPadding,
+      borderRadius: useBorderRadius()
+    }"
+    class="border border-solid duration-200 relative text-sm"
   >
-    <Component
-      :is="Component"
-      v-bind="stylingAttrs"
-      :class="[
-        {
-          'active:brightness-[1.2]': !providedProps.isDisabled && !providedProps.isLoading,
-          'opacity-50': providedProps.isDisabled,
-          'focus:ring': isKeyboardMode,
-        },
-      ]"
-      :style="{
-        backgroundColor,
-        borderColor,
-        color,
-        padding: computedPadding,
-        borderRadius: useBorderRadius()
-      }"
-      class="border border-solid duration-200 relative text-sm"
+    <div
+      v-if="state.isLoading && !hasExplicitWidth"
+      class="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2"
     >
-      <div
-        v-if="providedProps.isLoading && !hasExplicitWidth"
-        class="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2"
-      >
-        <Loader
-          :accent-color="color"
-          class="text-[0.7em]"
-        />
-      </div>
+      <Loader
+        :accent-color="color"
+        class="text-[0.7em]"
+      />
+    </div>
 
-      <div
-        :class="{
-          'opacity-0': providedProps.isLoading && !hasExplicitWidth
-        }"
-        class="flex items-center justify-center relative"
-      >
-        <div class="relative">
-          <Transition :name="!!iconLeft ? 'loader-with-icon-left' : 'loader'">
-            <div
-              v-if="providedProps.isLoading && hasExplicitWidth"
+    <div
+      :class="{
+        'opacity-0': state.isLoading && !hasExplicitWidth
+      }"
+      class="flex items-center justify-center relative"
+    >
+      <div class="relative">
+        <Transition :name="!!iconLeft ? 'loader-with-icon-left' : 'loader'">
+          <div
+            v-if="state.isLoading && hasExplicitWidth"
+            :style="{
+              width: iconSize,
+              height: iconSize,
+              marginRight: !!$slots.default ? iconSpacing : undefined
+            }"
+            class="relative"
+          >
+            <Loader
+              :accent-color="color"
+              class="!absolute -translate-x-1/2 -translate-y-1/2 left-1/2 text-[0.7em] top-1/2"
+            />
+          </div>
+
+          <div v-else-if="iconLeft">
+            <Icon
+              :icon="iconLeft"
               :style="{
                 width: iconSize,
                 height: iconSize,
                 marginRight: !!$slots.default ? iconSpacing : undefined
               }"
-              class="relative"
-            >
-              <Loader
-                :accent-color="color"
-                class="!absolute -translate-x-1/2 -translate-y-1/2 left-1/2 text-[0.7em] top-1/2"
-              />
-            </div>
-
-            <div v-else-if="iconLeft">
-              <Icon
-                :icon="iconLeft"
-                :style="{
-                  width: iconSize,
-                  height: iconSize,
-                  marginRight: !!$slots.default ? iconSpacing : undefined
-                }"
-              />
-            </div>
-          </Transition>
-        </div>
-
-        <span class="pointer-events-none text-[0.875em] whitespace-nowrap">
-          <slot />
-        </span>
-
-        <Icon
-          v-if="iconRight"
-          :icon="iconRight"
-          :style="{
-            width: iconSize,
-            height: iconSize,
-            marginLeft: !!$slots.default ? iconSpacing : undefined
-          }"
-        />
+            />
+          </div>
+        </Transition>
       </div>
-    </Component>
-  </ButtonProvider>
+
+      <span class="pointer-events-none text-[0.875em] whitespace-nowrap">
+        <slot />
+      </span>
+
+      <Icon
+        v-if="iconRight"
+        :icon="iconRight"
+        :style="{
+          width: iconSize,
+          height: iconSize,
+          marginLeft: !!$slots.default ? iconSpacing : undefined
+        }"
+      />
+    </div>
+  </Component>
 </template>
 
 <style lang="scss">

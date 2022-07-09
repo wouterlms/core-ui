@@ -2,7 +2,7 @@
 import { defineProps, withDefaults } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
 
-import { Svg } from '@/utils'
+import { Svg } from '@/theme'
 
 import Icon from '../icon/Icon.vue'
 

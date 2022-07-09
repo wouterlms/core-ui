@@ -3,8 +3,7 @@ import { defineProps, withDefaults } from 'vue'
 
 import { useIsMobileDevice } from '@wouterlms/composables'
 
-import { Svg } from '@/utils'
-import { colors } from '@/utils-v2'
+import { Svg, colors } from '@/theme'
 
 import Icon from '../icon/Icon.vue'
 import SelectOptionProvider from './SelectOptionProvider.vue'
