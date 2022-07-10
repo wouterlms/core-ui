@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { defineProps, withDefaults } from 'vue'
 
+import { ButtonVariant, Rounded } from '@/enums'
+
 import Button from '../button/Button.vue'
 
 export interface Props {
@@ -15,8 +17,8 @@ withDefaults(defineProps<Props>(), {
 <template>
   <Button
     v-if="isSecondaryAction"
-    variant="ghost"
-    rounded="md"
+    :variant="ButtonVariant.GHOST"
+    :rounded="Rounded.MD"
     class="!block hover:underline mx-auto w-full"
   >
     <slot />
@@ -24,7 +26,7 @@ withDefaults(defineProps<Props>(), {
 
   <Button
     v-else
-    rounded="md"
+    :rounded="Rounded.MD"
     class="w-full"
   >
     <slot />

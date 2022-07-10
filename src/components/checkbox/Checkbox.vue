@@ -9,12 +9,13 @@ import {
 import {
   useBorderRadius,
   useColor,
+  useComponentAttrs,
   useIsKeyboardMode,
 } from '@/composables'
 
 import { Svg, colors } from '@/theme'
 
-import { BorderRadius } from '@/types'
+import { Rounded } from '@/enums'
 
 import Icon from '../icon/Icon.vue'
 
@@ -26,12 +27,12 @@ export interface Props extends BaseProps {
   backgroundColor?: string
   borderColor?: string
 
-  rounded?: BorderRadius
+  rounded?: Rounded
 }
 
 const props = withDefaults(defineProps<Props>(), {
   error: false,
-  rounded: 'sm',
+  rounded: Rounded.SM,
   accentColor: undefined,
   backgroundColor: undefined,
   borderColor: undefined,
@@ -42,6 +43,11 @@ const { Component, state } = useCheckbox()
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
 const { isDarkColor } = useColor()
+const {
+  listenerAttrs,
+  nonStylingAttrs,
+  stylingAttrs,
+} = useComponentAttrs()
 
 const computedAccentColor = computed(
   () => props.accentColor ?? colors.value.accent.primary,
@@ -50,7 +56,7 @@ const computedAccentColor = computed(
 const computedBackgroundColor = computed(() => {
   if (state.value.isChecked) {
     if (props.error) {
-      return colors.value.accent.error
+      return colors.value.accent.red
     }
 
     return computedAccentColor.value
@@ -61,7 +67,7 @@ const computedBackgroundColor = computed(() => {
 
 const computedBorderColor = computed(() => {
   if (props.error) {
-    return colors.value.accent.error
+    return colors.value.accent.red
   }
 
   const { isChecked, isFocused } = state.value
@@ -76,12 +82,23 @@ const computedBorderColor = computed(() => {
 const computedTickColor = computed(() => (isDarkColor(computedBackgroundColor.value) ? '#fff' : '#000'))
 </script>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <Component
+    v-bind="stylingAttrs"
     :is="slots.default ? 'label' : 'div'"
     class="flex items-center"
   >
     <Component
+      v-bind="{
+        ...nonStylingAttrs,
+        ...listenerAttrs,
+      }"
       :is="Component"
       :class="[
         {

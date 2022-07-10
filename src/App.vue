@@ -1,67 +1,51 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Button, Input } from './components'
+import { ButtonVariant } from './enums'
 
 import {
-  Segment,
-  SegmentedControl,
-  Modal,
-  Button,
-  Checkbox,
-} from './components'
-
-import { createTheme } from './theme'
-
-const segments = [
-  'Segment A',
-  'Segment B',
-]
-const segment = ref(segments[0])
+  createTheme,
+  colors,
+  Svg,
+} from './theme'
 
 createTheme({
-  colors: {},
-  icons: {},
   enableDarkMode: true,
+  colors: {
+    accent: {
+      test: '#ff00ff',
+    },
+  },
+  icons: {},
 })
 
-const showModal = ref(false)
+const v = ref(null)
 
-const cbv = ref([])
+const handleFocus = () => {
+  console.log('a')
+}
 </script>
 
 <template>
   <div class="p-8">
-    <SegmentedControl v-model="segment">
-      <Segment
-        v-for="s of segments"
-        :key="s"
-        :segment="s"
-      >
-        {{ s }}
-      </Segment>
-    </SegmentedControl>
-
-    <button
-      type="button"
-      @click="showModal = true"
+    <Button
+      :variant="ButtonVariant.OUTLINE"
+      :icon-left="Svg.CORE_WIFI_WARNING"
+      :accent-color="colors.accent.red"
     >
-      show modal
-    </button>
+      Check connection
+    </Button>
 
-    <Modal v-model:show="showModal">
-      <div class="p-8">
-        modal content
+    <div>---------</div>
 
-        <Button type="button">
-          btn
-        </Button>
-      </div>
-    </Modal>
-
-    <Checkbox
-      v-model="cbv"
-      value="test"
+    <Input
+      v-model="v"
+      :icon-right="Svg.CORE_WIFI_WARNING"
+      :is-disabled="false"
+      :is-loading="false"
+      placeholder="Placeholder"
+      class="mt-12 text-xs"
+      @focus="handleFocus"
     />
-
-    {{ cbv }}
   </div>
 </template>

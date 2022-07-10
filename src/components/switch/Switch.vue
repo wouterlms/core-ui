@@ -10,6 +10,7 @@ import {
 } from 'vue'
 
 import {
+  useComponentAttrs,
   useIsKeyboardMode,
 } from '@/composables'
 
@@ -36,6 +37,12 @@ const computedAccentColor = computed(() => (
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
 
+const {
+  listenerAttrs,
+  nonStylingAttrs,
+  stylingAttrs,
+} = useComponentAttrs()
+
 const switchEl = ref<HTMLElement | null>(null)
 const switchWidth = ref(0)
 const padding = '1px'
@@ -59,12 +66,23 @@ const thumbStyle = computed(() => ({
 }))
 </script>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <Component
+    v-bind="stylingAttrs"
     :is="slots.default ? 'label' : 'div'"
     class="flex items-center text-sm"
   >
     <Component
+      v-bind="{
+        ...nonStylingAttrs,
+        ...listenerAttrs,
+      }"
       :is="Component"
       ref="switchEl"
       :class="[

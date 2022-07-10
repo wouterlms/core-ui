@@ -7,8 +7,7 @@ import {
 import { useBorderRadius } from '@/composables'
 
 import { Svg } from '@/theme'
-
-import { BorderRadius } from '@/types'
+import { Rounded } from '@/enums'
 
 import Focusable from '../focusable/Focusable.vue'
 import Icon from '../icon/Icon.vue'
@@ -16,15 +15,26 @@ import ModalOverlay from './ModalOverlay.vue'
 import useModal, { Props as BaseProps } from './useModal'
 
 export interface Props extends BaseProps {
+  /**
+   * Show close button in top right corner
+   */
   showCloseButton?: boolean
+
+  /**
+   * Blur background when modal is visible
+   */
   blur?: boolean
-  rounded?: BorderRadius
+
+  /**
+   * Border radius
+   */
+  rounded?: Rounded
 }
 
 withDefaults(defineProps<Props>(), {
   showCloseButton: true,
   blur: false,
-  rounded: 'default',
+  rounded: Rounded.DEFAULT,
 })
 
 const {
@@ -43,7 +53,6 @@ export default {
 <template>
   <Component :is="Component">
     <Transition name="modal-transition">
-      <!-- <FocusTrap v-if="state.isVisible"> -->
       <div
         v-if="state.isVisible"
         v-bind="$attrs"
@@ -52,7 +61,7 @@ export default {
         }"
         class="-translate-x-1/2
         -translate-y-1/2
-        bg-secondary
+        bg-primary
         fixed
         flex
         flex-col
@@ -74,7 +83,6 @@ export default {
 
         <slot />
       </div>
-      <!-- </FocusTrap> -->
     </Transition>
 
     <Transition name="overlay-transition">

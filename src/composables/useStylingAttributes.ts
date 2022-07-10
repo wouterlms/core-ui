@@ -8,7 +8,7 @@ interface StylingAttrs {
   style: HTMLAttributes['style']
   class: HTMLAttributes['class']
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const attrs = useAttrs()
 

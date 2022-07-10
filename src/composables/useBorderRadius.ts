@@ -1,21 +1,18 @@
-import { BorderRadius } from '@/types'
+import { Rounded } from '@/enums'
+
 import useInstance from './useInstance'
 
-const mappedBorderRadius: Record<BorderRadius, string> = {
-  none: '0em',
-  sm: '0.185em',
-  default: '0.375em',
-  md: '0.75em',
-  lg: '3em',
-  full: '50%',
+const mappedBorderRadius: Record<number, string> = {
+  [Rounded.NONE]: '0em',
+  [Rounded.SM]: '0.185em',
+  [Rounded.DEFAULT]: '0.375em',
+  [Rounded.MD]: '0.75em',
+  [Rounded.LG]: '3em',
+  [Rounded.FULL]: '50%',
 }
 
-export default () => {
+export default (): string => {
   const { props } = useInstance('useBorderRadius')
-
-  if (typeof props.rounded !== 'string') {
-    return '0em'
-  }
 
   return mappedBorderRadius[props.rounded as keyof typeof mappedBorderRadius]
 }

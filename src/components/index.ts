@@ -27,8 +27,9 @@ export { default as Modal } from './modal/Modal.vue'
 export { default as ModalAction } from './modal/ModalAction.vue'
 export { default as ModalContent } from './modal/ModalContent.vue'
 export { default as ModalOverlay } from './modal/ModalOverlay.vue'
-export { default as ModalProvider } from './modal/ModalProvider.vue'
 export { default as ModalTitle } from './modal/ModalTitle.vue'
+export { default as useModal } from './modal/useModal'
+export type { Props as ModalProps } from './modal/useModal'
 
 export { default as Popover } from './popover/Popover.vue'
 

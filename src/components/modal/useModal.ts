@@ -14,7 +14,7 @@ import {
 
 import { usePropsWithDefaults } from '@/composables'
 
-import ModalTest from './ModalTest.vue'
+import ModalWrapper from './ModalWrapper.vue'
 
 export interface Props {
   /**
@@ -38,7 +38,7 @@ const defaultProps = {
   closeOnEscape: true,
   trapFocus: true,
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const props = usePropsWithDefaults(defaultProps, useAttrs() as unknown as Props)
 
@@ -69,7 +69,7 @@ export default () => {
     })
   }
 
-  const Component = computed(() => h(ModalTest, {
+  const Component = computed(() => h(ModalWrapper, {
     active: showModal.value && props.value.trapFocus,
   }))
 

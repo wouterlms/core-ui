@@ -4,7 +4,7 @@ import {
 } from 'vue'
 
 const isDark = ref(false)
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const setThemeValue = () => {
     isDark.value = matchMedia('(prefers-color-scheme: dark)').matches

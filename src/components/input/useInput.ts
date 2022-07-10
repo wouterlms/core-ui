@@ -56,12 +56,6 @@ export interface Props {
   textareaHeight?: string
 }
 
-interface Emit {
-  (event: 'update:modelValue', value: string | number | null): void
-  (event: 'focus'): void
-  (event: 'blur'): void
-}
-
 export const defaultProps = {
   isReadonly: false,
   isDisabled: false,
@@ -73,7 +67,8 @@ export const defaultProps = {
   textareaHeight: '6em',
 }
 
-export default (emit: Emit) => {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export default () => {
   const props = usePropsWithDefaults(defaultProps, useAttrs() as unknown as Props)
 
   const value = useVModel(toRef(props.value, 'modelValue'))
@@ -136,11 +131,9 @@ export default (emit: Emit) => {
       },
       onFocus: () => {
         isFocused.value = true
-        emit('focus')
       },
       onBlur: () => {
         isFocused.value = false
-        emit('blur')
       },
       onVnodeMounted: (e) => {
         if (autofocus) {

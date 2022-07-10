@@ -4,10 +4,9 @@ const colors: Colors = {
   accent: {
     primary: '#6193ff',
     secondary: '#6193ff',
-    success: '#43b581',
-    warning: '#e6a23c',
-    error: '#f56c6c',
-    danger: '#f56c6c',
+    green: '#43b581',
+    orange: '#e6a23c',
+    red: '#f56c6c',
   },
 
   gray: {

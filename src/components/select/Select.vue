@@ -186,7 +186,7 @@ export default {
           :is-readonly="true"
           :icon-right="Svg.CORE_CHEVRON_UP_CHEVRON_DOWN"
           :class="{
-            '!border-accent-primary': !$attrs.error && isDropdownVisible
+            '!border-accent-primary': !$attrs.red && isDropdownVisible
           }"
           icon-right-size="0.6em"
           @keydown.space.prevent="isDropdownVisible = true"

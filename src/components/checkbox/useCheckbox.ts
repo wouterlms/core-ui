@@ -36,11 +36,11 @@ export const defaultProps = {
   isReadonly: false,
   rounded: 'sm',
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const props = usePropsWithDefaults(defaultProps, useAttrs() as unknown as Props)
 
-  const checkboxValue = useVModel(toRef(props.value, 'modelValue'))
+  const checkboxValue = useVModel(toRef(useAttrs(), 'modelValue'))
 
   const isFocused = ref(false)
 

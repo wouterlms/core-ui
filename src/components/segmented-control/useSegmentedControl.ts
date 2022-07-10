@@ -27,7 +27,7 @@ export interface Props {
    */
   modelValue: unknown
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const props = useAttrs() as unknown as Props
   const value = useVModel(toRef(props, 'modelValue'))

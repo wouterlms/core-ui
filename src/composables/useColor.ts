@@ -3,7 +3,7 @@ interface RGB {
   g: number
   b: number
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const isRgb = (color: string) => color.startsWith('rgb')
 
@@ -52,7 +52,7 @@ export default () => {
     }
 
     const hsp = Math.sqrt(
-      0.299 * (rgb.r * rgb.r) + 0.587 * (rgb.g * rgb.g) + 0.114 * (rgb.b * rgb.b)
+      0.299 * (rgb.r * rgb.r) + 0.587 * (rgb.g * rgb.g) + 0.114 * (rgb.b * rgb.b),
     )
 
     return hsp <= 180

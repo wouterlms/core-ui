@@ -1,36 +1,54 @@
 <script setup lang="ts">
-import { defineProps, toRef, withDefaults } from 'vue'
-
-import { useVModel } from '@wouterlms/composables'
-
 import {
-  useBorderRadius,
-  useStylingAttributes,
-} from '@/composables'
+  defineProps,
+  withDefaults,
+} from 'vue'
+
+import { useBorderRadius } from '@/composables'
 
 import { Svg, colors } from '@/theme'
 
-import ModalProvider from '../modal/ModalProvider.vue'
+import { ButtonVariant } from '@/enums'
+
 import Button from '../button/Button.vue'
 
-export interface Props {
-  show: boolean
+import ModalOverlay from '../modal/ModalOverlay.vue'
+import useModal, { Props as BaseProps } from '../modal/useModal'
+
+export interface Props extends BaseProps {
+  /**
+   * Drawer title
+   */
   title?: string
+
+  /**
+   * Drawer width
+   */
   width?: string
+
+  /**
+   * Drawer outside padding
+   */
   inset?: string
+
+  /**
+   * Drawer inside padding
+   */
   containerPadding?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   title: undefined,
   width: '27em',
   inset: '0px',
   containerPadding: '2.5rem',
 })
 
-const showModal = useVModel(toRef(props, 'show'), 'show')
-
-const { stylingAttrs, nonStylingAttrs } = useStylingAttributes()
+const {
+  Component,
+  state,
+  close,
+} = useModal()
 </script>
 
 <script lang="ts">
@@ -40,14 +58,10 @@ export default {
 </script>
 
 <template>
-  <ModalProvider
-    v-slot="{ Overlay, isVisible, close }"
-    v-model:show="showModal"
-    v-bind="nonStylingAttrs"
-  >
+  <Component :is="Component">
     <Transition name="slide-from-right">
       <div
-        v-if="isVisible"
+        v-if="state.isVisible"
         :style="{
           width,
           borderRadius: useBorderRadius(),
@@ -56,7 +70,7 @@ export default {
         class="!pl-0 fixed h-full right-0 top-0 z-20"
       >
         <div
-          v-bind="stylingAttrs"
+          v-bind="$attrs"
           class="bg-secondary flex flex-col h-full w-full"
         >
           <header class="flex items-center justify-between mb-6 p-10 pb-0">
@@ -71,10 +85,10 @@ export default {
 
             <div>
               <Button
-                variant="ghost"
-                padding="0.2em"
+                :variant="ButtonVariant.GHOST"
                 :accent-scheme="colors.text.secondary"
                 :icon-left="Svg.CORE_CLOSE_BOLD"
+                padding="0.2em"
                 @click="close"
               />
             </div>
@@ -94,13 +108,13 @@ export default {
 
     <Transition name="overlay-transition">
       <Component
-        :is="Overlay"
-        v-if="isVisible"
+        :is="ModalOverlay"
+        v-if="state.isVisible"
         class="z-10"
         @click="close"
       />
     </Transition>
-  </ModalProvider>
+  </Component>
 </template>
 
 <style scoped lang="scss">

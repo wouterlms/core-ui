@@ -2,12 +2,13 @@
 import {
   computed,
   defineProps,
+  useAttrs,
   useSlots,
   withDefaults,
 } from 'vue'
 
 import { Svg, colors } from '@/theme'
-import { BorderRadius } from '@/types'
+import { ButtonVariant, Rounded } from '@/enums'
 
 import {
   useBorderRadius,
@@ -27,7 +28,7 @@ export interface Props extends BaseProps {
   accentColor?: string
 
   /** Button styling */
-  variant?: 'solid' | 'outline' | 'ghost' | 'unstyled'
+  variant?: ButtonVariant
 
   /**
    * Show icon on the left side
@@ -57,23 +58,23 @@ export interface Props extends BaseProps {
 
   /**
    * Border radius
-   * @values 'none' | 'sm' | 'default' | 'md' | 'lg' | 'full'
    */
-  rounded?: BorderRadius
+  rounded?: Rounded
 }
 
 const props = withDefaults(defineProps<Props>(), {
   accentColor: undefined,
-  variant: 'solid',
+  variant: ButtonVariant.SOLID,
   iconLeft: undefined,
   iconRight: undefined,
   iconSize: '0.875em',
   iconSpacing: '0.8em',
 
   padding: undefined,
-  rounded: 'default',
+  rounded: Rounded.DEFAULT,
 })
 
+const attrs = useAttrs()
 const slots = useSlots()
 
 const {
@@ -95,9 +96,9 @@ const textColor = computed(() => (
 
 const backgroundColor = computed(() => {
   if ([
-    'outline',
-    'ghost',
-    'unstyled',
+    ButtonVariant.OUTLINE,
+    ButtonVariant.GHOST,
+    ButtonVariant.UNSTYLED,
   ].includes(props.variant)) {
     return 'transparent'
   }
@@ -107,13 +108,13 @@ const backgroundColor = computed(() => {
 
 const color = computed(() => {
   if ([
-    'ghost',
-    'outline',
+    ButtonVariant.GHOST,
+    ButtonVariant.OUTLINE,
   ].includes(props.variant)) {
     return computedAccentColor.value
   }
 
-  if (props.variant === 'unstyled') {
+  if (props.variant === ButtonVariant.UNSTYLED) {
     return colors.value.text.secondary
   }
 
@@ -122,8 +123,8 @@ const color = computed(() => {
 
 const borderColor = computed(() => {
   if ([
-    'solid',
-    'outline',
+    ButtonVariant.SOLID,
+    ButtonVariant.OUTLINE,
   ].includes(props.variant)) {
     return computedAccentColor.value
   }
@@ -136,7 +137,7 @@ const computedPadding = computed(() => {
     return props.padding
   }
 
-  if (props.variant === 'unstyled') {
+  if (props.variant === ButtonVariant.UNSTYLED) {
     return '0em'
   }
 

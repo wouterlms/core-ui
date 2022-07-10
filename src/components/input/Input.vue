@@ -10,7 +10,7 @@ import {
   useComponentAttrs,
 } from '@/composables'
 
-import { BorderRadius } from '@/types'
+import { ButtonVariant, Rounded } from '@/enums'
 import { Svg, colors } from '@/theme'
 
 import Button from '../button/Button.vue'
@@ -21,15 +21,45 @@ import Loader from '../loader/Loader.vue'
 import useInput, { Props as BaseProps } from './useInput'
 
 export interface Props extends BaseProps {
+  /**
+   * Input error
+   */
   error?: boolean
+
+  /**
+   * Left icon
+   */
   iconLeft?: Svg
+
+  /**
+   * Right icon
+   */
   iconRight?: Svg
+
+  /**
+   * Icon left size
+   */
   iconLeftSize?: string
+
+  /**
+   * Icon right size
+   */
   iconRightSize?: string
+
+  /**
+   * Border color
+   */
   borderColor?: string
 
+  /**
+   * Input padding
+   */
   padding?: string,
-  rounded?: BorderRadius
+
+  /**
+   * Border radius
+   */
+  rounded?: Rounded
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -41,25 +71,16 @@ const props = withDefaults(defineProps<Props>(), {
   borderColor: colors.value.border.input,
 
   padding: '0.5em',
-  rounded: 'default',
+  rounded: Rounded.DEFAULT,
 })
-
-/* eslint-disable-next-line */
-const emit = defineEmits<{
-  (event: 'update:modelValue', value: string | number | null): void
-  (event: 'focus'): void
-  (event: 'blur'): void
-}>()
 
 const {
   Component,
   state,
   togglePassword,
-} = useInput(emit)
+} = useInput()
 
-const { getListenerAttrs } = useComponentAttrs()
-
-const listenerAttrs = getListenerAttrs()
+const { listenerAttrs, nonStylingAttrs, stylingAttrs } = useComponentAttrs()
 
 const computedBorderColor = computed(
   () => props.borderColor ?? colors.value.border.input,
@@ -67,7 +88,7 @@ const computedBorderColor = computed(
 
 const iconColor = computed(() => {
   if (props.error) {
-    return colors.value.accent.error
+    return colors.value.accent.red
   }
 
   return colors.value.text.tertiary
@@ -83,6 +104,7 @@ export default {
 <template>
   <InputLabel
     v-slot="{ color }"
+    v-bind="stylingAttrs"
     :error="!!error"
     :is-disabled="state.isDisabled"
     :is-focused="state.isFocused"
@@ -110,7 +132,10 @@ export default {
     />
 
     <Component
-      v-bind="listenerAttrs"
+      v-bind="{
+        ...listenerAttrs,
+        ...nonStylingAttrs,
+      }"
       :is="Component"
       :class="{
         'absolute opacity-0 pointer-events-none': $slots.input
@@ -126,7 +151,7 @@ export default {
     <Loader
       v-if="state.isLoading"
       :accent-color="colors.text.input"
-      class="mr-[0.5em] text-[0.875em]"
+      class="mr-[0.625em] text-[0.625em]"
     />
 
     <Icon
@@ -142,11 +167,11 @@ export default {
 
     <Button
       v-else-if="state.type === 'password'"
+      :variant="ButtonVariant.GHOST"
       :icon-left="state.isPasswordVisible ? Svg.CORE_EYE_HIDE : Svg.CORE_EYE_VIEW"
       :is-disabled="state.isDisabled || state.isReadonly"
       :color-scheme="color"
-      variant="ghost"
-      rounded="sm"
+      :rounded="Rounded.SM"
       padding="0.2em"
       class="mr-[0.5em]"
       @click="togglePassword"

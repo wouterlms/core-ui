@@ -12,7 +12,7 @@ interface Options {
 
 const { detectTheme } = useDarkMode()
 
-export default ({ enableDarkMode, colors }: Options) => {
+export default ({ enableDarkMode, colors }: Options): void => {
   if (enableDarkMode) {
     detectTheme()
   }

@@ -11,5 +11,5 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('mousedown', () => {
   isKeyboardMode.value = false
 })
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => isKeyboardMode

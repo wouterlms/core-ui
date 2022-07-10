@@ -42,7 +42,7 @@ export const defaultProps = {
   to: undefined,
   href: undefined,
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const props = usePropsWithDefaults(defaultProps, useAttrs() as Props)
 

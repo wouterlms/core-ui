@@ -36,11 +36,11 @@ const defaultProps = {
   isReadonly: false,
   rounded: 'sm',
 }
-
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default () => {
   const props = usePropsWithDefaults(defaultProps, useAttrs() as unknown as Props)
 
-  const radioValue = useVModel(toRef(props.value, 'modelValue'))
+  const radioValue = useVModel(toRef(useAttrs(), 'modelValue'))
   const isFocused = ref(false)
   const isChecked = computed(() => (
     JSON.stringify(radioValue.value) === JSON.stringify(props.value.value)

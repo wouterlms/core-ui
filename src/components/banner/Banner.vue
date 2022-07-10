@@ -8,13 +8,25 @@ import {
 } from 'vue'
 
 import { Svg, colors } from '@/theme'
+import { ButtonVariant } from '@/enums'
 
 import Button from '../button/Button.vue'
 import Icon from '../icon/Icon.vue'
 
 export interface Props {
+  /**
+   * Banner color
+   */
   accentColor?: string
+
+  /**
+   * Banner title
+   */
   title: string
+
+  /**
+   * Toggles a x button
+   */
   isClosable?: boolean
 }
 
@@ -26,11 +38,11 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{(event: 'dismiss'): void }>()
 
 const computedAccentColor = computed(
-  () => props.accentColor ?? colors.value.accent.primary
+  () => props.accentColor ?? colors.value.accent.primary,
 )
 
 const actionButton = h(Button, {
-  variant: 'outline',
+  variant: ButtonVariant.OUTLINE,
   colorScheme: 'text-secondary',
   padding: '0.8em 1em',
 })
@@ -47,8 +59,8 @@ const actionButton = h(Button, {
     <Button
       v-if="isClosable"
       :icon-left="Svg.CORE_CLOSE_BOLD"
-      variant="unstyled"
-      icon-size="0.8em"
+      :variant="ButtonVariant.UNSTYLED"
+      icon-size="0.7em"
       padding="0.5em"
       class="!absolute right-3 top-[1.1em]"
       @click="emit('dismiss')"

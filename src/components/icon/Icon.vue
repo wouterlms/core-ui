@@ -9,7 +9,14 @@ import {
 import { svgs } from '@/theme'
 
 export interface Props {
+  /**
+   * Icon
+   */
   icon: string
+
+  /**
+   * Disables removing inline colors
+   */
   preserveOriginalColor?: boolean
 }
 
@@ -30,7 +37,7 @@ watch(svg, (svgValue) => {
   }
 }, { immediate: true })
 
-const removeHexCodes = (path: string) => {
+const removeHexCodes = (path: string): string => {
   let pathWithoutHexCodes = path
 
   const hexColors = path.match(/#[a-fA-F0-9]{6}|#[a-fA-F0-9]{3}/g) || []

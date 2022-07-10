@@ -6,10 +6,9 @@ export interface Colors extends Record<ColorGroups, Record<keyof ColorGroups, Co
   accent: {
     primary: Color
     secondary: Color
-    success: Color
-    warning: Color
-    error: Color
-    danger: Color
+    green: Color
+    orange: Color
+    red: Color
   }
   gray: {
     primary: Color
@@ -45,9 +44,8 @@ export interface Colors extends Record<ColorGroups, Record<keyof ColorGroups, Co
   }
 }
 
-export type ColorConfig = Partial<{ [K in keyof Colors]: K extends 'colors'
-  ? Partial<Colors[K]> & Record<string, string | [string, string]>
-  : Partial<Colors[K]>
+export type ColorConfig = Partial<{
+  [K in keyof Colors]: Partial<Colors[K]> & Record<string, string | [string, string]>
 }>
 
 export interface CreateThemeOptions {

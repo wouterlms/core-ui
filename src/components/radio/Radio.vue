@@ -7,6 +7,7 @@ import {
 } from 'vue'
 
 import {
+  useComponentAttrs,
   useIsKeyboardMode,
 } from '@/composables'
 
@@ -33,11 +34,17 @@ const computedAccentColor = computed(() => (
 const isKeyboardMode = useIsKeyboardMode()
 const slots = useSlots()
 
+const {
+  listenerAttrs,
+  nonStylingAttrs,
+  stylingAttrs,
+} = useComponentAttrs()
+
 const borderColor = computed(() => {
   const { isChecked, isFocused } = state.value
 
   if (props.error) {
-    return colors.value.accent.error
+    return colors.value.accent.red
   }
 
   if (isChecked || isFocused) {
@@ -49,19 +56,30 @@ const borderColor = computed(() => {
 
 const dotColor = computed(() => {
   if (props.error) {
-    return colors.value.accent.error
+    return colors.value.accent.red
   }
 
   return computedAccentColor.value
 })
 </script>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
+</script>
+
 <template>
   <Component
+    v-bind="stylingAttrs"
     :is="slots.default ? 'label' : 'div'"
     class="flex items-center"
   >
     <Component
+      v-bind="{
+        ...nonStylingAttrs,
+        ...listenerAttrs,
+      }"
       :is="Component"
       :class="[
         {

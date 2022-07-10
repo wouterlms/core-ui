@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { defineEmits, defineProps, withDefaults } from 'vue'
+import {
+  defineEmits,
+  defineProps,
+  withDefaults,
+} from 'vue'
+
 import { useTimeout } from '@wouterlms/composables'
 
 import { Toast } from '@/types'
+import { ButtonVariant } from '@/enums'
 import { Svg } from '@/theme'
 
 import Icon from '../icon/Icon.vue'
@@ -67,7 +73,7 @@ const color = props.toast.type ?? '#4447e0'
 
       <Button
         :icon-left="Svg.CORE_CLOSE_BOLD"
-        variant="ghost"
+        :variant="ButtonVariant.GHOST"
         icon-size="8px"
         color-scheme="text-tertiary"
         padding="0.2em"

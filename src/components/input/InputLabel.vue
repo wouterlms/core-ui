@@ -8,9 +8,24 @@ import {
 import { colors } from '@/theme'
 
 export interface Props {
+  /**
+   * Error
+   */
   error: boolean
+
+  /**
+   * Disable label + input
+   */
   isDisabled: boolean
+
+  /**
+   * Whether input is focused
+   */
   isFocused: boolean
+
+  /**
+   * Border color
+   */
   borderColor?: string
 }
 
@@ -24,7 +39,7 @@ const color = computed(() => {
   }
 
   if (props.error) {
-    return colors.value.accent.error
+    return colors.value.accent.red
   }
 
   return colors.value.text.input
@@ -32,7 +47,7 @@ const color = computed(() => {
 
 const borderColor = computed(() => {
   if (props.error) {
-    return colors.value.accent.error
+    return colors.value.accent.red
   }
 
   if (props.isFocused) {

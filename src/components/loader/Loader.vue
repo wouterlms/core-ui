@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { computed, defineProps, withDefaults } from 'vue'
+import {
+  computed,
+  defineProps,
+  withDefaults,
+} from 'vue'
 
 import { colors } from '@/theme'
 
 export interface Props {
   /**
-   * Tailwind `color` value or a hex, rgb value
+   * Accent color
    */
   accentColor?: string
 }
