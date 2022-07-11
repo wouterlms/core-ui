@@ -86,7 +86,7 @@ watch(showDropdown, (show) => {
   }
 })
 
-const isChildElement = (element: HTMLElement) => {
+const isChildElement = (element: HTMLElement): boolean => {
   let node = element.parentNode
 
   while (node !== null) {
@@ -100,7 +100,7 @@ const isChildElement = (element: HTMLElement) => {
   return false
 }
 
-const handleClickOutside = ({ target }: MouseEvent) => {
+const handleClickOutside = ({ target }: MouseEvent): void => {
   if (!isChildElement(target as HTMLElement)) {
     wasClosedByMouse.value = true
     showDropdown.value = false

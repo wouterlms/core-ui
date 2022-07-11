@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 
 import { Svg } from '@/theme'
-
 import {
   Button,
   Checkbox,
@@ -19,6 +18,7 @@ import {
   Select,
   Switch,
 } from '@/components'
+import { ButtonVariant } from './enums'
 
 const options = [
   'Option A',
@@ -26,10 +26,13 @@ const options = [
   'Option C',
   'Option D',
   'Option E',
-  'Option F'
+  'Option F',
 ]
 
-const segments = [ 'Users', 'Account settings' ]
+const segments = [
+  'Users',
+  'Account settings',
+]
 
 const checkboxValue = ref([])
 const radioValue = ref(null)
@@ -63,9 +66,7 @@ const fileValue = ref([])
           :icon-right="undefined"
           :is-disabled="false"
           :is-loading="false"
-          variant="solid"
           color-scheme="accent-primary"
-          rounded="default"
         >
           Create new user
         </Button>
@@ -105,7 +106,6 @@ const fileValue = ref([])
         :error="false"
         :icon-left="undefined"
         :icon-right="undefined"
-        rounded="default"
       />
 
       <Select
@@ -188,7 +188,6 @@ const fileValue = ref([])
         <Input
           :error="true"
           model-value="https://github.com/"
-          rounded="sm"
         />
       </FormLabel>
 
@@ -228,7 +227,7 @@ const fileValue = ref([])
 
         <div class="flex justify-center mt-2">
           <Button
-            variant="ghost"
+            :variant="ButtonVariant.GHOST"
             class="font-medium underline"
           >
             Download invoice

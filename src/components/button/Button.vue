@@ -27,7 +27,9 @@ export interface Props extends BaseProps {
    */
   accentColor?: string
 
-  /** Button styling */
+  /**
+   * Button styling
+   */
   variant?: ButtonVariant
 
   /**
